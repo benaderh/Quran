@@ -25,10 +25,7 @@ import android.widget.Toast;
 
 import androidx.viewpager.widget.ViewPager;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+// CSV reader - no external dependency needed
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -268,22 +265,31 @@ public class QMain extends Activity {
                                 sora = "s" + soraI;
                                 curS.close();
 
-                                // Read XLS using Apache POI
+                                // Read audio index from CSV file (converted from XLS)
                                 try {
-                                    File xlsFile = new File(Riwaya + sora + ".xls");
-                                    FileInputStream fis = new FileInputStream(xlsFile);
-                                    Workbook wb = new HSSFWorkbook(fis);
-                                    Sheet s = wb.getSheetAt(0);
-                                    Row row = s.getRow(x1);
-                                    if (row != null) {
-                                        pos   = (int) row.getCell(4).getNumericCellValue();
-                                        ayaI  = (int) row.getCell(5).getNumericCellValue();
-                                        lineI = (int) row.getCell(1).getNumericCellValue();
+                                    File csvFile = new File(Riwaya + sora + ".csv");
+                                    if (csvFile.exists()) {
+                                        java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(csvFile));
+                                        String csvLine;
+                                        int rowIdx = 0;
+                                        while ((csvLine = br.readLine()) != null) {
+                                            if (rowIdx == x1) {
+                                                String[] cols = csvLine.split(",");
+                                                if (cols.length > 5) {
+                                                    try {
+                                                        lineI = Integer.parseInt(cols[1].trim());
+                                                        pos   = Integer.parseInt(cols[4].trim());
+                                                        ayaI  = Integer.parseInt(cols[5].trim());
+                                                    } catch (NumberFormatException ignored) {}
+                                                }
+                                                break;
+                                            }
+                                            rowIdx++;
+                                        }
+                                        br.close();
                                     }
-                                    wb.close();
-                                    fis.close();
                                 } catch (Exception e) {
-                                    Log.e("QMain", "XLS read error: " + e.getMessage());
+                                    Log.e("QMain", "CSV read error: " + e.getMessage());
                                 }
 
                             } else {
@@ -549,3 +555,4 @@ public class QMain extends Activity {
         return super.onKeyUp(keyCode, event);
     }
 }
+
