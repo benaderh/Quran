@@ -1,2 +1,2 @@
-Error: Could not find or load main class "-Dorg.gradle.appname=gradlew"
-Caused by: java.lang.ClassNotFoundException: "-Dorg.gradle.appname=gradlew"
+Error: Could not find or load main class org.gradle.wrapper.GradleWrapperMain
+Caused by: java.lang.ClassNotFoundException: org.gradle.wrapper.GradleWrapperMain
