@@ -26,7 +26,16 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build Debug APK
-      run: ./gradlew assembleDebug --no-daemon
+      id: build
+      run: |
+        ./gradlew assembleDebug --no-daemon 2>&1 | tee build_output.txt
+        exit ${PIPESTATUS[0]}
+
+    - name: Show build output on failure
+      if: failure()
+      run: |
+        echo "=== LAST 200 LINES OF BUILD OUTPUT ==="
+        tail -200 build_output.txt || echo "No output file"
 
     - name: Check APK was created
       run: ls -la app/build/outputs/apk/debug/
