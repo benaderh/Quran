@@ -1,4 +1,4 @@
-﻿package quran.hb.com.quran;
+package quran.hb.com.quran;
 
 /**
  * Created by Juned on 2/21/2017.

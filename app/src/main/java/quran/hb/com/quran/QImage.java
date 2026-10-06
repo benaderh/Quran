@@ -1,4 +1,4 @@
-﻿package quran.hb.com.quran;
+package quran.hb.com.quran;
 
 import android.app.Activity;
 import android.content.Context;
