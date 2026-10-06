@@ -16,7 +16,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Set up JDK 17
-      uses: actions/setup-java@v5
+      uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
@@ -26,14 +26,20 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build Debug APK
-      run: ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee build_output.txt; EXITCODE=${PIPESTATUS[0]}; grep -E "error:|Error|FAILED|Exception|Could not resolve|cannot find" build_output.txt | head -50; exit $EXITCODE
+      run: |
+        set -o pipefail
+        ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee /tmp/build_output.txt
+        BUILD_EXIT=${PIPESTATUS[0]}
+        echo "=== ERRORS FOUND ===" 
+        grep -E "^.*(error:|Error:|FAILED|Exception|Caused by|> Could not|cannot find)" /tmp/build_output.txt | head -60 || true
+        exit $BUILD_EXIT
 
     - name: Upload build log
       if: always()
       uses: actions/upload-artifact@v4
       with:
         name: build-log
-        path: build_output.txt
+        path: /tmp/build_output.txt
         retention-days: 3
 
     - name: Upload Debug APK
