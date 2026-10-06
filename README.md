@@ -1,62 +1,65 @@
-﻿# قرآن كريم - Quran Android App
+﻿# قرآن كريم - Quran Android App (Hafs & Warsh)
 
-Application Android pour la lecture du Saint Coran (Hafs et Warsh).
+[![Build APK](https://github.com/benaderh/Quran/actions/workflows/build.yml/badge.svg)](https://github.com/benaderh/Quran/actions/workflows/build.yml)
 
-## Configuration requise
-- Android 5.0+ (API 21 minimum)
-- Android 12/13/14/15 (API 31-35) pleinement supporté
+Application Android pour la lecture du Saint Coran avec les deux riwayat **Hafs** et **Warsh**, lecture audio et Tafsir.
 
-## Fonctionnalités
-- Lecture du Coran page par page (604 pages)
-- Deux riwayat : Hafs et Warsh
-- Lecture audio des sourates
-- Index par sourate, page, juz et ayat
-- Signets (3 emplacements)
-- Tafsir (explication)
+## ⬇️ Télécharger le APK
 
-## Structure du projet
-```
-QuranHW/
-├── app/
-│   ├── src/main/
-│   │   ├── AndroidManifest.xml
-│   │   ├── java/quran/hb/com/quran/   # Code source
-│   │   ├── assets/                     # Base de données SQLite
-│   │   └── res/                        # Ressources (layouts, images)
-│   └── build.gradle
-├── gradle/wrapper/
-├── build.gradle
-├── settings.gradle
-└── .github/workflows/build.yml         # GitHub Actions CI/CD
-```
+1. Aller dans l''onglet **[Actions](https://github.com/benaderh/Quran/actions)**
+2. Cliquer sur le dernier workflow réussi
+3. Télécharger `quran-debug-apk` dans les **Artifacts**
 
-## Construire le APK
+---
 
-### Via GitHub Actions (recommandé)
-1. Pousser le code sur GitHub
-2. Aller dans l''onglet **Actions**
-3. Le workflow se lance automatiquement
-4. Télécharger le APK depuis les **Artifacts**
+## 📁 Fichiers à copier manuellement après installation
 
-### En local (nécessite Android Studio ou SDK)
-```bash
-./gradlew assembleDebug
-```
-Le APK sera dans : `app/build/outputs/apk/debug/`
+> Les images et fichiers audio ne sont pas inclus dans l''APK (trop volumineux).
+> Après installation de l''APK, copiez les dossiers suivants sur votre téléphone :
 
-## Stockage des fichiers
-Les images et fichiers audio sont stockés dans le répertoire privé de l''application :
+### Chemin de destination sur le téléphone :
 ```
 /sdcard/Android/data/quran.hb.com.quran/files/QuranHW/
-├── H/img/   # Images Hafs
-├── H/aud/   # Audio Hafs (.xls + .wav)
-├── W/img/   # Images Warsh
-└── W/aud/   # Audio Warsh (.xls + .wav)
 ```
-Aucune permission de stockage n''est requise sur Android 10+.
 
-## Dépendances principales
-- AndroidX AppCompat 1.7.0
-- Material Components 1.12.0
-- AndroidX ViewPager 1.0.0
-- Apache POI 5.2.5 (lecture fichiers .xls audio index)
+### Structure à créer :
+```
+QuranHW/
+├── H/
+│   ├── img/     ← Contenu du dossier HI/ (images Hafs : p1.jpg ... p608.jpg)
+│   └── aud/     ← Contenu du dossier HA/ (audio Hafs : s1.wav + s1.xls ...)
+└── W/
+    ├── img/     ← Contenu du dossier WI/ (images Warsh : p1.png ... p608.png)
+    └── aud/     ← Contenu du dossier WA/ (audio Warsh : s1.wav + s1.xls ...)
+```
+
+### Comment copier (Windows) :
+1. Connecter le téléphone en USB (mode Transfert de fichiers)
+2. Ouvrir l''Explorateur Windows
+3. Naviguer vers `Ce PC > [Nom du téléphone] > Stockage interne > Android > data > quran.hb.com.quran > files`
+4. Créer le dossier `QuranHW` et copier les sous-dossiers
+
+**Note :** Le dossier `Android/data/` est accessible sur Android 15 via un gestionnaire de fichiers ou en USB.
+
+---
+
+## 📱 Configuration requise
+- Android 5.0+ (API 21)
+- Android 12/13/14/15 pleinement supporté ✅
+- Espace requis : ~650 MB (images + audio)
+
+## 🔧 Fonctionnalités
+- 604 pages du Coran en images haute qualité
+- Deux riwayat : Hafs (حفص) et Warsh (ورش)  
+- Lecture audio par verset avec saut au bon endroit
+- Index par Sourate, Page, Juz, Ayat
+- 3 emplacements de signets
+- Tafsir Muyassar (تفسير ميسر)
+
+## 🏗️ Construire localement
+```bash
+git clone https://github.com/benaderh/Quran.git
+cd Quran
+./gradlew assembleDebug
+```
+APK dans : `app/build/outputs/apk/debug/`
