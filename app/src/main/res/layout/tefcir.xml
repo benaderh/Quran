@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -19,9 +19,7 @@
             android:layout_height="50dp"
 
             android:textAlignment="center"
-
-            android:onClick="true"
-            android:text="الآية التالية"
+            android:text="ط§ظ„ط¢ظٹط© ط§ظ„طھط§ظ„ظٹط©"
 
             />
 
@@ -30,7 +28,6 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:textAlignment="center"
-            android:onClick="true"
             android:text="+"
             />
 
@@ -39,7 +36,6 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:textAlignment="center"
-            android:onClick="true"
             android:text="-"
             />
 
@@ -47,11 +43,8 @@
             android:id="@+id/btnAP"
             android:layout_width="110dp"
             android:layout_height="50dp"
-
-
-            android:onClick="true"
             android:layout_gravity="right"
-            android:text="الآية السابقة"
+            android:text="ط§ظ„ط¢ظٹط© ط§ظ„ط³ط§ط¨ظ‚ط©"
 
             />
     </LinearLayout>
@@ -69,7 +62,7 @@
             <TextView
 
                 android:id="@+id/tv_aya"
-                android:text="آية"
+                android:text="ط¢ظٹط©"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#41e70e"
@@ -81,7 +74,7 @@
             <TextView
 
                 android:id="@+id/tv_sora"
-                android:text="آية/سورة"
+                android:text="ط¢ظٹط©/ط³ظˆط±ط©"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#94ef78"
@@ -92,7 +85,7 @@
 
             <TextView
                 android:id="@+id/tv_tefcir"
-                android:text="تفسير"
+                android:text="طھظپط³ظٹط±"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textSize="30sp"

@@ -31,7 +31,6 @@
             android:textColor="#ffffff"
             android:textAlignment="center"
             android:visibility="gone"
-            android:onClick="true"
 
             android:drawableLeft="@android:drawable/ic_menu_search" />
 
@@ -44,8 +43,7 @@
             android:background="#1d0606"
             android:textColor="#aea7a7"
             android:textAlignment="center"
-            android:visibility="gone"
-            android:onClick="true" />
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnH"
@@ -57,8 +55,7 @@
             android:background="#1d0606"
             android:textColor="#ffffff"
             android:textAlignment="center"
-            android:visibility="gone"
-            android:onClick="true" />
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnT"
@@ -69,8 +66,7 @@
             android:layout_weight="1"
             android:textColor="#ffffff"
             android:textAlignment="center"
-            android:visibility="gone"
-            android:onClick="true" />
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnA"
@@ -82,8 +78,7 @@
             android:textColor="#ffffff"
             android:textStyle="bold"
             android:textAlignment="center"
-            android:visibility="gone"
-            android:onClick="true" />
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnM"
@@ -94,8 +89,7 @@
             android:layout_weight="1"
             android:textColor="#ffffff"
             android:textAlignment="center"
-            android:visibility="gone"
-            android:onClick="true" />
+            android:visibility="gone" />
 
     </LinearLayout>
     <LinearLayout
@@ -115,8 +109,7 @@
         android:layout_weight="0.06"
         android:textColor="#ffffff"
         android:textAlignment="center"
-        android:visibility="gone"
-        android:onClick="true" />
+        android:visibility="gone" />
     </LinearLayout>
 
 
@@ -177,8 +170,6 @@
                         android:layout_height="50dp"
 
                         android:textAlignment="center"
-
-                        android:onClick="true"
                         android:text="ط§ظ„ط¢ظٹط© ط§ظ„طھط§ظ„ظٹط©"
 
                         />
@@ -189,8 +180,6 @@
                         android:layout_height="50dp"
 
                         android:textAlignment="center"
-
-                        android:onClick="true"
                         android:text="ط§ظ„ط¹ظˆط¯ط©"
 
                         />
@@ -199,9 +188,6 @@
                         android:id="@+id/btnAP"
                         android:layout_width="110dp"
                         android:layout_height="50dp"
-
-
-                        android:onClick="true"
                         android:layout_gravity="right"
                         android:text="ط§ظ„ط¢ظٹط© ط§ظ„ط³ط§ط¨ظ‚ط©"
 
@@ -275,8 +261,6 @@
                        android:layout_height="50dp"
 
                        android:textAlignment="center"
-
-                       android:onClick="true"
                         android:text="ط§ظ„ط¢ظٹط© ط§ظ„طھط§ظ„ظٹط©"
 
                     />
@@ -285,9 +269,6 @@
                         android:id="@+id/btnAPb"
                         android:layout_width="110dp"
                         android:layout_height="50dp"
-
-
-                        android:onClick="true"
                         android:layout_gravity="right"
                         android:text="ط§ظ„ط¢ظٹط© ط§ظ„ط³ط§ط¨ظ‚ط©"
 
@@ -319,8 +300,7 @@
             android:textColor="#ffffff"
             android:background="#1d0606"
             android:textAlignment="center"
-            android:visibility="gone"
-            android:onClick="true" />
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnP"
@@ -332,8 +312,7 @@
             android:layout_alignParentBottom="true"
             android:textAlignment="center"
             android:background="#1d0606"
-            android:visibility="gone"
-            android:onClick="true" />
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnJ"
@@ -344,8 +323,7 @@
             android:textColor="#ffffff"
             android:background="#1d0606"
             android:textAlignment="center"
-            android:visibility="gone"
-            android:onClick="true" />
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -361,6 +339,7 @@
 
 
 </RelativeLayout>
+
 
 
 
