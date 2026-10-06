@@ -28,19 +28,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
-
-    packaging {
-        resources {
-            excludes += ['META-INF/DEPENDENCIES', 'META-INF/LICENSE', 'META-INF/NOTICE']
-        }
-    }
 }
 
 dependencies {
+    // AndroidX AppCompat (includes ViewPager support)
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'androidx.core:core:1.12.0'
-    // NOTE: Apache POI removed temporarily for build test
-    // Will be added back once basic build works
 }
