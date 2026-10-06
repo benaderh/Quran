@@ -27,20 +27,31 @@ jobs:
 
     - name: Build Debug APK
       run: |
-        set -o pipefail
-        ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee /tmp/build_output.txt
-        BUILD_EXIT=${PIPESTATUS[0]}
-        echo "=== ERRORS FOUND ===" 
-        grep -E "^.*(error:|Error:|FAILED|Exception|Caused by|> Could not|cannot find)" /tmp/build_output.txt | head -60 || true
-        exit $BUILD_EXIT
+        ./gradlew assembleDebug --no-daemon --stacktrace > /tmp/build.log 2>&1
+        EXIT_CODE=$?
+        echo "=== BUILD EXIT CODE: $EXIT_CODE ==="
+        if [ $EXIT_CODE -ne 0 ]; then
+          echo "=== COMPILATION ERRORS ==="
+          grep -n "error:\|FAILED\|Exception\|Caused by\|> Could not\|cannot find symbol\|package.*does not exist\|cannot access" /tmp/build.log | head -80
+          echo "=== END ERRORS ==="
+        fi
+        exit $EXIT_CODE
 
-    - name: Upload build log
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-log
-        path: /tmp/build_output.txt
-        retention-days: 3
+    - name: Save build log to repo on failure
+      if: failure()
+      run: |
+        cp /tmp/build.log build_error.log
+        cat /tmp/build.log | grep -E "error:|FAILED|Exception|Caused by|cannot find" | head -100 > build_errors_summary.txt
+        echo "Done"
+
+    - name: Commit error log to repo
+      if: failure()
+      run: |
+        git config user.email "ci@github.com"
+        git config user.name "GitHub Actions"
+        git add build_error.log build_errors_summary.txt
+        git commit -m "ci: save build error log [skip ci]" || echo "Nothing to commit"
+        git push || echo "Push failed"
 
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
