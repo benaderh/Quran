@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    >
+    <TextView
+        android:id="@+id/tv_sora"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:textColor="#0b18d2"
+        android:layout_marginTop="15dp"
+        android:layout_marginRight="20dp"
+
+        />
+
+    <TextView
+        android:id="@+id/tv_ayaT"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/tv_sora"
+        />
+
+
+    <TextView
+        android:id="@+id/tv_ayaI"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:layout_marginRight="5dp"
+
+        android:layout_below="@+id/tv_ayaT"
+        android:layout_alignRight="@+id/tv_ayaT"
+        android:layout_alignEnd="@+id/tv_ayaT" />
+
+    <TextView
+        android:id="@+id/tv_pageI"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:layout_below="@+id/tv_ayaT"
+        android:layout_alignLeft="@+id/tv_ayaT"
+        android:layout_alignStart="@+id/tv_ayaT"
+        android:layout_marginLeft="5dp"
+        />
+
+</RelativeLayout>

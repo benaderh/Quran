@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ظ‚ط±ط¢ظ† ظƒط±ظٹظ…</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+
+
+
+
+    <string name="title_activity_main">ظ…ظˆط§ظ‚ظٹطھ ط§ظ„طµظ„ط§ط©</string>
+
+    <string name="about1">ظ…ظˆط§ظ‚ظٹطھ ط§ظ„طµظ„ط§ط©</string>
+
+    <string name="Date">ط§ظ„طھط§ط±ظٹط® ط§ظ„ظ…ظٹظ„ط§ط¯ظٹ</string>
+
+
+    <string name="txt01">ظ‚ط±ط¢ظ† ظƒط±ظٹظ…   ط­ظپطµ/ظˆط±ط´ ط§ظ„ظ†ط³ط®ط© 1.0</string>
+    <string name="txt02">ظ‡ط´ط§ظ…  ط¨ظ† ظ†ط§ط¯ط±   ط¹ظٹظ† ط§ظ„ط¨ظٹط¶ط§ط،   ط§ظ„ط¬ط²ط§ط¦ط±</string>
+    <string name="txt03">ط§ظ„ط¨ط±ظٹط¯ ط§ظ„ط¥ظ„ظƒطھط±ظˆظ†ظٹ:</string>
+    <string name="txt031"><u>benaderh@gmail.com</u></string>
+    <string name="txt04">ظپظٹط³ط¨ظˆظƒ:</string>
+    <string name="txt041"><u>https://www.facebook.com/hichemb.hb.1</u></string>
+    <string name="txt06">ط¨ط±ظ†ط§ظ…ط¬ ط§ظ„ظ‚ط±ط¢ظ† ط§ظ„ظƒط±ظٹظ… ط¨ط±ظˆط§ظٹطھظٹ ط­ظپطµ ظˆ ظˆط±ط´  ظ…ظ‚ط±ظˆط، ظˆ ظ…ط³ظ…ظˆط¹.</string>
+    <string name="txt07">- ط§ظ„ظˆط§ط¬ظ‡ط© ط§ظ„ط±ط¦ظٹط³ظٹط© ط¨ط³ظٹط·ط©طŒ ط´ط§ظ…ظ„ط© ظˆ ظ…ط±ظ†ط©.</string>
+    <string name="txt08">- ط¨ظ„ظ…ط³ط© ظˆط§ط­ط¯ط© طھظ†طھظ‚ظ„ ط¨ظٹظ† ط§ظ„ط±ظˆط§ظٹطھظ†طŒ ط£ظˆ طھط³طھظ…ط¹ ط¥ظ„ظ‰ ط¢ظٹط© ط£ظˆ ط¬ط²ط، ظ…ظ†ظ‡ط§.</string>
+    <string name="txt09">- ظ†ظپط³ ط§ظ„ط´ظٹط، ط¨ط§ظ„ظ†ط³ط¨ط© ظ„ظ„طھظپط³ظٹط± ط§ظ„ظ…ظٹط³ط±.</string>
+    <string name="txt10">- ط§ظ„ط£ظ†طھظ‚ط§ظ„ ط­ط³ط¨ ط§ظ„ط£ط¬ط²ط§ط، ط£ظˆ  ط§ظ„طµظپط­ط§طھ ط£ظˆ ط§ظ„ط³ظˆط± ط¨ط§ظ„ط¶ط؛ط· ط¹ظ„ظ‰ ط§ظ„ط´ط±ظٹط· ط§ظ„ط£ط³ظپظ„.</string>
+    <string name="txt11">- ظٹظ†طھظ‡ظٹ ط§ظ„ظ…طµط­ظپ ط¨ط§ظ„ط¯ط¹ط§ط، ط«ظ… ط§ظ„ط£ظ†طھظ‚ط§ظ„ ظ…ط¨ط§ط´ط±ط© ظ„ط¨ط¯ط§ظٹط© ط§ظ„ظ…طµط­ظپ.</string>
+    <string name="txt12">- ط¥ظ…ظƒط§ظ†ظٹط© طھط؛ظٹظٹط± ط§ظ„ظ…ظ‚ط±ظٹط،. ظٹطھط·ظ„ط¨ ط°ظ„ظƒ طھط¹ط¯ظٹظ„ط§طھ ظپظٹ ظ…ظ„ظپ ط§ظ„ط¥ظƒط³ظ„ (Excel) ط§ظ„ظ…ط±طھط¨ط· ط¨ط§ظ„ط³ظˆط±ط© ط§ظ„ظ…ط¹ظ†ظٹط©.</string>
+    <string name="txt13">- ط¨ط¶ط؛ط·ط© ظ…ط·ظˆظ„ط© طھط­ظپط¸ ط§ظ„طµظپط­ط©ط§ظ„ط­ط§ظ„ظٹط© ط£ظˆ طھط¹ط±ط¶ طµظپط­ط© ظ…ط­ظپظˆط¸ط©.</string>
+    <string name="txt14">- ط­ظپطµ/ط§ظ„ظ…ظ†ط´ط§ظˆظٹ.   - ظˆط±ط´/ظ…طµط·ظپظ‰ ط؛ط±ط¨ظٹ.</string>
+
+    <string name="label_index_page">البحث عن صفحة</string>
+    <string name="label_index_sura">البحث عن سورة</string>
+    <string name="label_index_juz">البحث عن جزء</string>
+    <string name="label_index_aya">البحث عن آية</string>
+    <string name="label_landmark">حفظ و تعديل العلامة</string>
+    <string name="label_tefcir">تفسير ميسر</string>
+    <string name="label_about">حول</string>
+</resources>
+

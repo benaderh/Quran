@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:tools="http://schemas.android.com/tools"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#000000"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <LinearLayout
+            android:id="@+id/ll_0"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:gravity="center"
+            android:layout_marginTop="50dp"
+            android:background="#368f0a"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            >
+
+            <TextView
+                android:id="@+id/tv_pc"
+                android:layout_width="fill_parent"
+                android:layout_height="80dp"
+                android:text="الصفحة الحالية"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:textColor="#ffffff"
+                />
+
+        </LinearLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#368f0a"
+        android:layout_below="@+id/ll_0"
+        android:layout_marginTop="45dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        />
+    <LinearLayout
+        android:id="@+id/ll_1"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_below="@+id/ll_0"
+        android:gravity="center"
+        android:layout_marginTop="50dp"
+        android:background="#000000"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+       >
+
+        <Button
+            android:id="@+id/btn_C1"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="تغيير"
+            android:textColor="#ffffff"
+            />
+        <TextView
+            android:id="@+id/tv_p1"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_weight="2"
+            android:text="الصفحة 1"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textColor="#f977e42e"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp"
+            />
+
+        <Button
+            android:id="@+id/btn_O1"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="فتح"
+            android:textColor="#ffffff"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#368f0a"
+        android:layout_below="@+id/ll_1"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_2"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_below="@+id/ll_1"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:background="#000000"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        >
+
+        <Button
+            android:id="@+id/btn_C2"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="تغيير"
+            android:textColor="#ffffff"
+            />
+        <TextView
+            android:id="@+id/tv_p2"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_weight="2"
+            android:text="الصفحة 2"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textColor="#f977e42e"
+            />
+
+        <Button
+            android:id="@+id/btn_O2"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="فتح"
+            android:textColor="#ffffff"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#368f0a"
+        android:layout_below="@+id/ll_2"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/ll_3"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_below="@+id/ll_2"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:background="#000000"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        >
+
+        <Button
+            android:id="@+id/btn_C3"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="تغيير"
+            android:textColor="#ffffff"
+            />
+        <TextView
+            android:id="@+id/tv_p3"
+            android:layout_width="0dp"
+            android:layout_height="70dp"
+            android:layout_weight="2"
+            android:text="الصفحة 3"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:textColor="#f977e42e"
+            />
+
+        <Button
+            android:id="@+id/btn_O3"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="فتح"
+            android:textColor="#ffffff"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#368f0a"
+        android:layout_below="@+id/ll_3"
+        android:layout_marginTop="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        />
+</RelativeLayout>

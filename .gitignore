@@ -1,0 +1,21 @@
+﻿*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Old project structure (replaced by app/)
+/main/
+
+
+# Large binary assets - copy manually to device after install
+# See README.md for instructions
+app/src/main/assets/HI/
+app/src/main/assets/HA/
+app/src/main/assets/WI/
+app/src/main/assets/WA/

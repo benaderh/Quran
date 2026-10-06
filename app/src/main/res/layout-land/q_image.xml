@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+android:orientation = "vertical"
+android:layout_gravity = "center">
+<TextView
+    android:id="@+id/txtPageNotFound"
+    android:text="PageLoading Land"
+    android:visibility="gone"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity = "center"
+    android:textSize="16sp"
+    android:textColor="@android:color/black"
+    android:background="#FFF4CB" />
+<ScrollView
+    android:id = "@+id/page_scroller"
+    android:layout_width = "match_parent"
+    android:layout_height = "match_parent"
+    >
+    <ImageView
+        android:id="@+id/imgDisplay"
+        android:background="#FFF4CB"
+        android:layout_width = "match_parent"
+        android:layout_height =  "match_parent"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        />
+</ScrollView>
+</RelativeLayout>
+
