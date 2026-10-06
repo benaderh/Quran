@@ -25,11 +25,8 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Show Android SDK location
-      run: echo "ANDROID_HOME=$ANDROID_HOME" && ls $ANDROID_HOME/platforms || true
-
     - name: Build Debug APK
-      run: ./gradlew assembleDebug --no-daemon --stacktrace
+      run: ./gradlew assembleDebug --no-daemon --info 2>&1 | tail -100
 
     - name: Upload Debug APK
       uses: actions/upload-artifact@v4
