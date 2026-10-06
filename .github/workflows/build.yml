@@ -16,7 +16,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Set up JDK 17
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         java-version: '17'
         distribution: 'temurin'
@@ -26,23 +26,17 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build Debug APK
-      run: ./gradlew assembleDebug --no-daemon --stacktrace > build_output.txt 2>&1 || true
+      run: ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee build_output.txt; EXITCODE=${PIPESTATUS[0]}; grep -E "error:|Error|FAILED|Exception|Could not resolve|cannot find" build_output.txt | head -50; exit $EXITCODE
 
-    - name: Show last 300 lines of build log
-      run: tail -300 build_output.txt
-
-    - name: Upload build log as artifact
+    - name: Upload build log
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: build-log
         path: build_output.txt
         retention-days: 3
 
-    - name: Fail if APK not created
-      run: test -f app/build/outputs/apk/debug/app-debug.apk && echo "APK OK" || (echo "APK NOT FOUND - build failed" && exit 1)
-
     - name: Upload Debug APK
-      if: success()
       uses: actions/upload-artifact@v4
       with:
         name: quran-debug-apk
