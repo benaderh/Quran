@@ -357,7 +357,8 @@ public class QMain extends Activity {
                                 int bestAya = 1;
                                 
                                 String tableName = (lastR == 1) ? "tb_tafcir" : "tb_tafcirW";
-                                Cursor c = db.tfrawQuery("SELECT sora, aya, p_sora, line, point FROM " + tableName + " WHERE p_sora = " + click_page + " OR p_sora = " + (click_page - 1) + " ORDER BY p_sora ASC, line ASC, point ASC", null);
+                                SQLdb = db.openWritableDb();
+                                Cursor c = SQLdb.rawQuery("SELECT sora, aya, p_sora, line, point FROM " + tableName + " WHERE p_sora = " + click_page + " OR p_sora = " + (click_page - 1) + " ORDER BY p_sora ASC, line ASC, point ASC", null);
                                 if (c != null && c.moveToFirst()) {
                                     do {
                                         int p_sora = c.getInt(2);
@@ -374,6 +375,7 @@ public class QMain extends Activity {
                                     } while (c.moveToNext());
                                     c.close();
                                 }
+                                SQLdb.close();
                                 soraI = bestSora;
                                 ayaI = bestAya;
 
