@@ -9,9 +9,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -99,9 +101,23 @@ public class QMain extends Activity {
         }
 
         // Demander la permission de lire le stockage externe si nécessaire
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            // Android 6-9 : besoin de READ_EXTERNAL_STORAGE
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // Android 11+ : besoin de MANAGE_EXTERNAL_STORAGE
+            if (!Environment.isExternalStorageManager()) {
+                try {
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                    intent.addCategory("android.intent.category.DEFAULT");
+                    intent.setData(Uri.parse(String.format("package:%s", getApplicationContext().getPackageName())));
+                    startActivityForResult(intent, 2229);
+                } catch (Exception e) {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                    startActivityForResult(intent, 2229);
+                }
+                return; // initPostLoad() sera appelé dans onActivityResult
+            }
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // Android 6-10 : besoin de READ_EXTERNAL_STORAGE
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this,
@@ -124,8 +140,25 @@ public class QMain extends Activity {
                 initPostLoad();
             } else {
                 Toast.makeText(this,
-                        "Permission refusée. Placez les fichiers dans /sdcard/QuranHW/ et accordez la permission.",
+                        "Permission refusée. L'application nécessite l'accès au stockage.",
                         Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 2229) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (Environment.isExternalStorageManager()) {
+                    findViewById(R.id.loadingLayout).setVisibility(View.GONE);
+                    initPostLoad();
+                } else {
+                    Toast.makeText(this,
+                            "Permission 'Tous les fichiers' refusée.",
+                            Toast.LENGTH_LONG).show();
+                }
             }
         }
     }
