@@ -85,9 +85,9 @@ public class IndexF_Connector extends ArrayAdapter<IndexF_Variables> {
         IndexF_Variables kran = KranListTemp.get(position);
 
         holder.tv_sora.setText(kran.getSora());
-        holder.tv_ayaI.setText("ط§ظ„ط¢ظٹط©: " + kran.getAyai());
+        holder.tv_ayaI.setText("الآية: " + kran.getAyai());
         holder.tv_ayaT.setText(kran.getAyat());
-        holder.tv_pageI.setText("ط§ظ„طµظپط­ط©: " + kran.getPage());
+        holder.tv_pageI.setText("الصفحة: " + kran.getPage());
 
         return convertView;
 

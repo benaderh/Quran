@@ -36,6 +36,10 @@ import androidx.viewpager.widget.ViewPager;
 import java.io.File;
 import java.io.IOException;
 
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+
 public class QMain extends Activity {
 
     private Utils utils;
@@ -344,31 +348,24 @@ public class QMain extends Activity {
                                 sora = "s" + soraI;
                                 curS.close();
 
-                                // Read audio index from CSV file (converted from XLS)
+                                // Read audio index from XLS file
                                 try {
-                                    File csvFile = new File(Riwaya + sora + ".csv");
-                                    if (csvFile.exists()) {
-                                        java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(csvFile));
-                                        String csvLine;
-                                        int rowIdx = 0;
-                                        while ((csvLine = br.readLine()) != null) {
-                                            if (rowIdx == x1) {
-                                                String[] cols = csvLine.split(",");
-                                                if (cols.length > 5) {
-                                                    try {
-                                                        lineI = Integer.parseInt(cols[1].trim());
-                                                        pos   = Integer.parseInt(cols[4].trim());
-                                                        ayaI  = Integer.parseInt(cols[5].trim());
-                                                    } catch (NumberFormatException ignored) {}
-                                                }
-                                                break;
-                                            }
-                                            rowIdx++;
-                                        }
-                                        br.close();
+                                    File xlsFile = new File(Riwaya + sora + ".xls");
+                                    if (xlsFile.exists()) {
+                                        Workbook wb = Workbook.getWorkbook(xlsFile);
+                                        Sheet s = wb.getSheet(0);
+
+                                        Cell z = s.getCell(4, x1);
+                                        pos = new Integer(z.getContents().toString());
+
+                                        z = s.getCell(5, x1);
+                                        ayaI = new Integer(z.getContents().toString());
+
+                                        z = s.getCell(1, x1);
+                                        lineI = new Integer(z.getContents().toString());
                                     }
                                 } catch (Exception e) {
-                                    Log.e("QMain", "CSV read error: " + e.getMessage());
+                                    Log.e("QMain", "XLS read error: " + e.getMessage());
                                 }
 
                             } else {

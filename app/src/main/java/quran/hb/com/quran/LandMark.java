@@ -76,10 +76,10 @@ public class LandMark extends Activity {
         } while (j < 609);
         lastPt = curQ.getString(3);
 
-        tv_pc.setText("ط§ظ„طµظپط­ط© ط§ظ„ط­ط§ظ„ظٹط©\nط³ظˆط±ط© " + lastPt + "\nط§ظ„طµظپط­ط© " + lastP);
-        tv_p1.setText("ط³ظˆط±ط© " + rt1 + "\nط§ظ„طµظپط­ط© " + ri1);
-        tv_p2.setText("ط³ظˆط±ط© " + rt2 + "\nط§ظ„طµظپط­ط© " + ri2);
-        tv_p3.setText("ط³ظˆط±ط© " + rt3 + "\nط§ظ„طµظپط­ط© " + ri3);
+        tv_pc.setText("الصفحة الحالية\nسورة " + lastPt + "\nالصفحة " + lastP);
+        tv_p1.setText("سورة " + rt1 + "\nالصفحة " + ri1);
+        tv_p2.setText("سورة " + rt2 + "\nالصفحة " + ri2);
+        tv_p3.setText("سورة " + rt3 + "\nالصفحة " + ri3);
 
         btn_O1.setOnClickListener(new View.OnClickListener() {
             @Override

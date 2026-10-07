@@ -84,7 +84,7 @@ public class Tefcir extends Activity {
             //Toast.makeText(getApplicationContext(), "s: "+soraI+"   a: "+ayaI+"   t: "+curT.getString(3) , Toast.LENGTH_SHORT).show();
 
             ayaT.setText(curT.getString(3));
-            soraT.setText("ط§ظ„ط¢ظٹط© " + curT.getString(2) + "   ط³ظˆط±ط© " + curT.getString(7));
+            soraT.setText("الآية " + curT.getString(2) + "   سورة " + curT.getString(7));
             tefcirT.setText(curT.getString(4));
 
             Typeface tf = Typeface.createFromAsset(getAssets(), "font/UthmanicHafs1 Ver09.otf");
@@ -105,7 +105,7 @@ public class Tefcir extends Activity {
             //Toast.makeText(getApplicationContext(), "s: "+soraI+"   a: "+ayaI+"   t: "+curT.getString(3) , Toast.LENGTH_SHORT).show();
 
             ayaT.setText(curT.getString(3));
-            soraT.setText("ط§ظ„ط¢ظٹط© " + curT.getString(2) + "   ط³ظˆط±ط© " + curT.getString(7));
+            soraT.setText("الآية " + curT.getString(2) + "   سورة " + curT.getString(7));
             tefcirT.setText(curT.getString(4));
             //fontW=curT.getString(6);
             pageS = Integer.valueOf(curT.getString(6));
@@ -127,7 +127,7 @@ public class Tefcir extends Activity {
             public void onClick(View arg0) {
                 if (curT.getInt(0)==1) curT.moveToLast(); else curT.moveToPrevious();
                 ayaT.setText(curT.getString(3));
-                soraT.setText("ط§ظ„ط¢ظٹط© " + curT.getString(2) + "   ط³ظˆط±ط© " + curT.getString(7));
+                soraT.setText("الآية " + curT.getString(2) + "   سورة " + curT.getString(7));
                 tefcirT.setText(curT.getString(4));
 
                 if (lastR ==2) {
@@ -162,7 +162,7 @@ public class Tefcir extends Activity {
                 else curT.moveToNext();
 
                 ayaT.setText(curT.getString(3));
-                soraT.setText("ط§ظ„ط¢ظٹط© " + curT.getString(2) + "   ط³ظˆط±ط© " + curT.getString(7));
+                soraT.setText("الآية " + curT.getString(2) + "   سورة " + curT.getString(7));
                 tefcirT.setText(curT.getString(4));
                 //ayaB.setText(curT.getString(3));
                 //tefcirB.setText(curT.getString(4));
