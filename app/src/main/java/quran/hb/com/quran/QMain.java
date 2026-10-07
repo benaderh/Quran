@@ -348,48 +348,47 @@ public class QMain extends Activity {
                                 } while (k < 115);
                                 curS.moveToPrevious();
                                 x1 = x1 - curS.getInt(3);
-                                sora = "s" + (k - 1);
+                                soraI = k - 1;
+                                sora = "s" + soraI;
                                 curS.close();
 
-                                // Calculate soraI and ayaI from SQLite (tb_tafcir or tb_tafcirW) based on click position
-                                int clickPosIndex = click_line * 4 + click_point;
-                                int bestSora = 1;
-                                int bestAya = 1;
-                                
-                                String tableName = (lastR == 1) ? "tb_tafcir" : "tb_tafcirW";
-                                SQLdb = db.openWritableDb();
-                                Cursor c = SQLdb.rawQuery("SELECT sora, aya, p_sora, line, point FROM " + tableName + " WHERE p_sora = " + click_page + " OR p_sora = " + (click_page - 1) + " ORDER BY p_sora ASC, line ASC, point ASC", null);
-                                if (c != null && c.moveToFirst()) {
-                                    do {
-                                        int p_sora = c.getInt(2);
-                                        int r_line = c.getInt(3);
-                                        int r_point = c.getInt(4);
-                                        int pos_index = r_line * 4 + r_point;
-                                        
-                                        if (p_sora < click_page || (p_sora == click_page && pos_index <= clickPosIndex)) {
-                                            bestSora = c.getInt(0);
-                                            bestAya = c.getInt(1);
-                                        } else {
-                                            break;
-                                        }
-                                    } while (c.moveToNext());
-                                    c.close();
-                                }
-                                SQLdb.close();
-                                soraI = bestSora;
-                                ayaI = bestAya;
-
-                                // Read audio index from XLS file
+                                // Restore EXACT ExQuran behavior for reading position, ayaI and lineI
                                 try {
+                                    File csvFile = new File(Riwaya + sora + ".csv");
                                     File xlsFile = new File(Riwaya + sora + ".xls");
-                                    if (xlsFile.exists()) {
+
+                                    if (csvFile.exists()) {
+                                        java.io.BufferedReader br = new java.io.BufferedReader(new java.io.FileReader(csvFile));
+                                        String csvLine;
+                                        int rowIdx = 0;
+                                        while ((csvLine = br.readLine()) != null) {
+                                            if (rowIdx == x1) {
+                                                // Support both comma and semicolon separators
+                                                String[] cols = csvLine.split("[,;]");
+                                                if (cols.length > 5) {
+                                                    try {
+                                                        lineI = Integer.parseInt(cols[1].trim());
+                                                        pos   = Integer.parseInt(cols[4].trim());
+                                                        ayaI  = Integer.parseInt(cols[5].trim());
+                                                    } catch (NumberFormatException ignored) {}
+                                                }
+                                                break;
+                                            }
+                                            rowIdx++;
+                                        }
+                                        br.close();
+                                    } else if (xlsFile.exists()) {
                                         Workbook wb = Workbook.getWorkbook(xlsFile);
                                         Sheet s = wb.getSheet(0);
                                         Cell z = s.getCell(4, x1);
                                         pos = new Integer(z.getContents().toString());
+                                        z = s.getCell(5, x1);
+                                        ayaI = new Integer(z.getContents().toString());
+                                        z = s.getCell(1, x1);
+                                        lineI = new Integer(z.getContents().toString());
                                     }
                                 } catch (Exception e) {
-                                    Log.e("QMain", "XLS read error: " + e.getMessage());
+                                    Log.e("QMain", "Read error: " + e.getMessage());
                                 }
 
                             } else {
