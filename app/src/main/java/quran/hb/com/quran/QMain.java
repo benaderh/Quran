@@ -330,6 +330,10 @@ public class QMain extends Activity {
                                 else if ((screenWidth / 4) * 2 < x && x < ((screenWidth / 4) * 3) + 1) x1 = 2;
                                 else if ((screenWidth / 4) * 3 < x && x < ((screenWidth / 4) * 4) + 1) x1 = 1;
 
+                                int click_page = curQ.getInt(0);
+                                int click_line = y1;
+                                int click_point = x1;
+
                                 x1 = (curQ.getInt(0) - 1) * 60 + (y1 - 1) * 4 + x1 + 1;
 
                                 Cursor curS;
@@ -344,9 +348,34 @@ public class QMain extends Activity {
                                 } while (k < 115);
                                 curS.moveToPrevious();
                                 x1 = x1 - curS.getInt(3);
-                                soraI = k - 1;
-                                sora = "s" + soraI;
+                                sora = "s" + (k - 1);
                                 curS.close();
+
+                                // Calculate soraI and ayaI from SQLite (tb_tafcir or tb_tafcirW) based on click position
+                                int clickPosIndex = click_line * 4 + click_point;
+                                int bestSora = 1;
+                                int bestAya = 1;
+                                
+                                String tableName = (lastR == 1) ? "tb_tafcir" : "tb_tafcirW";
+                                Cursor c = db.tfrawQuery("SELECT sora, aya, p_sora, line, point FROM " + tableName + " WHERE p_sora = " + click_page + " OR p_sora = " + (click_page - 1) + " ORDER BY p_sora ASC, line ASC, point ASC", null);
+                                if (c != null && c.moveToFirst()) {
+                                    do {
+                                        int p_sora = c.getInt(2);
+                                        int r_line = c.getInt(3);
+                                        int r_point = c.getInt(4);
+                                        int pos_index = r_line * 4 + r_point;
+                                        
+                                        if (p_sora < click_page || (p_sora == click_page && pos_index <= clickPosIndex)) {
+                                            bestSora = c.getInt(0);
+                                            bestAya = c.getInt(1);
+                                        } else {
+                                            break;
+                                        }
+                                    } while (c.moveToNext());
+                                    c.close();
+                                }
+                                soraI = bestSora;
+                                ayaI = bestAya;
 
                                 // Read audio index from XLS file
                                 try {
@@ -354,15 +383,8 @@ public class QMain extends Activity {
                                     if (xlsFile.exists()) {
                                         Workbook wb = Workbook.getWorkbook(xlsFile);
                                         Sheet s = wb.getSheet(0);
-
                                         Cell z = s.getCell(4, x1);
                                         pos = new Integer(z.getContents().toString());
-
-                                        z = s.getCell(5, x1);
-                                        ayaI = new Integer(z.getContents().toString());
-
-                                        z = s.getCell(1, x1);
-                                        lineI = new Integer(z.getContents().toString());
                                     }
                                 } catch (Exception e) {
                                     Log.e("QMain", "XLS read error: " + e.getMessage());
