@@ -90,20 +90,33 @@ public class QMain extends Activity {
         scrollV    = findViewById(R.id.scrollV);
         scrollVb   = findViewById(R.id.scrollVb);
 
-        try {
-            db = new DbHelper(this);
-        } catch (IOException e2) {
-            e2.printStackTrace();
-        }
+        android.widget.Toast.makeText(this, "Chargement initial, veuillez patienter...", android.widget.Toast.LENGTH_LONG).show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    db = new DbHelper(QMain.this);
+                    db.createdatabase();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-        try {
-            db.createdatabase();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                // Create app-specific external directories (no permission needed on Android 10+)
+                createAppDirectories();
 
-        // Create app-specific external directories (no permission needed on Android 10+)
-        createAppDirectories();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (isFinishing()) return;
+                        findViewById(R.id.loadingLayout).setVisibility(View.GONE);
+                        initPostLoad();
+                    }
+                });
+            }
+        }).start();
+    }
+
+    private void initPostLoad() {
 
         // Read indice from DB
         db.opendatabase();
