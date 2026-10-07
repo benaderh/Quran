@@ -1,13 +1,17 @@
 package quran.hb.com.quran;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -23,16 +27,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.viewpager.widget.ViewPager;
 
-// CSV reader - no external dependency needed
-
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 public class QMain extends Activity {
 
@@ -90,30 +90,44 @@ public class QMain extends Activity {
         scrollV    = findViewById(R.id.scrollV);
         scrollVb   = findViewById(R.id.scrollVb);
 
-        android.widget.Toast.makeText(this, "Chargement initial, veuillez patienter...", android.widget.Toast.LENGTH_LONG).show();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    db = new DbHelper(QMain.this);
-                    db.createdatabase();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        // Initialiser la base de données (petite, rapide)
+        try {
+            db = new DbHelper(this);
+            db.createdatabase();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-                // Create app-specific external directories (no permission needed on Android 10+)
-                createAppDirectories();
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (isFinishing()) return;
-                        findViewById(R.id.loadingLayout).setVisibility(View.GONE);
-                        initPostLoad();
-                    }
-                });
+        // Demander la permission de lire le stockage externe si nécessaire
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            // Android 6-9 : besoin de READ_EXTERNAL_STORAGE
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                return; // initPostLoad() sera appelé dans onRequestPermissionsResult
             }
-        }).start();
+        }
+
+        // Cacher l'écran de chargement et démarrer
+        findViewById(R.id.loadingLayout).setVisibility(View.GONE);
+        initPostLoad();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 1) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                findViewById(R.id.loadingLayout).setVisibility(View.GONE);
+                initPostLoad();
+            } else {
+                Toast.makeText(this,
+                        "Permission refusée. Placez les fichiers dans /sdcard/QuranHW/ et accordez la permission.",
+                        Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void initPostLoad() {
@@ -510,52 +524,8 @@ public class QMain extends Activity {
         bar = 0;
     }
 
-    /**
-     * Creates app-specific external directories and copies assets.
-     * Uses getExternalFilesDir() - no WRITE_EXTERNAL_STORAGE permission needed on Android 10+
-     */
-    private void createAppDirectories() {
-        File hafsImg = utils.getHafsImgDir();
-        File hafsAud = utils.getHafsAudDir();
-        File warshImg = utils.getWarshImgDir();
-        File warshAud = utils.getWarshAudDir();
-
-        // Also create .nomedia file
-        try { new File(utils.getQuranBaseDir(), ".nomedia").createNewFile(); } catch (IOException ignored) {}
-
-        if (hafsImg.list() == null || hafsImg.list().length == 0) {
-            copyAssetsFolder("HI", hafsImg);
-        }
-        if (hafsAud.list() == null || hafsAud.list().length == 0) {
-            copyAssetsFolder("HA", hafsAud);
-        }
-        if (warshImg.list() == null || warshImg.list().length == 0) {
-            copyAssetsFolder("WI", warshImg);
-        }
-        if (warshAud.list() == null || warshAud.list().length == 0) {
-            copyAssetsFolder("WA", warshAud);
-        }
-    }
-
-    private void copyAssetsFolder(String assetFolder, File destDir) {
-        try {
-            String[] files = getAssets().list(assetFolder);
-            if (files == null) return;
-            for (String filename : files) {
-                InputStream in = getAssets().open(assetFolder + "/" + filename);
-                File outFile = new File(destDir, filename);
-                OutputStream out = new FileOutputStream(outFile);
-                byte[] buffer = new byte[4096];
-                int read;
-                while ((read = in.read(buffer)) != -1) out.write(buffer, 0, read);
-                out.flush();
-                out.close();
-                in.close();
-            }
-        } catch (IOException e) {
-            Log.e("QMain", "copyAssetsFolder error: " + e.getMessage());
-        }
-    }
+    // Les fichiers sont déposés manuellement par l'utilisateur dans /sdcard/QuranHW/
+    // Pas de copie d'assets nécessaire.
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {

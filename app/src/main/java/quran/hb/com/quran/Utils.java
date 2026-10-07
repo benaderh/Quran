@@ -1,6 +1,7 @@
 package quran.hb.com.quran;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
@@ -11,83 +12,64 @@ public class Utils {
 
     private Context _context;
 
+    // Répertoire racine : /sdcard/QuranHW/
+    // L'utilisateur dépose manuellement ses fichiers dans les 4 sous-dossiers :
+    //   HI/ -> images Hafs (.jpg)
+    //   HA/ -> audio  Hafs (.wav, .csv)
+    //   WI/ -> images Warsh (.png)
+    //   WA/ -> audio  Warsh (.wav, .csv)
+    private static final String BASE_DIR_NAME = "QuranHW";
+
     public Utils(Context context) {
         this._context = context;
     }
 
-    /**
-     * Returns the app-private external files directory for Quran images/audio.
-     * No permissions needed on Android 10+.
-     * Path: /sdcard/Android/data/quran.hb.com.quran/files/QuranHW/
-     */
+    /** Racine : /sdcard/QuranHW/ */
     public File getQuranBaseDir() {
-        // getExternalFilesDir(null) returns app-specific external dir - no permission needed
-        File baseDir = _context.getExternalFilesDir(null);
-        if (baseDir == null) {
-            // Fallback to internal files dir if no external storage
-            baseDir = _context.getFilesDir();
-        }
-        File quranDir = new File(baseDir, "QuranHW");
-        quranDir.mkdirs();
-        return quranDir;
+        File sdcard = Environment.getExternalStorageDirectory(); // /storage/emulated/0
+        File dir = new File(sdcard, BASE_DIR_NAME);
+        dir.mkdirs();
+        return dir;
     }
 
+    /** /sdcard/QuranHW/HI/ — images Hafs */
     public File getHafsImgDir() {
-        File dir = new File(getQuranBaseDir(), "H/img");
-        dir.mkdirs();
-        return dir;
+        return new File(getQuranBaseDir(), "HI");
     }
 
+    /** /sdcard/QuranHW/HA/ — audio Hafs */
     public File getHafsAudDir() {
-        File dir = new File(getQuranBaseDir(), "H/aud");
-        dir.mkdirs();
-        return dir;
+        return new File(getQuranBaseDir(), "HA");
     }
 
+    /** /sdcard/QuranHW/WI/ — images Warsh */
     public File getWarshImgDir() {
-        File dir = new File(getQuranBaseDir(), "W/img");
-        dir.mkdirs();
-        return dir;
+        return new File(getQuranBaseDir(), "WI");
     }
 
+    /** /sdcard/QuranHW/WA/ — audio Warsh */
     public File getWarshAudDir() {
-        File dir = new File(getQuranBaseDir(), "W/aud");
-        dir.mkdirs();
-        return dir;
+        return new File(getQuranBaseDir(), "WA");
     }
 
+    /** Liste triée des chemins images Hafs p0.jpg … p608.jpg */
     public ArrayList<String> getFilePaths() {
         ArrayList<String> filePaths = new ArrayList<>();
-        File directoryH = getHafsImgDir();
-        File[] listFiles = directoryH.listFiles();
-        if (listFiles != null && listFiles.length > 0) {
-            for (int i = 0; i < listFiles.length; i++) {
-                String filePath = listFiles[i].getAbsolutePath();
-                if (IsSupportedFile(filePath)) {
-                    filePaths.add(directoryH + "/p" + (608 - i) + ".jpg");
-                }
-            }
+        File dir = getHafsImgDir();
+        for (int i = 0; i <= 608; i++) {
+            filePaths.add(new File(dir, "p" + i + ".jpg").getAbsolutePath());
         }
         return filePaths;
     }
 
+    /** Liste triée des chemins images Warsh p0.png … p608.png */
     public ArrayList<String> getFilePathsW() {
         ArrayList<String> filePathsW = new ArrayList<>();
-        File directoryW = getWarshImgDir();
-        File[] listFilesW = directoryW.listFiles();
-        if (listFilesW != null && listFilesW.length > 0) {
-            for (int i = 0; i < listFilesW.length; i++) {
-                String filePathW = listFilesW[i].getAbsolutePath();
-                if (IsSupportedFile(filePathW)) {
-                    filePathsW.add(directoryW + "/p" + (608 - i) + ".png");
-                }
-            }
+        File dir = getWarshImgDir();
+        for (int i = 0; i <= 608; i++) {
+            filePathsW.add(new File(dir, "p" + i + ".png").getAbsolutePath());
         }
         return filePathsW;
-    }
-
-    private boolean IsSupportedFile(String filePath) {
-        return true;
     }
 
     public int getScreenWidth() {

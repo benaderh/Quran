@@ -1,8 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- No WRITE_EXTERNAL_STORAGE needed for app-specific directories on Android 10+ -->
-    <!-- For audio playback from app-specific dir, no permissions needed -->
+    <!-- Lire les fichiers de /sdcard/QuranHW/ (Android 6-9 seulement, inutile sur Android 10+) -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
 
     <application
         android:allowBackup="true"
