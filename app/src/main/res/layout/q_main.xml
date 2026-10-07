@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
+    android:textDirection="rtl"
+    android:layoutDirection="rtl"
     android:orientation="vertical">
 
     <androidx.viewpager.widget.ViewPager
@@ -61,7 +63,7 @@
             android:id="@+id/btnW"
             android:layout_width="0dp"
             android:layout_height="30dp"
-            android:text="ظˆط±ط´"
+            android:text="@string/btn_warsh"
             android:layout_weight="1"
             android:background="#1d0606"
             android:textColor="#aea7a7"
@@ -72,7 +74,7 @@
             android:id="@+id/btnH"
             android:layout_width="0dp"
             android:layout_height="30dp"
-            android:text="ط­ظپطµ"
+            android:text="@string/btn_hafs"
             android:textStyle="bold"
             android:layout_weight="1"
             android:background="#1d0606"
@@ -84,7 +86,7 @@
             android:id="@+id/btnT"
             android:layout_width="0dp"
             android:layout_height="30dp"
-            android:text="طھظپط³ظٹط±"
+            android:text="@string/btn_tafsir"
             android:background="#1d0606"
             android:layout_weight="1"
             android:textColor="#ffffff"
@@ -95,7 +97,7 @@
             android:id="@+id/btnA"
             android:layout_width="0dp"
             android:layout_height="30dp"
-            android:text="طھظ„ط§ط©"
+            android:text="@string/btn_tilawa"
             android:background="#227e08"
             android:layout_weight="1"
             android:textColor="#ffffff"
@@ -107,7 +109,7 @@
             android:id="@+id/btnM"
             android:layout_width="0dp"
             android:layout_height="30dp"
-            android:text="ط§ظ„ظ‚ط§ط¦ظ…ط©"
+            android:text="@string/btn_menu"
             android:background="#1d0606"
             android:layout_weight="1"
             android:textColor="#ffffff"
@@ -127,7 +129,7 @@
         android:id="@+id/btnAbout"
         android:layout_width="0dp"
         android:layout_height="30dp"
-        android:text="ط­ظˆظ„"
+        android:text="@string/btn_about"
         android:background="#1d0606"
         android:layout_weight="0.06"
         android:textColor="#ffffff"
@@ -160,7 +162,7 @@
                 <TextView
 
                     android:id="@+id/tv_aya"
-                    android:text="ط¢ظٹط©"
+                    android:text="@string/lbl_aya"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#41e70e"
@@ -170,7 +172,7 @@
 
                 <TextView
                     android:id="@+id/tv_tefcir"
-                    android:text="طھظپط³ظٹط±"
+                    android:text="@string/lbl_tafsir"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textSize="30sp"
@@ -193,7 +195,7 @@
                         android:layout_height="50dp"
 
                         android:textAlignment="center"
-                        android:text="ط§ظ„ط¢ظٹط© ط§ظ„طھط§ظ„ظٹط©"
+                        android:text="@string/btn_next_aya"
 
                         />
 
@@ -203,7 +205,7 @@
                         android:layout_height="50dp"
 
                         android:textAlignment="center"
-                        android:text="ط§ظ„ط¹ظˆط¯ط©"
+                        android:text="@string/btn_return"
 
                         />
 
@@ -212,7 +214,7 @@
                         android:layout_width="110dp"
                         android:layout_height="50dp"
                         android:layout_gravity="right"
-                        android:text="ط§ظ„ط¢ظٹط© ط§ظ„ط³ط§ط¨ظ‚ط©"
+                        android:text="@string/btn_prev_aya"
 
                         />
 
@@ -249,7 +251,7 @@
                 <TextView
 
                     android:id="@+id/tv_ayab"
-                    android:text="ط¢ظٹط©"
+                    android:text="@string/lbl_aya"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#41e70e"
@@ -260,7 +262,7 @@
 
                 <TextView
                     android:id="@+id/tv_tefcirb"
-                    android:text="طھظپط³ظٹط±"
+                    android:text="@string/lbl_tafsir"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textSize="30sp"
@@ -284,7 +286,7 @@
                        android:layout_height="50dp"
 
                        android:textAlignment="center"
-                        android:text="ط§ظ„ط¢ظٹط© ط§ظ„طھط§ظ„ظٹط©"
+                        android:text="@string/btn_next_aya"
 
                     />
 
@@ -293,7 +295,7 @@
                         android:layout_width="110dp"
                         android:layout_height="50dp"
                         android:layout_gravity="right"
-                        android:text="ط§ظ„ط¢ظٹط© ط§ظ„ط³ط§ط¨ظ‚ط©"
+                        android:text="@string/btn_prev_aya"
 
                     />
 

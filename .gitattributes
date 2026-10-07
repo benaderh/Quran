@@ -2,3 +2,5 @@
 gradlew text eol=lf
 *.sh text eol=lf
 *.bat text eol=crlf
+# Empêcher la conversion des fichiers XML (protège les caractères arabes UTF-8)
+*.xml -text

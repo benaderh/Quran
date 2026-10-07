@@ -57,7 +57,7 @@ public class Utils {
         ArrayList<String> filePaths = new ArrayList<>();
         File dir = getHafsImgDir();
         for (int i = 0; i <= 608; i++) {
-            filePaths.add(new File(dir, "p" + i + ".jpg").getAbsolutePath());
+            filePaths.add(new File(dir, "p" + (608 - i) + ".jpg").getAbsolutePath());
         }
         return filePaths;
     }
@@ -67,7 +67,7 @@ public class Utils {
         ArrayList<String> filePathsW = new ArrayList<>();
         File dir = getWarshImgDir();
         for (int i = 0; i <= 608; i++) {
-            filePathsW.add(new File(dir, "p" + i + ".png").getAbsolutePath());
+            filePathsW.add(new File(dir, "p" + (608 - i) + ".png").getAbsolutePath());
         }
         return filePathsW;
     }
