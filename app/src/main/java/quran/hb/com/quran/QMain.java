@@ -132,8 +132,27 @@ public class QMain extends Activity {
 
     private void initPostLoad() {
 
+        // === Vérifier que les fichiers images existent ===
+        File imgDir = utils.getHafsImgDir(); // /storage/emulated/0/QuranHW/HI/
+        File testImg = new File(imgDir, "p1.jpg");
+        if (!testImg.exists()) {
+            // Afficher un message d'erreur clair
+            Toast.makeText(this,
+                "Fichiers manquants !\n" +
+                "Copiez vos images dans :\n" +
+                imgDir.getAbsolutePath(),
+                Toast.LENGTH_LONG).show();
+            // Montrer aussi un TextView dans l'UI
+            showMissingFilesMessage(imgDir.getAbsolutePath());
+            return;
+        }
+
         // Read indice from DB
-        db.opendatabase();
+        try {
+            db.opendatabase();
+        } catch (Exception e) {
+            Log.e("QMain", "opendatabase error: " + e.getMessage());
+        }
         Cursor curI = db.inrawQuery("SELECT * FROM tb_indice", null);
         curI.moveToFirst();
         lastP  = curI.getInt(0);
@@ -524,8 +543,26 @@ public class QMain extends Activity {
         bar = 0;
     }
 
-    // Les fichiers sont déposés manuellement par l'utilisateur dans /sdcard/QuranHW/
+    // Les fichiers sont déposés manuellement par l'utilisateur dans /storage/emulated/0/QuranHW/
     // Pas de copie d'assets nécessaire.
+
+    /** Affiche un message d'erreur dans l'UI quand les fichiers images sont absents */
+    private void showMissingFilesMessage(String path) {
+        // Réutilise le loadingLayout pour afficher le message
+        View loading = findViewById(R.id.loadingLayout);
+        loading.setVisibility(View.VISIBLE);
+        // Trouver le TextView dans le layout de chargement
+        TextView tv = loading.findViewById(R.id.tvLoadingMsg);
+        if (tv != null) {
+            tv.setText(
+                "\u26a0 Fichiers manquants !\n\n" +
+                "Copiez vos images JPG dans :\n\n" +
+                path + "\n\n" +
+                "(p0.jpg, p1.jpg ... p608.jpg)\n\n" +
+                "Puis relancez l'application."
+            );
+        }
+    }
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
