@@ -75,12 +75,16 @@ public class Tefcir extends Activity {
             int j = 1;
             do {
                 if (curT.getInt(1) == soraI && curT.getInt(2) == ayaI) {
-                    //i = 366;
                     break;
                 }
                 curT.moveToNext();
                 j++;
-            } while (j < 6237);
+            } while (j < 6237 && !curT.isAfterLast());
+            
+            if (curT.isAfterLast()) {
+                curT.moveToFirst();
+            }
+
             //Toast.makeText(getApplicationContext(), "s: "+soraI+"   a: "+ayaI+"   t: "+curT.getString(3) , Toast.LENGTH_SHORT).show();
 
             ayaT.setText(curT.getString(3));
@@ -101,7 +105,12 @@ public class Tefcir extends Activity {
                 }
                 curT.moveToNext();
                 j++;
-            } while (j < 6215);
+            } while (j < 6215 && !curT.isAfterLast());
+
+            if (curT.isAfterLast()) {
+                curT.moveToFirst();
+            }
+
             //Toast.makeText(getApplicationContext(), "s: "+soraI+"   a: "+ayaI+"   t: "+curT.getString(3) , Toast.LENGTH_SHORT).show();
 
             ayaT.setText(curT.getString(3));
