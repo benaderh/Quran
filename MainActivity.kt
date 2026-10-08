@@ -14,6 +14,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -48,6 +55,7 @@ class MainActivity : ComponentActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContent {
             MaterialTheme {
+                CrashDialog(java.io.File(filesDir, "crash.txt"))
                 val ok = remember(tick) { Storage.resolve(this) && Storage.dbAvailable(this) }
                 LaunchedEffect(ok) { if (ok) vm.start() }
 
@@ -144,5 +152,26 @@ private fun AppNav(vm: AppViewModel) {
         composable("landmark") { LandmarkScreen(vm, back, openReader) }
         composable("tafsir") { TafsirScreen(vm, back) }
         composable("about") { AboutScreen(back) }
+    }
+}
+
+
+/** يعرض سبب آخر انهيار (إن وُجد) مع زر نسخ */
+@Composable
+private fun CrashDialog(file: java.io.File) {
+    var text by remember { mutableStateOf(if (file.exists()) runCatching { file.readText() }.getOrNull() else null) }
+    val clipboard = LocalClipboardManager.current
+    if (text != null) {
+        AlertDialog(
+            onDismissRequest = { file.delete(); text = null },
+            title = { Text("سبب آخر انهيار") },
+            text = {
+                SelectionContainer {
+                    Text(text!!, fontSize = 11.sp, modifier = Modifier.verticalScroll(rememberScrollState()).heightIn(max = 360.dp))
+                }
+            },
+            confirmButton = { TextButton(onClick = { clipboard.setText(AnnotatedString(text!!)) }) { Text("نسخ") } },
+            dismissButton = { TextButton(onClick = { file.delete(); text = null }) { Text("إغلاق") } }
+        )
     }
 }

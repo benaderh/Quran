@@ -2,9 +2,11 @@ package quran.hb.com.quran.ui
 
 import android.database.Cursor
 import android.graphics.Typeface
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -56,15 +58,25 @@ private class TafsirHolder(private val cursor: Cursor, private val riwaya: Int) 
 fun TafsirScreen(vm: AppViewModel, onBack: () -> Unit) {
     val context = LocalContext.current
     val riwaya = vm.riwaya
-    val holder = remember { TafsirHolder(vm.repo.openTafsir(riwaya), riwaya) }
-    DisposableEffect(Unit) { onDispose { holder.close() } }
 
+    var holder by remember { mutableStateOf<TafsirHolder?>(null) }
     var pos by remember { mutableIntStateOf(0) }
-    var loaded by remember { mutableStateOf(false) }
+    var error by remember { mutableStateOf<String?>(null) }
+
+    // فتح الجدول و البحث عن الآية خارج الخيط الرئيسي
     LaunchedEffect(Unit) {
-        pos = withContext(Dispatchers.IO) { holder.find(vm.tafsirSora, vm.tafsirAya) }
-        loaded = true
+        try {
+            val h = withContext(Dispatchers.IO) {
+                val c = TafsirHolder(vm.repo.openTafsir(riwaya), riwaya)
+                pos = c.find(vm.tafsirSora, vm.tafsirAya)
+                c
+            }
+            holder = h
+        } catch (e: Throwable) {
+            error = Log.getStackTraceString(e)
+        }
     }
+    DisposableEffect(holder) { onDispose { holder?.close() } }
 
     val fonts = remember { HashMap<String, FontFamily>() }
     fun fontFor(item: Tafsir): FontFamily {
@@ -72,32 +84,39 @@ fun TafsirScreen(vm: AppViewModel, onBack: () -> Unit) {
         else "font/P" + item.page.toString().padStart(3, '0') + ".otf"
         return fonts.getOrPut(path) {
             try {
-                FontFamily(Typeface.createFromAsset(context.assets, path))      // داخل الـ APK
-            } catch (e: Exception) {
+                FontFamily(Typeface.createFromAsset(context.assets, path))        // داخل الـ APK
+            } catch (e: Throwable) {
                 try {
-                    val f = java.io.File(Storage.root, path)                      // أو في QuranHW/font
-                    FontFamily(Typeface.createFromFile(f))
-                } catch (e2: Exception) {
+                    FontFamily(Typeface.createFromFile(java.io.File(Storage.root, path)))  // QuranHW/font
+                } catch (e2: Throwable) {
                     FontFamily.Default
                 }
             }
         }
     }
 
-    val item = remember(pos, loaded) { if (loaded && holder.count > 0) holder.get(pos) else null }
+    val result = remember(pos, holder) { runCatching { holder?.takeIf { it.count > 0 }?.get(pos) } }
+    val item = result.getOrNull()
+    val itemError = result.exceptionOrNull()?.let { Log.getStackTraceString(it) }
+
     val scroll = rememberScrollState()
     val scope = rememberCoroutineScope()
     var size by remember { mutableIntStateOf(vm.fontSize) }
 
     fun move(delta: Int) {
-        if (holder.count == 0) return
-        pos = (pos + delta + holder.count) % holder.count
+        val h = holder ?: return
+        if (h.count == 0) return
+        pos = (pos + delta + h.count) % h.count
         scope.launch { scroll.animateScrollTo(0) }
     }
 
     ScreenScaffold("تفسير ميسر", onBack) {
         Column(Modifier.fillMaxSize().background(Cream)) {
             Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(scroll)) {
+                val err = error ?: itemError
+                if (err != null) {
+                    SelectionContainer { Text(err, color = Color.Red, fontSize = 11.sp, modifier = Modifier.padding(8.dp)) }
+                }
                 if (item != null) {
                     Text(
                         item.aya, Modifier.fillMaxWidth().background(Color.Black).padding(end = 5.dp),
