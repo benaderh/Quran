@@ -30,4 +30,3 @@ android:layout_gravity = "center">
         />
 </ScrollView>
 </RelativeLayout>
-

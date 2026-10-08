@@ -5,10 +5,15 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
 
+
+
+
     <string name="title_activity_main">مواقيت الصلاة</string>
 
     <string name="about1">مواقيت الصلاة</string>
+
     <string name="Date">التاريخ الميلادي</string>
+
 
     <string name="txt01">قرآن كريم   حفص/ورش النسخة 1.0</string>
     <string name="txt02">هشام  بن نادر   عين البيضاء   الجزائر</string>
@@ -20,31 +25,10 @@
     <string name="txt07">- الواجهة الرئيسية بسيطة، شاملة و مرنة.</string>
     <string name="txt08">- بلمسة واحدة تنتقل بين الروايتن، أو تستمع إلى آية أو جزء منها.</string>
     <string name="txt09">- نفس الشيء بالنسبة للتفسير الميسر.</string>
-    <string name="txt10">- الانتقال حسب الأجزاء أو  الصفحات أو السور بالضغط على الشريط الأسفل.</string>
-    <string name="txt11">- ينتهي المصحف بالدعاء ثم الانتقال مباشرة لبداية المصحف.</string>
-    <string name="txt12">- إمكانية تغيير المقرئ. يتطلب ذلك تعديلات في ملف الإكسل (Excel) المرتبط بالسورة المعنية.</string>
+    <string name="txt10">- الأنتقال حسب الأجزاء أو  الصفحات أو السور بالضغط على الشريط الأسفل.</string>
+    <string name="txt11">- ينتهي المصحف بالدعاء ثم الأنتقال مباشرة لبداية المصحف.</string>
+    <string name="txt12">- إمكانية تغيير المقريء. يتطلب ذلك تعديلات في ملف الإكسل (Excel) المرتبط بالسورة المعنية.</string>
     <string name="txt13">- بضغطة مطولة تحفظ الصفحةالحالية أو تعرض صفحة محفوظة.</string>
     <string name="txt14">- حفص/المنشاوي.   - ورش/مصطفى غربي.</string>
-
-    <string name="label_index_page">البحث عن صفحة</string>
-    <string name="label_index_sura">البحث عن سورة</string>
-    <string name="label_index_juz">البحث عن جزء</string>
-    <string name="label_index_aya">البحث عن آية</string>
-    <string name="label_landmark">حفظ و تعديل العلامة</string>
-    <string name="label_tefcir">تفسير ميسر</string>
-    <string name="label_about">حول</string>
-
-    <!-- Boutons principaux -->
-    <string name="btn_warsh">ورش</string>
-    <string name="btn_hafs">حفص</string>
-    <string name="btn_tafsir">تفسير</string>
-    <string name="btn_tilawa">تلاوة</string>
-    <string name="btn_menu">القائمة</string>
-    <string name="btn_about">حول</string>
-    <string name="btn_next_aya">الآية التالية</string>
-    <string name="btn_prev_aya">الآية السابقة</string>
-    <string name="btn_return">العودة</string>
-    <string name="lbl_aya">آية</string>
-    <string name="lbl_tafsir">تفسير</string>
 
 </resources>

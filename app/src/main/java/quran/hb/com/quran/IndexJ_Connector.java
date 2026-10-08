@@ -101,7 +101,7 @@ public class IndexJ_Connector extends BaseAdapter {
 		//if (pos < mHolder.txt_DjPage.length())
 		{
 		//	mHolder.txt_DjPage.setText(DjPage.get(pos));
-			mHolder.txt_DjHizb.setText("ط¬ط²ط، "+(1+(pos/8))+"    "+"ط­ط²ط¨ "+(1+(pos/4)));
+			mHolder.txt_DjHizb.setText("جزء "+(1+(pos/8))+"    "+"حزب "+(1+(pos/4)));
 		//	mHolder.txt_DjAyaT.setText(DjAyaT.get(pos));
 		//	mHolder.txt_DjDetail.setText(DjDetail.get(pos));
 
@@ -119,7 +119,7 @@ public class IndexJ_Connector extends BaseAdapter {
 		}else if(pos%4==0){
 
 		//	mHolder.txt_DjPage.setText(DjPage.get(pos));
-			mHolder.txt_DjHizb.setText("ط­ط²ط¨ "+(1+(pos/4)));
+			mHolder.txt_DjHizb.setText("حزب "+(1+(pos/4)));
 		//	mHolder.txt_DjAyaT.setText(DjAyaT.get(pos));
 		//	mHolder.txt_DjDetail.setText(DjDetail.get(pos));
 
@@ -160,4 +160,3 @@ public class IndexJ_Connector extends BaseAdapter {
 	}
 
 }
-

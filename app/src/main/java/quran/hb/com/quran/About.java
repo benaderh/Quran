@@ -18,7 +18,7 @@ public class About extends Activity {
         TextView txt031 = (TextView) findViewById(R.id.txt031);
         AddressOnClickListners((TextView) findViewById(R.id.txt041), "http://facebook.com/benaderh.hb.1");
         txt031.setOnClickListener(new txt031C());
-        txt02.setText("ظ‡ط´ط§ظ…  ط¨ظ† ظ†ط§ط¯ط± - ط¹ظٹظ† ط§ظ„ط¨ظٹط¶ط§ط، - ط§ظ„ط¬ط²ط§ط¦ط±");
+        txt02.setText("هشام  بن نادر - عين البيضاء - الجزائر");
     }
 
     class txt031C implements OnClickListener {
@@ -70,4 +70,3 @@ public class About extends Activity {
 
 
 }
-

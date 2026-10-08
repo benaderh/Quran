@@ -4,40 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:textDirection="rtl"
-    android:layoutDirection="rtl"
     android:orientation="vertical">
 
-    <androidx.viewpager.widget.ViewPager
+    <android.support.v4.view.ViewPager
         android:id="@+id/vPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
 
     />
-
-    <LinearLayout
-        android:id="@+id/loadingLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:background="#000000"
-        android:orientation="vertical">
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminate="true" />
-        <TextView
-            android:id="@+id/tvLoadingMsg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Chargement initial, veuillez patienter..."
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:gravity="center"
-            android:layout_marginTop="16dp"/>
-
-    </LinearLayout>
 
 
     <LinearLayout
@@ -56,6 +31,7 @@
             android:textColor="#ffffff"
             android:textAlignment="center"
             android:visibility="gone"
+            android:onClick="true"
 
             android:drawableLeft="@android:drawable/ic_menu_search" />
 
@@ -63,58 +39,63 @@
             android:id="@+id/btnW"
             android:layout_width="0dp"
             android:layout_height="30dp"
-            android:text="@string/btn_warsh"
+            android:text="ورش"
             android:layout_weight="1"
             android:background="#1d0606"
             android:textColor="#aea7a7"
             android:textAlignment="center"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:onClick="true" />
 
         <Button
             android:id="@+id/btnH"
             android:layout_width="0dp"
             android:layout_height="30dp"
-            android:text="@string/btn_hafs"
+            android:text="حفص"
             android:textStyle="bold"
             android:layout_weight="1"
             android:background="#1d0606"
             android:textColor="#ffffff"
             android:textAlignment="center"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:onClick="true" />
 
         <Button
             android:id="@+id/btnT"
             android:layout_width="0dp"
             android:layout_height="30dp"
-            android:text="@string/btn_tafsir"
+            android:text="تفسير"
             android:background="#1d0606"
             android:layout_weight="1"
             android:textColor="#ffffff"
             android:textAlignment="center"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:onClick="true" />
 
         <Button
             android:id="@+id/btnA"
             android:layout_width="0dp"
             android:layout_height="30dp"
-            android:text="@string/btn_tilawa"
+            android:text="تلاة"
             android:background="#227e08"
             android:layout_weight="1"
             android:textColor="#ffffff"
             android:textStyle="bold"
             android:textAlignment="center"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:onClick="true" />
 
         <Button
             android:id="@+id/btnM"
             android:layout_width="0dp"
             android:layout_height="30dp"
-            android:text="@string/btn_menu"
+            android:text="القائمة"
             android:background="#1d0606"
             android:layout_weight="1"
             android:textColor="#ffffff"
             android:textAlignment="center"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:onClick="true" />
 
     </LinearLayout>
     <LinearLayout
@@ -129,12 +110,13 @@
         android:id="@+id/btnAbout"
         android:layout_width="0dp"
         android:layout_height="30dp"
-        android:text="@string/btn_about"
+        android:text="حول"
         android:background="#1d0606"
         android:layout_weight="0.06"
         android:textColor="#ffffff"
         android:textAlignment="center"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:onClick="true" />
     </LinearLayout>
 
 
@@ -162,7 +144,7 @@
                 <TextView
 
                     android:id="@+id/tv_aya"
-                    android:text="@string/lbl_aya"
+                    android:text="آية"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#41e70e"
@@ -172,7 +154,7 @@
 
                 <TextView
                     android:id="@+id/tv_tefcir"
-                    android:text="@string/lbl_tafsir"
+                    android:text="تفسير"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textSize="30sp"
@@ -195,7 +177,9 @@
                         android:layout_height="50dp"
 
                         android:textAlignment="center"
-                        android:text="@string/btn_next_aya"
+
+                        android:onClick="true"
+                        android:text="الآية التالية"
 
                         />
 
@@ -205,7 +189,9 @@
                         android:layout_height="50dp"
 
                         android:textAlignment="center"
-                        android:text="@string/btn_return"
+
+                        android:onClick="true"
+                        android:text="العودة"
 
                         />
 
@@ -213,8 +199,11 @@
                         android:id="@+id/btnAP"
                         android:layout_width="110dp"
                         android:layout_height="50dp"
+
+
+                        android:onClick="true"
                         android:layout_gravity="right"
-                        android:text="@string/btn_prev_aya"
+                        android:text="الآية السابقة"
 
                         />
 
@@ -251,7 +240,7 @@
                 <TextView
 
                     android:id="@+id/tv_ayab"
-                    android:text="@string/lbl_aya"
+                    android:text="آية"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#41e70e"
@@ -262,7 +251,7 @@
 
                 <TextView
                     android:id="@+id/tv_tefcirb"
-                    android:text="@string/lbl_tafsir"
+                    android:text="تفسير"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:textSize="30sp"
@@ -286,7 +275,9 @@
                        android:layout_height="50dp"
 
                        android:textAlignment="center"
-                        android:text="@string/btn_next_aya"
+
+                       android:onClick="true"
+                        android:text="الآية التالية"
 
                     />
 
@@ -294,8 +285,11 @@
                         android:id="@+id/btnAPb"
                         android:layout_width="110dp"
                         android:layout_height="50dp"
+
+
+                        android:onClick="true"
                         android:layout_gravity="right"
-                        android:text="@string/btn_prev_aya"
+                        android:text="الآية السابقة"
 
                     />
 
@@ -325,7 +319,8 @@
             android:textColor="#ffffff"
             android:background="#1d0606"
             android:textAlignment="center"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:onClick="true" />
 
         <Button
             android:id="@+id/btnP"
@@ -337,7 +332,8 @@
             android:layout_alignParentBottom="true"
             android:textAlignment="center"
             android:background="#1d0606"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:onClick="true" />
 
         <Button
             android:id="@+id/btnJ"
@@ -348,7 +344,8 @@
             android:textColor="#ffffff"
             android:background="#1d0606"
             android:textAlignment="center"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:onClick="true" />
 
     </LinearLayout>
 
@@ -364,7 +361,5 @@
 
 
 </RelativeLayout>
-
-
 
 

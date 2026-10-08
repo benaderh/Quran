@@ -99,7 +99,7 @@ public class IndexF extends Activity {
 
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, final int arg2, long arg3) {
      			//lastP= Integer.parseInt(tempPage.get(arg2) );
-				SQLdb = mHelper.openWritableDb();
+				SQLdb = openOrCreateDatabase("db_quran.sqlite", Context.MODE_PRIVATE, null);
 				SQLdb.execSQL("UPDATE tb_indice SET last_page = " + lastP + "");
 				finish();
 				Intent intent = new Intent(getApplicationContext(), QMain.class);
@@ -124,7 +124,7 @@ public class IndexF extends Activity {
 				lineS= Integer.parseInt(ListViewClickData.getLine());
 				pointS= Integer.parseInt(ListViewClickData.getPoint());
 
-                SQLdb = mHelper.openWritableDb();
+                SQLdb = openOrCreateDatabase("db_quran.sqlite", Context.MODE_PRIVATE, null);
                 SQLdb.execSQL("UPDATE tb_indice SET last_page = " + lastP + ", line = " + lineS + ", point = " + pointS + "");
                 finish();
                 Intent intent = new Intent(getApplicationContext(), QMain.class);
@@ -295,7 +295,7 @@ public class IndexF extends Activity {
 	{
 		if( keyCode == KeyEvent.KEYCODE_BACK )
 		{
-			//SQLdb = mHelper.openWritableDb();
+			//SQLdb = openOrCreateDatabase("db_quran.sqlite", Context.MODE_PRIVATE, null);
 			//SQLdb.execSQL("UPDATE tb_indice SET last_page = " + lastP + "");
 			this.finish();
 			startActivity(new Intent(this, QMain.class));
@@ -307,5 +307,3 @@ public class IndexF extends Activity {
 
 
 }
-
-

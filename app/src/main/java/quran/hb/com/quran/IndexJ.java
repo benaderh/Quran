@@ -122,7 +122,7 @@ public class IndexJ extends Activity {
 				//Toast.makeText(getApplicationContext(),	"DG: "  +  user_DjPage.get(arg2) + " J: " + j, Toast.LENGTH_LONG).show();
 				//lastP=user_DG.get(arg2);//Toast.makeText(mContext, "Delete "+position, Toast.LENGTH_LONG).show();
 				lastP= Integer.parseInt(user_DjPage.get(arg2) );
-				SQLdb = mHelper.openWritableDb();
+				SQLdb = openOrCreateDatabase("db_quran.sqlite", Context.MODE_PRIVATE, null);
 				SQLdb.execSQL("UPDATE tb_indice SET last_page = " + lastP + "");
 				finish();
 				//startActivity(new Intent(this, QMain.class));
@@ -133,9 +133,9 @@ public class IndexJ extends Activity {
 				//String value = userList.getAdapter().getItem(position).toString();
 				//userList.smoothScrollToPosition(40);
 	/*			build = new AlertDialog.Builder(ModifD.this);
-				build.setTitle("طھط¨ط¯ظٹظ„");
+				build.setTitle("تبديل");
 				if (user_NJ.get(arg2).substring(0,1).equals("2")) {
-					build.setMessage("ظ‡ظ„ طھط±ظٹط¯ طھط؛ظٹظٹط± ط´ظ‡ط±" + "\n" + user_DH.get(arg2).substring(2, user_DH.get(arg2).length())  + "\n" + "ظ…ظ† 29 ظٹظˆظ…  ط¥ظ„ظ‰ 30 ظٹظˆظ… طں"+"\n"+"ظپظٹ ط­ط§ظ„ط© ط§ظ„ظ…ظˆط§ظپظ‚ط© ظپط¥ظ† ط¨ط¯ط§ظٹط§طھ ط§ظ„ط´ظ‡ظˆط± ط§ظ„ظ„ط§ط­ظ‚ط© ط³طھطھط؛ظٹط±.");
+					build.setMessage("هل تريد تغيير شهر" + "\n" + user_DH.get(arg2).substring(2, user_DH.get(arg2).length())  + "\n" + "من 29 يوم  إلى 30 يوم ؟"+"\n"+"في حالة الموافقة فإن بدايات الشهور اللاحقة ستتغير.");
 
 
 					i=1;
@@ -146,14 +146,14 @@ public class IndexJ extends Activity {
 					//annDateI = Integer.parseInt(annDate);
 				}
                 else {
-					build.setMessage("ظ‡ظ„ طھط±ظٹط¯ طھط؛ظٹظٹط± ط´ظ‡ط±" + "\n" + user_DH.get(arg2).substring(2, user_DH.get(arg2).length())  + "\n" + "ظ…ظ† 30 ظٹظˆظ…  ط¥ظ„ظ‰ 29 ظٹظˆظ… طں"+"\n"+"ظپظٹ ط­ط§ظ„ط© ط§ظ„ظ…ظˆط§ظپظ‚ط© ظپط¥ظ† ط¨ط¯ط§ظٹط§طھ ط§ظ„ط´ظ‡ظˆط± ط§ظ„ظ„ط§ط­ظ‚ط© ط³طھطھط؛ظٹط±.");
+					build.setMessage("هل تريد تغيير شهر" + "\n" + user_DH.get(arg2).substring(2, user_DH.get(arg2).length())  + "\n" + "من 30 يوم  إلى 29 يوم ؟"+"\n"+"في حالة الموافقة فإن بدايات الشهور اللاحقة ستتغير.");
 					i=-1;
 				}
 				//userList.getChildAt(j).setBackgroundColor(Color.GRAY);
 				j=parseInt(user_DG0.get(arg2));
 				//j=1+(j-42292)/30;
 				//userList.getChildAt(j-1).setBackgroundColor(Color.BLUE);
-				build.setPositiveButton("ظ†ط¹ظ…",
+				build.setPositiveButton("نعم",
 						new DialogInterface.OnClickListener() {
 
 							public void onClick(DialogInterface dialog,
@@ -196,7 +196,7 @@ public class IndexJ extends Activity {
 
 						});
 
-				build.setNegativeButton("ظ„ط§",
+				build.setNegativeButton("لا",
 						new DialogInterface.OnClickListener() {
 
 							public void onClick(DialogInterface dialog,
@@ -308,7 +308,7 @@ public class IndexJ extends Activity {
 	{
 		if( keyCode == KeyEvent.KEYCODE_BACK )
 		{
-			//SQLdb = mHelper.openWritableDb();
+			//SQLdb = openOrCreateDatabase("db_quran.sqlite", Context.MODE_PRIVATE, null);
 			//SQLdb.execSQL("UPDATE tb_indice SET last_page = " + lastP + "");
 			this.finish();
 			startActivity(new Intent(this, QMain.class));
@@ -320,5 +320,3 @@ public class IndexJ extends Activity {
 
 
 }
-
-

@@ -84,8 +84,8 @@ public class LandMark extends Activity {
         btn_O1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                //Toast.makeText(getApplicationContext(), "ط§ظ„ظ‚ط§ط¦ظ…ط©", Toast.LENGTH_SHORT).show();
-                SQLdb = db.openWritableDb();
+                //Toast.makeText(getApplicationContext(), "القائمة", Toast.LENGTH_SHORT).show();
+                SQLdb = openOrCreateDatabase("db_quran.sqlite", Context.MODE_PRIVATE, null);
                 SQLdb.execSQL("UPDATE tb_indice SET last_page = " + ri1 + "");
                 finish();
                 Intent intent = new Intent(LandMark.this, QMain.class);
@@ -96,8 +96,8 @@ public class LandMark extends Activity {
         btn_O2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                //Toast.makeText(getApplicationContext(), "ط§ظ„ظ‚ط§ط¦ظ…ط©", Toast.LENGTH_SHORT).show();
-                SQLdb = db.openWritableDb();
+                //Toast.makeText(getApplicationContext(), "القائمة", Toast.LENGTH_SHORT).show();
+                SQLdb = openOrCreateDatabase("db_quran.sqlite", Context.MODE_PRIVATE, null);
                 SQLdb.execSQL("UPDATE tb_indice SET last_page = " + ri2 + "");
                 finish();
                 Intent intent = new Intent(LandMark.this, QMain.class);
@@ -108,8 +108,8 @@ public class LandMark extends Activity {
         btn_O3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                //Toast.makeText(getApplicationContext(), "ط§ظ„ظ‚ط§ط¦ظ…ط©", Toast.LENGTH_SHORT).show();
-                SQLdb = db.openWritableDb();
+                //Toast.makeText(getApplicationContext(), "القائمة", Toast.LENGTH_SHORT).show();
+                SQLdb = openOrCreateDatabase("db_quran.sqlite", Context.MODE_PRIVATE, null);
                 SQLdb.execSQL("UPDATE tb_indice SET last_page = " + ri3 + "");
                 finish();
                 Intent intent = new Intent(LandMark.this, QMain.class);
@@ -121,7 +121,7 @@ public class LandMark extends Activity {
             @Override
             public void onClick(View arg0) {
                 //Toast.makeText(getApplicationContext(), ""+lastPt, Toast.LENGTH_SHORT).show();
-                SQLdb = db.openWritableDb();
+                SQLdb = openOrCreateDatabase("db_quran.sqlite", Context.MODE_PRIVATE, null);
                 SQLdb.execSQL("UPDATE tb_indice SET ri1 = " + lastP + ", rt1 = '" + lastPt + "'");
                 finish();
                 Intent intent = new Intent(LandMark.this, QMain.class);
@@ -133,7 +133,7 @@ public class LandMark extends Activity {
             @Override
             public void onClick(View arg0) {
                 //Toast.makeText(getApplicationContext(), ""+lastPt, Toast.LENGTH_SHORT).show();
-                SQLdb = db.openWritableDb();
+                SQLdb = openOrCreateDatabase("db_quran.sqlite", Context.MODE_PRIVATE, null);
                 SQLdb.execSQL("UPDATE tb_indice SET ri2 = " + lastP + ", rt2 = '" + lastPt + "'");
                 finish();
                 Intent intent = new Intent(LandMark.this, QMain.class);
@@ -145,7 +145,7 @@ public class LandMark extends Activity {
             @Override
             public void onClick(View arg0) {
                 //Toast.makeText(getApplicationContext(), ""+lastPt, Toast.LENGTH_SHORT).show();
-                SQLdb = db.openWritableDb();
+                SQLdb = openOrCreateDatabase("db_quran.sqlite", Context.MODE_PRIVATE, null);
                 SQLdb.execSQL("UPDATE tb_indice SET ri3 = " + lastP + ", rt3 = '" + lastPt + "'");
                 finish();
                 Intent intent = new Intent(LandMark.this, QMain.class);
@@ -161,7 +161,7 @@ public class LandMark extends Activity {
     {
         if( keyCode == KeyEvent.KEYCODE_BACK )
         {
-            //SQLdb = db.openWritableDb();
+            //SQLdb = openOrCreateDatabase("db_quran.sqlite", Context.MODE_PRIVATE, null);
             //SQLdb.execSQL("UPDATE tb_indice SET last_page = " + lastP + "");
             this.finish();
             startActivity(new Intent(this, QMain.class));
@@ -174,4 +174,3 @@ public class LandMark extends Activity {
 
 
 }
-

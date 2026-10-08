@@ -75,16 +75,12 @@ public class Tefcir extends Activity {
             int j = 1;
             do {
                 if (curT.getInt(1) == soraI && curT.getInt(2) == ayaI) {
+                    //i = 366;
                     break;
                 }
                 curT.moveToNext();
                 j++;
-            } while (j < 6237 && !curT.isAfterLast());
-            
-            if (curT.isAfterLast()) {
-                curT.moveToFirst();
-            }
-
+            } while (j < 6237);
             //Toast.makeText(getApplicationContext(), "s: "+soraI+"   a: "+ayaI+"   t: "+curT.getString(3) , Toast.LENGTH_SHORT).show();
 
             ayaT.setText(curT.getString(3));
@@ -105,12 +101,7 @@ public class Tefcir extends Activity {
                 }
                 curT.moveToNext();
                 j++;
-            } while (j < 6215 && !curT.isAfterLast());
-
-            if (curT.isAfterLast()) {
-                curT.moveToFirst();
-            }
-
+            } while (j < 6215);
             //Toast.makeText(getApplicationContext(), "s: "+soraI+"   a: "+ayaI+"   t: "+curT.getString(3) , Toast.LENGTH_SHORT).show();
 
             ayaT.setText(curT.getString(3));
@@ -225,7 +216,7 @@ public class Tefcir extends Activity {
     {
         if( keyCode == KeyEvent.KEYCODE_BACK )
         {
-            //SQLdb = mHelper.openWritableDb();
+            //SQLdb = openOrCreateDatabase("db_quran.sqlite", Context.MODE_PRIVATE, null);
             //SQLdb.execSQL("UPDATE tb_indice SET last_page = " + lastP + "");
             this.finish();
             startActivity(new Intent(this, QMain.class));
@@ -238,5 +229,3 @@ public class Tefcir extends Activity {
 
 
 }
-
-

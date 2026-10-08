@@ -76,4 +76,3 @@ public class IndexP_Connector extends BaseAdapter {
 	}
 
 }
-

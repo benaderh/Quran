@@ -1,27 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+    package="quran.hb.com.quran"
+    android:versionCode="1"
+    android:versionName="1.0" >
 
-    <!-- مجلد /storage/emulated/0/QuranHW : أندرويد 11+ يحتاج "الوصول إلى كل الملفات" (للتثبيت اليدوي APK فقط، Google Play يرفضه) -->
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="29" />
 
     <application
-        android:name=".QuranApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="قرآن كريم"
-        android:requestLegacyExternalStorage="true"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.Quran">
+        android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:configChanges="orientation|screenSize|keyboardHidden">
+            android:name=".QMain"
+            android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".IndexP" android:label="البحث عن صفحة"/>
+        <activity android:name=".IndexS" android:label="البحث عن سورة"/>
+        <activity android:name=".IndexJ" android:label="البحث عن جزء"/>
+        <activity android:name=".IndexF" android:label="البحث عن آية"/>
+        <activity android:name=".LandMark" android:label="حفظ و تعديل العلامة"/>
+        <activity android:name=".Tefcir" android:label="تفسير ميسر"/>
+        <activity android:name=".About" android:label="حول"/>
+
     </application>
+
+
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
 </manifest>

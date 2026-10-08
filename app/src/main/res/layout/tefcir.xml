@@ -19,7 +19,9 @@
             android:layout_height="50dp"
 
             android:textAlignment="center"
-            android:text="ط§ظ„ط¢ظٹط© ط§ظ„طھط§ظ„ظٹط©"
+
+            android:onClick="true"
+            android:text="الآية التالية"
 
             />
 
@@ -28,6 +30,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:textAlignment="center"
+            android:onClick="true"
             android:text="+"
             />
 
@@ -36,6 +39,7 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:textAlignment="center"
+            android:onClick="true"
             android:text="-"
             />
 
@@ -43,8 +47,11 @@
             android:id="@+id/btnAP"
             android:layout_width="110dp"
             android:layout_height="50dp"
+
+
+            android:onClick="true"
             android:layout_gravity="right"
-            android:text="ط§ظ„ط¢ظٹط© ط§ظ„ط³ط§ط¨ظ‚ط©"
+            android:text="الآية السابقة"
 
             />
     </LinearLayout>
@@ -62,7 +69,7 @@
             <TextView
 
                 android:id="@+id/tv_aya"
-                android:text="ط¢ظٹط©"
+                android:text="آية"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#41e70e"
@@ -74,7 +81,7 @@
             <TextView
 
                 android:id="@+id/tv_sora"
-                android:text="ط¢ظٹط©/ط³ظˆط±ط©"
+                android:text="آية/سورة"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#94ef78"
@@ -85,7 +92,7 @@
 
             <TextView
                 android:id="@+id/tv_tefcir"
-                android:text="طھظپط³ظٹط±"
+                android:text="تفسير"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:textSize="30sp"

@@ -1,8 +1,10 @@
 package quran.hb.com.quran;
 
+import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Environment;
-import android.util.DisplayMetrics;
+import android.graphics.Point;
+import android.os.Build;
+import android.view.Display;
 import android.view.WindowManager;
 
 import java.io.File;
@@ -10,72 +12,128 @@ import java.util.ArrayList;
 
 public class Utils {
 
-    private Context _context;
+	private Context _context;
 
-    // Répertoire racine : /sdcard/QuranHW/
-    // L'utilisateur dépose manuellement ses fichiers dans les 4 sous-dossiers :
-    //   HI/ -> images Hafs (.jpg)
-    //   HA/ -> audio  Hafs (.wav, .csv)
-    //   WI/ -> images Warsh (.png)
-    //   WA/ -> audio  Warsh (.wav, .csv)
-    private static final String BASE_DIR_NAME = "QuranHW";
+	// constructor
+	public Utils(Context context) {
+		this._context = context;
+	}
 
-    public Utils(Context context) {
-        this._context = context;
-    }
+	/*
+	 * Reading file paths from SDCard
+	 */
+	public ArrayList<String> getFilePaths() {
+		ArrayList<String> filePaths = new ArrayList<String>();
 
-    /** Racine : /sdcard/QuranHW/ */
-    public File getQuranBaseDir() {
-        File sdcard = Environment.getExternalStorageDirectory(); // /storage/emulated/0
-        File dir = new File(sdcard, BASE_DIR_NAME);
-        dir.mkdirs();
-        return dir;
-    }
+		File DirectoryH = new File(android.os.Environment.getExternalStorageDirectory().toString() +"/QuranHW/H/img");
 
-    /** /sdcard/QuranHW/HI/ — images Hafs */
-    public File getHafsImgDir() {
-        return new File(getQuranBaseDir(), "HI");
-    }
+			File[] listFiles = DirectoryH.listFiles();
+			// Check for count
+			if (listFiles.length > 0) {
 
-    /** /sdcard/QuranHW/HA/ — audio Hafs */
-    public File getHafsAudDir() {
-        return new File(getQuranBaseDir(), "HA");
-    }
+				for (int i = 0; i < listFiles.length; i++) {
 
-    /** /sdcard/QuranHW/WI/ — images Warsh */
-    public File getWarshImgDir() {
-        return new File(getQuranBaseDir(), "WI");
-    }
+					// get file path
+					String filePath = listFiles[i].getAbsolutePath();
 
-    /** /sdcard/QuranHW/WA/ — audio Warsh */
-    public File getWarshAudDir() {
-        return new File(getQuranBaseDir(), "WA");
-    }
+					// check for supported file extension
+					if (IsSupportedFile(filePath)) {
 
-    /** Liste triée des chemins images Hafs p0.jpg … p608.jpg */
-    public ArrayList<String> getFilePaths() {
-        ArrayList<String> filePaths = new ArrayList<>();
-        File dir = getHafsImgDir();
-        for (int i = 0; i <= 608; i++) {
-            filePaths.add(new File(dir, "p" + (608 - i) + ".jpg").getAbsolutePath());
-        }
-        return filePaths;
-    }
+						filePaths.add(DirectoryH+"/p"+(608-i)+".jpg");
+					}
 
-    /** Liste triée des chemins images Warsh p0.png … p608.png */
-    public ArrayList<String> getFilePathsW() {
-        ArrayList<String> filePathsW = new ArrayList<>();
-        File dir = getWarshImgDir();
-        for (int i = 0; i <= 608; i++) {
-            filePathsW.add(new File(dir, "p" + (608 - i) + ".png").getAbsolutePath());
-        }
-        return filePathsW;
-    }
+				}
 
-    public int getScreenWidth() {
-        WindowManager wm = (WindowManager) _context.getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics metrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(metrics);
-        return metrics.widthPixels;
-    }
+			}
+
+
+		return filePaths ;
+
+	}
+
+	public ArrayList<String> getFilePathsW() {
+		ArrayList<String> filePathsW = new ArrayList<String>();
+
+		File DirectoryW = new File(android.os.Environment.getExternalStorageDirectory().toString() +"/QuranHW/W/img");
+
+		File[] listFilesW = DirectoryW.listFiles();
+		// Check for count
+
+		if (listFilesW.length > 0) {
+
+			for (int i = 0; i < listFilesW.length; i++) {
+
+				// get file path
+				String filePathW = listFilesW[i].getAbsolutePath();
+
+				// check for supported file extension
+				if (IsSupportedFile(filePathW)) {
+
+					filePathsW.add(DirectoryW+"/p"+(608-i)+".png");
+				}
+
+			}
+
+		}
+
+		return filePathsW ;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/*
+	 * Check supported file extensions
+	 *
+	 * @returns boolean
+	 */
+	private boolean IsSupportedFile(String filePath) {
+		String ext = filePath.substring((filePath.lastIndexOf(".") + 1),
+				filePath.length());
+
+		//	if (AppConstant.FILE_EXTN
+		//			.contains(ext.toLowerCase(Locale.getDefault())))
+		return true;
+		//	else
+		//		return false;
+
+	}
+
+	/*
+	 * getting screen width
+	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+	public int getScreenWidth() {
+		int columnWidth;
+		WindowManager wm = (WindowManager) _context
+				.getSystemService(Context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+
+		final Point point = new Point();
+		try {
+			display.getSize(point);
+		} catch (java.lang.NoSuchMethodError ignore) { // Older device
+			point.x = display.getWidth();
+			point.y = display.getHeight();
+		}
+		columnWidth = point.x;
+		return columnWidth;
+	}
+
+
 }
