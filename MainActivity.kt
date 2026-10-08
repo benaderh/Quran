@@ -156,14 +156,25 @@ private fun AppNav(vm: AppViewModel) {
 }
 
 
-/** يعرض سبب آخر انهيار (إن وُجد) مع زر نسخ */
+/** يعرض سبب آخر انهيار + آخر مراحل تنفيذ التفسير إن لم تكتمل */
 @Composable
 private fun CrashDialog(file: java.io.File) {
-    var text by remember { mutableStateOf(if (file.exists()) runCatching { file.readText() }.getOrNull() else null) }
+    fun load(): String? {
+        val crash = if (file.exists()) runCatching { file.readText() }.getOrNull() else null
+        val trace = quran.hb.com.quran.data.Trace.read()
+        val unfinished = trace.isNotBlank() && !trace.contains("OK -")
+        if (crash == null && !unfinished) return null
+        return buildString {
+            if (unfinished) append("آخر المراحل:\n").append(trace).append("\n")
+            if (crash != null) append("الخطأ:\n").append(crash)
+        }
+    }
+    var text by remember { mutableStateOf(load()) }
     val clipboard = LocalClipboardManager.current
+    val close = { file.delete(); quran.hb.com.quran.data.Trace.clear(); text = null }
     if (text != null) {
         AlertDialog(
-            onDismissRequest = { file.delete(); text = null },
+            onDismissRequest = close,
             title = { Text("سبب آخر انهيار") },
             text = {
                 SelectionContainer {
@@ -171,7 +182,7 @@ private fun CrashDialog(file: java.io.File) {
                 }
             },
             confirmButton = { TextButton(onClick = { clipboard.setText(AnnotatedString(text!!)) }) { Text("نسخ") } },
-            dismissButton = { TextButton(onClick = { file.delete(); text = null }) { Text("إغلاق") } }
+            dismissButton = { TextButton(onClick = close) { Text("إغلاق") } }
         )
     }
 }

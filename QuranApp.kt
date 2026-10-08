@@ -8,6 +8,7 @@ import java.io.File
 class QuranApp : Application() {
     override fun onCreate() {
         super.onCreate()
+        quran.hb.com.quran.data.Trace.init(this)
         val previous = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler { thread, error ->
             try {

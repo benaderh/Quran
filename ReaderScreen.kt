@@ -37,6 +37,7 @@ import androidx.core.view.WindowInsetsControllerCompat
 import coil.compose.AsyncImage
 import quran.hb.com.quran.AppViewModel
 import quran.hb.com.quran.data.Storage
+import quran.hb.com.quran.data.Trace
 import kotlin.math.roundToInt
 
 private val BarHeight = 36.dp
@@ -148,7 +149,12 @@ fun ReaderScreen(vm: AppViewModel, onNavigate: (String) -> Unit) {
                         vm.setRiwaya(1); bar = false; menu = false
                     }
                     BarButton("تفسير", 1f, DarkBar) {
-                        vm.prepareTafsir(); onNavigate("tafsir")
+                        Trace.reset()
+                        Trace.step("1 - ضغط زر تفسير")
+                        vm.prepareTafsir()
+                        Trace.step("2 - تحضير الآية تم")
+                        onNavigate("tafsir")
+                        Trace.step("3 - الانتقال إلى الشاشة")
                     }
                     BarButton("تلاوة", 1f, Color(0xFF227E08), Color.White, true) {
                         vm.play(); bar = false; menu = false

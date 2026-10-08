@@ -25,6 +25,8 @@ import kotlinx.coroutines.withContext
 import quran.hb.com.quran.AppViewModel
 import quran.hb.com.quran.data.Storage
 import quran.hb.com.quran.data.Tafsir
+import quran.hb.com.quran.data.Trace
+import kotlinx.coroutines.delay
 
 /** مؤشر على كامل جدول التفسير ، التنقل بالموضع مع الدوران من النهاية إلى البداية */
 private class TafsirHolder(private val cursor: Cursor, private val riwaya: Int) {
@@ -66,14 +68,20 @@ fun TafsirScreen(vm: AppViewModel, onBack: () -> Unit) {
     // فتح الجدول و البحث عن الآية خارج الخيط الرئيسي
     LaunchedEffect(Unit) {
         try {
+            Trace.step("4 - بدء شاشة التفسير (رواية $riwaya ، سورة ${vm.tafsirSora} ، آية ${vm.tafsirAya})")
             val h = withContext(Dispatchers.IO) {
+                Trace.step("5 - فتح جدول التفسير", toast = false)
                 val c = TafsirHolder(vm.repo.openTafsir(riwaya), riwaya)
+                Trace.step("6 - الجدول مفتوح : ${c.count} سطر", toast = false)
                 pos = c.find(vm.tafsirSora, vm.tafsirAya)
+                Trace.step("7 - موضع الآية : $pos", toast = false)
                 c
             }
             holder = h
+            Trace.step("8 - المؤشر جاهز")
         } catch (e: Throwable) {
             error = Log.getStackTraceString(e)
+            Trace.step("خطأ في الفتح: ${e.javaClass.simpleName}: ${e.message}")
         }
     }
     DisposableEffect(holder) { onDispose { holder?.close() } }
@@ -83,12 +91,18 @@ fun TafsirScreen(vm: AppViewModel, onBack: () -> Unit) {
         val path = if (riwaya == 1) "font/UthmanicHafs1 Ver09.otf"
         else "font/P" + item.page.toString().padStart(3, '0') + ".otf"
         return fonts.getOrPut(path) {
+            Trace.step("9 - تحميل الخط : $path")
             try {
-                FontFamily(Typeface.createFromAsset(context.assets, path))        // داخل الـ APK
+                val f = FontFamily(Typeface.createFromAsset(context.assets, path))        // داخل الـ APK
+                Trace.step("10 - الخط من assets")
+                f
             } catch (e: Throwable) {
                 try {
-                    FontFamily(Typeface.createFromFile(java.io.File(Storage.root, path)))  // QuranHW/font
+                    val file = java.io.File(Storage.root, path)                           // QuranHW/font
+                    Trace.step("10 - الخط من الملف : ${file.path} موجود=${file.exists()}")
+                    FontFamily(Typeface.createFromFile(file))
                 } catch (e2: Throwable) {
+                    Trace.step("10 - فشل الخط (${e2.javaClass.simpleName}) -> الخط الافتراضي")
                     FontFamily.Default
                 }
             }
@@ -98,6 +112,16 @@ fun TafsirScreen(vm: AppViewModel, onBack: () -> Unit) {
     val result = remember(pos, holder) { runCatching { holder?.takeIf { it.count > 0 }?.get(pos) } }
     val item = result.getOrNull()
     val itemError = result.exceptionOrNull()?.let { Log.getStackTraceString(it) }
+
+    LaunchedEffect(item) {
+        if (item != null) {
+            Trace.step("11 - قراءة الآية ${item.ayaNo} : ${item.aya.length} حرف ، تفسير ${item.tafsir.length} حرف")
+            delay(1500)
+            Trace.step("OK - الرسم نجح")
+        } else if (itemError != null) {
+            Trace.step("خطأ في قراءة الآية")
+        }
+    }
 
     val scroll = rememberScrollState()
     val scope = rememberCoroutineScope()
