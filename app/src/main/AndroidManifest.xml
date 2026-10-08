@@ -1,38 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Lire les fichiers de /sdcard/QuranHW/ -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
-
+    <!-- مجلد /storage/emulated/0/QuranHW : أندرويد 11+ يحتاج "الوصول إلى كل الملفات" (للتثبيت اليدوي APK فقط، Google Play يرفضه) -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="29" />
 
     <application
+        android:name=".QuranApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme"
+        android:label="قرآن كريم"
+        android:requestLegacyExternalStorage="true"
         android:supportsRtl="true"
-        android:hardwareAccelerated="true">
-
+        android:theme="@style/Theme.Quran">
         <activity
-            android:name=".QMain"
-            android:theme="@style/FullscreenTheme"
-            android:screenOrientation="portrait"
-            android:exported="true">
+            android:name=".MainActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|keyboardHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".IndexP" android:label="@string/label_index_page" android:exported="false"/>
-        <activity android:name=".IndexS" android:label="@string/label_index_sura" android:exported="false"/>
-        <activity android:name=".IndexJ" android:label="@string/label_index_juz" android:exported="false"/>
-        <activity android:name=".IndexF" android:label="@string/label_index_aya" android:exported="false"/>
-        <activity android:name=".LandMark" android:label="@string/label_landmark" android:exported="false"/>
-        <activity android:name=".Tefcir" android:label="@string/label_tefcir" android:exported="false"/>
-        <activity android:name=".About" android:label="@string/label_about" android:exported="false"/>
-
     </application>
-
 </manifest>
