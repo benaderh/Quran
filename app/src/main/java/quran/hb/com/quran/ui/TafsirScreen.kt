@@ -1,0 +1,177 @@
+package quran.hb.com.quran.ui
+
+import android.database.Cursor
+import android.graphics.Typeface
+import android.util.Log
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import quran.hb.com.quran.AppViewModel
+import quran.hb.com.quran.data.Storage
+import quran.hb.com.quran.data.Tafsir
+import quran.hb.com.quran.data.Trace
+import kotlinx.coroutines.delay
+
+/** مؤشر على كامل جدول التفسير ، التنقل بالموضع مع الدوران من النهاية إلى البداية */
+private class TafsirHolder(private val cursor: Cursor, private val riwaya: Int) {
+    val count = cursor.count
+
+    fun find(sora: Int, aya: Int): Int {
+        if (!cursor.moveToFirst()) return 0
+        var i = 0
+        do {
+            if (cursor.getInt(1) == sora && cursor.getInt(2) == aya) return i
+            i++
+        } while (cursor.moveToNext())
+        return 0
+    }
+
+    fun get(pos: Int): Tafsir {
+        cursor.moveToPosition(pos)
+        return Tafsir(
+            aya = cursor.getString(3) ?: "",
+            ayaNo = cursor.getString(2) ?: "",
+            soraName = cursor.getString(7) ?: "",
+            tafsir = cursor.getString(4) ?: "",
+            page = if (riwaya == 2) (cursor.getString(6)?.trim()?.toIntOrNull() ?: 1) else 0
+        )
+    }
+
+    fun close() = cursor.close()
+}
+
+@Composable
+fun TafsirScreen(vm: AppViewModel, onBack: () -> Unit) {
+    val context = LocalContext.current
+    val riwaya = vm.riwaya
+
+    var holder by remember { mutableStateOf<TafsirHolder?>(null) }
+    var pos by remember { mutableIntStateOf(0) }
+    var error by remember { mutableStateOf<String?>(null) }
+
+    // فتح الجدول و البحث عن الآية خارج الخيط الرئيسي
+    LaunchedEffect(Unit) {
+        try {
+            Trace.step("4 - بدء شاشة التفسير (رواية $riwaya ، سورة ${vm.tafsirSora} ، آية ${vm.tafsirAya})")
+            val h = withContext(Dispatchers.IO) {
+                Trace.step("5 - فتح جدول التفسير", toast = false)
+                val c = TafsirHolder(vm.repo.openTafsir(riwaya), riwaya)
+                Trace.step("6 - الجدول مفتوح : ${c.count} سطر", toast = false)
+                pos = c.find(vm.tafsirSora, vm.tafsirAya)
+                Trace.step("7 - موضع الآية : $pos", toast = false)
+                c
+            }
+            holder = h
+            Trace.step("8 - المؤشر جاهز")
+        } catch (e: Throwable) {
+            error = Log.getStackTraceString(e)
+            Trace.step("خطأ في الفتح: ${e.javaClass.simpleName}: ${e.message}")
+        }
+    }
+    DisposableEffect(holder) { onDispose { holder?.close() } }
+
+    val fonts = remember { HashMap<String, FontFamily>() }
+    fun fontFor(item: Tafsir): FontFamily {
+        val path = if (riwaya == 1) "font/UthmanicHafs1 Ver09.otf"
+        else "font/P" + item.page.toString().padStart(3, '0') + ".otf"
+        return fonts.getOrPut(path) {
+            Trace.step("9 - تحميل الخط : $path")
+            try {
+                val f = FontFamily(Typeface.createFromAsset(context.assets, path))        // داخل الـ APK
+                Trace.step("10 - الخط من assets")
+                f
+            } catch (e: Throwable) {
+                try {
+                    val file = java.io.File(Storage.root, path)                           // QuranHW/font
+                    Trace.step("10 - الخط من الملف : ${file.path} موجود=${file.exists()}")
+                    FontFamily(Typeface.createFromFile(file))
+                } catch (e2: Throwable) {
+                    Trace.step("10 - فشل الخط (${e2.javaClass.simpleName}) -> الخط الافتراضي")
+                    FontFamily.Default
+                }
+            }
+        }
+    }
+
+    val result = remember(pos, holder) { runCatching { holder?.takeIf { it.count > 0 }?.get(pos) } }
+    val item = result.getOrNull()
+    val itemError = result.exceptionOrNull()?.let { Log.getStackTraceString(it) }
+
+    LaunchedEffect(item) {
+        if (item != null) {
+            Trace.step("11 - قراءة الآية ${item.ayaNo} : ${item.aya.length} حرف ، تفسير ${item.tafsir.length} حرف")
+            delay(1500)
+            Trace.step("OK - الرسم نجح")
+        } else if (itemError != null) {
+            Trace.step("خطأ في قراءة الآية")
+        }
+    }
+
+    val scroll = rememberScrollState()
+    val scope = rememberCoroutineScope()
+    var size by remember { mutableIntStateOf(vm.fontSize) }
+
+    fun move(delta: Int) {
+        val h = holder ?: return
+        if (h.count == 0) return
+        pos = (pos + delta + h.count) % h.count
+        scope.launch { scroll.animateScrollTo(0) }
+    }
+
+    ScreenScaffold("تفسير ميسر", onBack) {
+        Column(Modifier.fillMaxSize().background(Cream)) {
+            Column(Modifier.weight(1f).fillMaxWidth().verticalScroll(scroll)) {
+                val err = error ?: itemError
+                if (err != null) {
+                    SelectionContainer { Text(err, color = Color.Red, fontSize = 11.sp, modifier = Modifier.padding(8.dp)) }
+                }
+                if (item != null) {
+                    Text(
+                        item.aya, Modifier.fillMaxWidth().background(Color.Black).padding(end = 5.dp),
+                        color = Color(0xFF41E70E), fontSize = size.sp, fontFamily = fontFor(item)
+                    )
+                    Text(
+                        "الآية ${item.ayaNo}   سورة ${item.soraName}",
+                        Modifier.fillMaxWidth().background(Color.Black).padding(end = 25.dp),
+                        color = Color(0xFF94EF78), fontSize = 15.sp
+                    )
+                    Text(
+                        item.tafsir, Modifier.fillMaxWidth().padding(end = 5.dp),
+                        fontSize = 30.sp, fontWeight = FontWeight.Bold, color = Color.Black
+                    )
+                }
+            }
+            Row(Modifier.fillMaxWidth().padding(4.dp), horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+                Button(onClick = { move(+1) }, contentPadding = PaddingValues(4.dp), modifier = Modifier.width(110.dp).height(50.dp)) { Text("الآية التالية") }
+                Spacer(Modifier.width(4.dp))
+                Button(onClick = {
+                    size += 5; if (size == 75) size = 70
+                    vm.saveFontSize(size)
+                }, contentPadding = PaddingValues(0.dp), modifier = Modifier.width(50.dp).height(50.dp)) { Text("+") }
+                Spacer(Modifier.width(4.dp))
+                Button(onClick = {
+                    size -= 5; if (size == 15) size = 20
+                    vm.saveFontSize(size)
+                }, contentPadding = PaddingValues(0.dp), modifier = Modifier.width(50.dp).height(50.dp)) { Text("-") }
+                Spacer(Modifier.width(4.dp))
+                Button(onClick = { move(-1) }, contentPadding = PaddingValues(4.dp), modifier = Modifier.width(110.dp).height(50.dp)) { Text("الآية السابقة") }
+            }
+        }
+    }
+}
