@@ -442,6 +442,10 @@ public class QMain extends Activity {
 								//btnS.setText("x: " + x1 + "    y: " + y1);
 								//x1=((Page -1) x 120) + ((Ligne - 1) x 8) + (PointClick)        (Row0: Titre)
 
+								int click_page = curQ.getInt(0);
+								int click_line = y1;
+								int click_point = x1;
+
 								//x1=(curQ.getInt(0)-1)*120+(y1-1)*8+x1;
 								x1 = (curQ.getInt(0) - 1) * 60 + (y1 - 1) * 4 + x1+1;
 								//btnS.setText("" + x1);
@@ -461,10 +465,35 @@ public class QMain extends Activity {
 								} while (j < 115);
 								curS.moveToPrevious();
 								x1=x1-curS.getInt(3);
-								soraI=j-1;
-								sora="s"+soraI;
+								sora="s"+(j - 1);
 								curS.close();
 								//btnS.setText(sora);
+
+								// Calculate soraI and ayaI from SQLite (tb_tafcir or tb_tafcirW) based on click position
+								int clickPosIndex = click_line * 4 + click_point;
+								int bestSora = 1;
+								int bestAya = 1;
+
+								String tableName = (lastR == 1) ? "tb_tafcir" : "tb_tafcirW";
+								Cursor c = db.tfrawQuery("SELECT sora, aya, p_sora, line, point FROM " + tableName + " WHERE p_sora = " + click_page + " OR p_sora = " + (click_page - 1) + " ORDER BY p_sora ASC, line ASC, point ASC", null);
+								if (c != null && c.moveToFirst()) {
+									do {
+										int p_sora = c.getInt(2);
+										int r_line = c.getInt(3);
+										int r_point = c.getInt(4);
+										int pos_index = r_line * 4 + r_point;
+
+										if (p_sora < click_page || (p_sora == click_page && pos_index <= clickPosIndex)) {
+											bestSora = c.getInt(0);
+											bestAya = c.getInt(1);
+										} else {
+											break;
+										}
+									} while (c.moveToNext());
+									c.close();
+								}
+								soraI = bestSora;
+								ayaI = bestAya;
 
 								try {
 									//Workbook wb = Workbook.getWorkbook(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + RiwayaExel));
@@ -478,8 +507,9 @@ public class QMain extends Activity {
 									Cell z = s.getCell(4, x1);
 									pos = new Integer(z.getContents().toString());
 
-									z = s.getCell(5, x1);
-									ayaI = new Integer(z.getContents().toString());
+									// We don't need ayaI from xls anymore because it's retrieved from SQLite above!
+									//z = s.getCell(5, x1);
+									//ayaI = new Integer(z.getContents().toString());
 
 									z = s.getCell(1, x1);
 									lineI = new Integer(z.getContents().toString());
