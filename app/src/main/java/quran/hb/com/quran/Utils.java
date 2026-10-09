@@ -24,58 +24,35 @@ public class Utils {
 	 */
 	public ArrayList<String> getFilePaths() {
 		ArrayList<String> filePaths = new ArrayList<String>();
-
-		File DirectoryH = new File(android.os.Environment.getExternalStorageDirectory().toString() +"/QuranHW/H/img");
-
+		File DirectoryH = new File(android.os.Environment.getExternalStorageDirectory().toString() +"/QuranHW/HI");
+		if (DirectoryH.exists()) {
 			File[] listFiles = DirectoryH.listFiles();
-			// Check for count
-			if (listFiles.length > 0) {
-
+			if (listFiles != null && listFiles.length > 0) {
 				for (int i = 0; i < listFiles.length; i++) {
-
-					// get file path
 					String filePath = listFiles[i].getAbsolutePath();
-
-					// check for supported file extension
 					if (IsSupportedFile(filePath)) {
-
 						filePaths.add(DirectoryH+"/p"+(608-i)+".jpg");
 					}
-
 				}
-
 			}
-
-
+		}
 		return filePaths ;
-
 	}
 
 	public ArrayList<String> getFilePathsW() {
 		ArrayList<String> filePathsW = new ArrayList<String>();
-
-		File DirectoryW = new File(android.os.Environment.getExternalStorageDirectory().toString() +"/QuranHW/W/img");
-
-		File[] listFilesW = DirectoryW.listFiles();
-		// Check for count
-
-		if (listFilesW.length > 0) {
-
-			for (int i = 0; i < listFilesW.length; i++) {
-
-				// get file path
-				String filePathW = listFilesW[i].getAbsolutePath();
-
-				// check for supported file extension
-				if (IsSupportedFile(filePathW)) {
-
-					filePathsW.add(DirectoryW+"/p"+(608-i)+".png");
+		File DirectoryW = new File(android.os.Environment.getExternalStorageDirectory().toString() +"/QuranHW/WI");
+		if (DirectoryW.exists()) {
+			File[] listFilesW = DirectoryW.listFiles();
+			if (listFilesW != null && listFilesW.length > 0) {
+				for (int i = 0; i < listFilesW.length; i++) {
+					String filePathW = listFilesW[i].getAbsolutePath();
+					if (IsSupportedFile(filePathW)) {
+						filePathsW.add(DirectoryW+"/p"+(608-i)+".png");
+					}
 				}
-
 			}
-
 		}
-
 		return filePathsW ;
 	}
 
