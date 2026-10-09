@@ -11,14 +11,17 @@
         android:label="قرآن كريم"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".QMain"
-            android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen">
+            android:name=".SplashActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity
+            android:name=".QMain"
+            android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen" />
 
         <activity android:name=".IndexP" android:label="البحث عن صفحة"/>
         <activity android:name=".IndexS" android:label="البحث عن سورة"/>
