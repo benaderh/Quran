@@ -83,9 +83,11 @@ public class Tefcir extends Activity {
             } while (j < 6237);
             //Toast.makeText(getApplicationContext(), "s: "+soraI+"   a: "+ayaI+"   t: "+curT.getString(3) , Toast.LENGTH_SHORT).show();
 
-            ayaT.setText(curT.getString(3));
-            soraT.setText("الآية " + curT.getString(2) + "   سورة " + curT.getString(7));
-            tefcirT.setText(curT.getString(4));
+            if (!curT.isAfterLast()) {
+                ayaT.setText(curT.getString(3));
+                soraT.setText("الآية " + curT.getString(2) + "   سورة " + curT.getString(7));
+                tefcirT.setText(curT.getString(4));
+            }
 
             try {
                 Typeface tf = Typeface.createFromFile(android.os.Environment.getExternalStorageDirectory() + "/QuranHW/UthmanicHafs1 Ver09.otf");
@@ -107,11 +109,13 @@ public class Tefcir extends Activity {
             } while (j < 6215);
             //Toast.makeText(getApplicationContext(), "s: "+soraI+"   a: "+ayaI+"   t: "+curT.getString(3) , Toast.LENGTH_SHORT).show();
 
-            ayaT.setText(curT.getString(3));
-            soraT.setText("الآية " + curT.getString(2) + "   سورة " + curT.getString(7));
-            tefcirT.setText(curT.getString(4));
-            //fontW=curT.getString(6);
-            pageS = Integer.valueOf(curT.getString(6));
+            if (!curT.isAfterLast()) {
+                ayaT.setText(curT.getString(3));
+                soraT.setText("الآية " + curT.getString(2) + "   سورة " + curT.getString(7));
+                tefcirT.setText(curT.getString(4));
+                //fontW=curT.getString(6);
+                pageS = Integer.valueOf(curT.getString(6));
+            }
             if (pageS<10) {fontW = "p00"+pageS;
             }else{ if (pageS<100) {fontW = "p0"+pageS;
             }else{ fontW = "p"+pageS;
