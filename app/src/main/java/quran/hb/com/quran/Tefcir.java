@@ -87,7 +87,7 @@ public class Tefcir extends Activity {
             soraT.setText("الآية " + curT.getString(2) + "   سورة " + curT.getString(7));
             tefcirT.setText(curT.getString(4));
 
-            Typeface tf = Typeface.createFromAsset(getAssets(), "font/UthmanicHafs1 Ver09.otf");
+            Typeface tf = Typeface.createFromFile(android.os.Environment.getExternalStorageDirectory() + "/QuranHW/UthmanicHafs1 Ver09.otf");
             //Typeface tf = Typeface.createFromAsset(getAssets(), "font/UthmanicWarsh1 Ver05.otf");
             ayaT.setTypeface(tf);
         }else{
@@ -109,15 +109,15 @@ public class Tefcir extends Activity {
             tefcirT.setText(curT.getString(4));
             //fontW=curT.getString(6);
             pageS = Integer.valueOf(curT.getString(6));
-            if (pageS<10) {fontW = "P00"+pageS;
-            }else{ if (pageS<100) {fontW = "P0"+pageS;
-            }else{ fontW = "P"+pageS;
+            if (pageS<10) {fontW = "p00"+pageS;
+            }else{ if (pageS<100) {fontW = "p0"+pageS;
+            }else{ fontW = "p"+pageS;
             }}
-            fontW="font/"+fontW+".otf";
+            fontW="/QuranHW/"+fontW+".otf";
             //fontW = ""+pageS;
             //Typeface tf = Typeface.createFromAsset(getAssets(), "font/UthmanicWarsh1 Ver05.otf");
             //Typeface tf = Typeface.createFromAsset(getAssets(), "font/P200.otf");
-            Typeface tf = Typeface.createFromAsset(getAssets(), fontW);///"+fontW+".otf");
+            Typeface tf = Typeface.createFromFile(android.os.Environment.getExternalStorageDirectory() + fontW);
             ayaT.setTypeface(tf);
             //ayaT.setText(fontW);
         }
@@ -132,15 +132,15 @@ public class Tefcir extends Activity {
 
                 if (lastR ==2) {
                     pageS = Integer.valueOf(curT.getString(6));
-                    if (pageS<10) {fontW = "P00"+pageS;
-                    }else{ if (pageS<100) {fontW = "P0"+pageS;
-                    }else{ fontW = "P"+pageS;
+                    if (pageS<10) {fontW = "p00"+pageS;
+                    }else{ if (pageS<100) {fontW = "p0"+pageS;
+                    }else{ fontW = "p"+pageS;
                     }}
-                    fontW="font/"+fontW+".otf";
+                    fontW="/QuranHW/"+fontW+".otf";
                     //fontW = ""+pageS;
                     //Typeface tf = Typeface.createFromAsset(getAssets(), "font/UthmanicWarsh1 Ver05.otf");
                     //Typeface tf = Typeface.createFromAsset(getAssets(), "font/P200.otf");
-                    Typeface tf = Typeface.createFromAsset(getAssets(), fontW);///"+fontW+".otf");
+                    Typeface tf = Typeface.createFromFile(android.os.Environment.getExternalStorageDirectory() + fontW);
                     ayaT.setTypeface(tf);
                 }
                 //ayaB.setText(curT.getString(3));
@@ -168,15 +168,15 @@ public class Tefcir extends Activity {
                 //tefcirB.setText(curT.getString(4));
                 if (lastR ==2) {
                     pageS = Integer.valueOf(curT.getString(6));
-                    if (pageS<10) {fontW = "P00"+pageS;
-                    }else{ if (pageS<100) {fontW = "P0"+pageS;
-                    }else{ fontW = "P"+pageS;
+                    if (pageS<10) {fontW = "p00"+pageS;
+                    }else{ if (pageS<100) {fontW = "p0"+pageS;
+                    }else{ fontW = "p"+pageS;
                     }}
-                    fontW="font/"+fontW+".otf";
+                    fontW="/QuranHW/"+fontW+".otf";
                     //fontW = ""+pageS;
                     //Typeface tf = Typeface.createFromAsset(getAssets(), "font/UthmanicWarsh1 Ver05.otf");
                     //Typeface tf = Typeface.createFromAsset(getAssets(), "font/P200.otf");
-                    Typeface tf = Typeface.createFromAsset(getAssets(), fontW);///"+fontW+".otf");
+                    Typeface tf = Typeface.createFromFile(android.os.Environment.getExternalStorageDirectory() + fontW);
                     ayaT.setTypeface(tf);
                 }
 
