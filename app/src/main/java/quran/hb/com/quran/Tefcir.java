@@ -18,6 +18,17 @@ import android.widget.TextView;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Tefcir (Tafsir) Activity
+ *
+ * Table structure (SELECT * columns):
+ *   tb_tafcir  : [0]tefcir_id [1]sora [2]aya [3]aya_q [4]aya_t [5]aya_text [6]p_sora [7]t_sora [8]line [9]point
+ *   tb_tafcirW : [0]tefcir_id [1]sora [2]aya [3]aya_q [4]aya_t [5]aya_text [6]p_sora [7]t_sora [8]line [9]point [10]ayaW [11]eff
+ *
+ * Font files (external storage /QuranHW/):
+ *   Hafs  : UthmanicHafs1 Ver09.otf
+ *   Warsh : p001.otf … p604.otf  (p_sora = column 6, values 1-604)
+ */
 public class Tefcir extends Activity {
 
     DbHelper db;
@@ -25,75 +36,65 @@ public class Tefcir extends Activity {
     Button btnAN, btnAP, btnM, btnP;
     TextView ayaT, soraT, tefcirT;
     ScrollView scrollV;
-    int soraI, ayaI, pageS, lastR;
-    Cursor curT;
+
+    int soraI, ayaI, lastR;
     int pro;
-    String fontW;
+    Cursor curT;
 
     // ---------------------------------------------------------------
-    // Helper : build font path for Warsh from page number
-    // Files: /storage/emulated/0/QuranHW/p001.otf … p604.otf
+    // Font helpers
     // ---------------------------------------------------------------
-    private String buildWarshFontPath(int page) {
+
+    /** Build /QuranHW/p001.otf path for a given page (1-604) */
+    private String warshFontPath(int page) {
         String name;
-        if (page < 10)        name = "p00" + page;
-        else if (page < 100)  name = "p0"  + page;
-        else                  name = "p"   + page;
-        return Environment.getExternalStorageDirectory()
-                .getAbsolutePath() + "/QuranHW/" + name + ".otf";
+        if      (page < 10)  name = "p00" + page;
+        else if (page < 100) name = "p0"  + page;
+        else                 name = "p"   + page;
+        return Environment.getExternalStorageDirectory().getAbsolutePath()
+                + "/QuranHW/" + name + ".otf";
     }
 
-    // ---------------------------------------------------------------
-    // Helper : apply Warsh Typeface safely
-    // ---------------------------------------------------------------
     private void applyWarshFont(int page) {
-        if (page <= 0 || page > 604) return;
+        if (page < 1 || page > 604) return;
         try {
-            File f = new File(buildWarshFontPath(page));
-            if (f.exists()) {
-                Typeface tf = Typeface.createFromFile(f);
-                ayaT.setTypeface(tf);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            File f = new File(warshFontPath(page));
+            if (f.exists()) ayaT.setTypeface(Typeface.createFromFile(f));
+        } catch (Exception e) { e.printStackTrace(); }
     }
 
-    // ---------------------------------------------------------------
-    // Helper : apply Hafs Typeface safely
-    // ---------------------------------------------------------------
     private void applyHafsFont() {
         try {
-            File f = new File(Environment.getExternalStorageDirectory()
-                    .getAbsolutePath() + "/QuranHW/UthmanicHafs1 Ver09.otf");
-            if (f.exists()) {
-                Typeface tf = Typeface.createFromFile(f);
-                ayaT.setTypeface(tf);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+            File f = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + "/QuranHW/UthmanicHafs1 Ver09.otf");
+            if (f.exists()) ayaT.setTypeface(Typeface.createFromFile(f));
+        } catch (Exception e) { e.printStackTrace(); }
     }
 
     // ---------------------------------------------------------------
-    // Helper : display current row of curT
+    // Display the current cursor row
     // ---------------------------------------------------------------
     private void displayCurrentRow() {
+        if (curT == null || curT.isClosed()) return;
         try {
-            if (curT == null || curT.isBeforeFirst() || curT.isAfterLast()) return;
-            ayaT.setText(curT.getString(3));
-            soraT.setText("الآية " + curT.getString(2) + "   سورة " + curT.getString(7));
-            String tefcir = curT.getString(4);
-            tefcirT.setText(tefcir != null ? tefcir : "");
+            if (curT.isBeforeFirst() || curT.isAfterLast()) return;
 
-            if (lastR == 2) {
-                String colVal = curT.getString(6);
-                if (colVal != null && !colVal.isEmpty()) {
-                    pageS = Integer.parseInt(colVal.trim());
-                    applyWarshFont(pageS);
-                }
-            } else {
+            // col[3]=aya_q (arabic text), col[4]=aya_t (tafsir), col[7]=t_sora (sora name)
+            String ayaText   = curT.getString(3);
+            String tafsirText = curT.getString(4);
+            String soraName  = curT.getString(7);
+            String ayaNum    = curT.getString(2);
+
+            ayaT.setText(ayaText    != null ? ayaText    : "");
+            tefcirT.setText(tafsirText != null ? tafsirText : "");
+            soraT.setText("الآية " + (ayaNum != null ? ayaNum : "") + "   سورة " + (soraName != null ? soraName : ""));
+
+            // Apply font - col[6] = p_sora (use getInt, not getString)
+            if (lastR == 1) {
                 applyHafsFont();
+            } else {
+                int page = curT.getInt(6); // p_sora column
+                applyWarshFont(page);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,48 +102,49 @@ public class Tefcir extends Activity {
     }
 
     // ---------------------------------------------------------------
-    // Find cursor position matching soraI / ayaI
-    // Returns true if found, false otherwise (cursor left at first row)
+    // Find the cursor row matching soraI/ayaI
     // ---------------------------------------------------------------
-    private boolean seekToAya(int sora, int aya, int maxRows) {
+    private void seekToAya(int targetSora, int targetAya) {
+        if (curT == null || curT.isClosed()) return;
         try {
             curT.moveToFirst();
-            int j = 0;
             do {
-                if (curT.getInt(1) == sora && curT.getInt(2) == aya) return true;
-                j++;
-            } while (curT.moveToNext() && j < maxRows);
-            // Not found – go back to first row so something is shown
+                if (curT.getInt(1) == targetSora && curT.getInt(2) == targetAya) return;
+            } while (curT.moveToNext());
+            // Not found: stay on first row
             curT.moveToFirst();
-            return false;
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            try { curT.moveToFirst(); } catch (Exception ignored) {}
         }
     }
 
+    // ---------------------------------------------------------------
+    // onCreate
+    // ---------------------------------------------------------------
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tefcir);
 
-        btnAP   = (Button)   findViewById(R.id.btnAP);
-        btnAN   = (Button)   findViewById(R.id.btnAN);
-        btnM    = (Button)   findViewById(R.id.btnM);
-        btnP    = (Button)   findViewById(R.id.btnP);
-        ayaT    = (TextView) findViewById(R.id.tv_aya);
-        soraT   = (TextView) findViewById(R.id.tv_sora);
-        tefcirT = (TextView) findViewById(R.id.tv_tefcir);
+        btnAP   = (Button)     findViewById(R.id.btnAP);
+        btnAN   = (Button)     findViewById(R.id.btnAN);
+        btnM    = (Button)     findViewById(R.id.btnM);
+        btnP    = (Button)     findViewById(R.id.btnP);
+        ayaT    = (TextView)   findViewById(R.id.tv_aya);
+        soraT   = (TextView)   findViewById(R.id.tv_sora);
+        tefcirT = (TextView)   findViewById(R.id.tv_tefcir);
         scrollV = (ScrollView) findViewById(R.id.scrollV);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-        // --- Open database ----------------------------------------
+        // --- Open DB -----------------------------------------------
         try { db = new DbHelper(this); } catch (IOException e) { e.printStackTrace(); }
-        try { db.createdatabase(); }     catch (IOException e) { e.printStackTrace(); }
+        try { db.createdatabase(); }    catch (IOException e) { e.printStackTrace(); }
         db.opendatabase();
 
-        // --- Read index -------------------------------------------
+        // --- Read saved position from tb_indice --------------------
+        // col[1]=last_riwaya, col[10]=soraIndex, col[11]=ayaIndex, col[12]=sizei
         try {
             Cursor curI = db.inrawQuery("SELECT * FROM tb_indice", null);
             curI.moveToFirst();
@@ -158,62 +160,51 @@ public class Tefcir extends Activity {
 
         ayaT.setTextSize(pro);
 
-        // --- Load tafcir table ------------------------------------
+        // --- Load tafcir table and seek to aya ---------------------
         try {
             if (lastR == 1) {
                 curT = db.tfrawQuery("SELECT * FROM tb_tafcir", null);
-                seekToAya(soraI, ayaI, 6236);
             } else {
                 curT = db.tfwrawQuery("SELECT * FROM tb_tafcirW", null);
-                seekToAya(soraI, ayaI, 6215);
             }
+            seekToAya(soraI, ayaI);
             displayCurrentRow();
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         // ---------------------------------------------------------------
-        // Button : Previous aya
+        // Previous aya button
         // ---------------------------------------------------------------
         btnAP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    if (curT.isFirst()) {
-                        curT.moveToLast();
-                    } else {
-                        curT.moveToPrevious();
-                    }
+                    if (curT.isFirst()) curT.moveToLast();
+                    else curT.moveToPrevious();
                     displayCurrentRow();
                     scrollV.smoothScrollTo(0, 0);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
         });
 
         // ---------------------------------------------------------------
-        // Button : Next aya
+        // Next aya button
         // ---------------------------------------------------------------
         btnAN.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    if (curT.isLast()) {
-                        curT.moveToFirst();
-                    } else {
-                        curT.moveToNext();
-                    }
+                    if (curT.isLast()) curT.moveToFirst();
+                    else curT.moveToNext();
                     displayCurrentRow();
                     scrollV.smoothScrollTo(0, 0);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                } catch (Exception e) { e.printStackTrace(); }
             }
         });
 
         // ---------------------------------------------------------------
-        // Button : Decrease font size
+        // Decrease font size
         // ---------------------------------------------------------------
         btnM.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,7 +219,7 @@ public class Tefcir extends Activity {
         });
 
         // ---------------------------------------------------------------
-        // Button : Increase font size
+        // Increase font size
         // ---------------------------------------------------------------
         btnP.setOnClickListener(new View.OnClickListener() {
             @Override

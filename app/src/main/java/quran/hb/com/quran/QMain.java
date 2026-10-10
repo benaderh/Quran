@@ -469,31 +469,55 @@ public class QMain extends Activity {
 								curS.close();
 								//btnS.setText(sora);
 
-								// Calculate soraI and ayaI from SQLite (tb_tafcir or tb_tafcirW) based on click position
-								int clickPosIndex = click_line * 4 + click_point;
+								// --- Find sora/aya from click position using tb_tafcir/tb_tafcirW ---
+								// Logic: find the LAST aya whose start position (p_sora,line,point) is
+								// <= clicked position. Since (p_sora,line,point) has a few duplicates,
+								// we take the one with the highest tefcir_id (= last inserted = last aya).
+								// Query 1: on the clicked page, at or before the clicked line/point.
+								// Query 2: fallback to last aya of any previous page.
 								int bestSora = 1;
-								int bestAya = 1;
+								int bestAya  = 1;
 
-								String tableName = (lastR == 1) ? "tb_tafcir" : "tb_tafcirW";
-								Cursor c = db.tfrawQuery("SELECT sora, aya, p_sora, line, point FROM " + tableName + " WHERE p_sora = " + click_page + " OR p_sora = " + (click_page - 1) + " ORDER BY p_sora ASC, line ASC, point ASC", null);
-								if (c != null && c.moveToFirst()) {
-									do {
-										int p_sora = c.getInt(2);
-										int r_line = c.getInt(3);
-										int r_point = c.getInt(4);
-										int pos_index = r_line * 4 + r_point;
+								String tbl = (lastR == 1) ? "tb_tafcir" : "tb_tafcirW";
 
-										if (p_sora < click_page || (p_sora == click_page && pos_index <= clickPosIndex)) {
-											bestSora = c.getInt(0);
-											bestAya = c.getInt(1);
-										} else {
-											break;
+								// Build a raw DB query directly (not through DbHelper cursor helpers
+								// so we can pass a real WHERE clause)
+								try {
+									SQLiteDatabase rawDb = android.database.sqlite.SQLiteDatabase.openDatabase(
+										"/data/data/quran.hb.com.quran/databases/db_quran.sqlite",
+										null, android.database.sqlite.SQLiteDatabase.OPEN_READONLY);
+
+									// Rows on the clicked page with position <= click position
+									String q1 = "SELECT sora, aya FROM " + tbl
+										+ " WHERE p_sora = " + click_page
+										+ " AND (line * 4 + point) <= " + (click_line * 4 + click_point)
+										+ " ORDER BY line DESC, point DESC, tefcir_id DESC LIMIT 1";
+									Cursor c1 = rawDb.rawQuery(q1, null);
+									if (c1 != null && c1.moveToFirst()) {
+										bestSora = c1.getInt(0);
+										bestAya  = c1.getInt(1);
+										c1.close();
+									} else {
+										// Fallback: last aya of any page before the clicked page
+										if (c1 != null) c1.close();
+										String q2 = "SELECT sora, aya FROM " + tbl
+											+ " WHERE p_sora < " + click_page
+											+ " ORDER BY p_sora DESC, line DESC, point DESC, tefcir_id DESC LIMIT 1";
+										Cursor c2 = rawDb.rawQuery(q2, null);
+										if (c2 != null && c2.moveToFirst()) {
+											bestSora = c2.getInt(0);
+											bestAya  = c2.getInt(1);
 										}
-									} while (c.moveToNext());
-									c.close();
+										if (c2 != null) c2.close();
+									}
+									rawDb.close();
+								} catch (Exception eDb) {
+									eDb.printStackTrace();
 								}
+
 								soraI = bestSora;
-								ayaI = bestAya;
+								ayaI  = bestAya;
+
 
 								try {
 									//Workbook wb = Workbook.getWorkbook(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + RiwayaExel));
