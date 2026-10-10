@@ -24,24 +24,15 @@ jobs:
           java-version: '8'
           distribution: 'temurin'
 
-      - name: Setup Android SDK build-tools 28.0.3
-        run: |
-          echo "y" | $ANDROID_HOME/tools/bin/sdkmanager \
-            "build-tools;28.0.3" \
-            "platforms;android-28" \
-            --sdk_root=$ANDROID_HOME 2>/dev/null || true
-
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build Debug APK
-        run: ./gradlew assembleDebug --stacktrace
-        env:
-          ANDROID_HOME: /usr/local/lib/android/sdk
 
-      - name: Upload APK artifact
+      - name: Build with Gradle
+        run: ./gradlew assembleDebug --stacktrace --info
+
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Quran-debug-apk
-          path: app/build/outputs/apk/debug/*.apk
-          retention-days: 30
+          name: app-debug
+          path: app/build/outputs/apk/**/*.apk
