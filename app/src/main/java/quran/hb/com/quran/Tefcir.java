@@ -87,9 +87,12 @@ public class Tefcir extends Activity {
             soraT.setText("الآية " + curT.getString(2) + "   سورة " + curT.getString(7));
             tefcirT.setText(curT.getString(4));
 
-            Typeface tf = Typeface.createFromFile(android.os.Environment.getExternalStorageDirectory() + "/QuranHW/UthmanicHafs1 Ver09.otf");
-            //Typeface tf = Typeface.createFromAsset(getAssets(), "font/UthmanicWarsh1 Ver05.otf");
-            ayaT.setTypeface(tf);
+            try {
+                Typeface tf = Typeface.createFromFile(android.os.Environment.getExternalStorageDirectory() + "/QuranHW/UthmanicHafs1 Ver09.otf");
+                ayaT.setTypeface(tf);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }else{
             curT = db.tfwrawQuery("SELECT * FROM tb_tafcirW", null);
             curT.moveToFirst();
@@ -117,8 +120,12 @@ public class Tefcir extends Activity {
             //fontW = ""+pageS;
             //Typeface tf = Typeface.createFromAsset(getAssets(), "font/UthmanicWarsh1 Ver05.otf");
             //Typeface tf = Typeface.createFromAsset(getAssets(), "font/P200.otf");
-            Typeface tf = Typeface.createFromFile(android.os.Environment.getExternalStorageDirectory() + fontW);
-            ayaT.setTypeface(tf);
+            try {
+                Typeface tf = Typeface.createFromFile(android.os.Environment.getExternalStorageDirectory() + fontW);
+                ayaT.setTypeface(tf);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             //ayaT.setText(fontW);
         }
 
@@ -140,8 +147,12 @@ public class Tefcir extends Activity {
                     //fontW = ""+pageS;
                     //Typeface tf = Typeface.createFromAsset(getAssets(), "font/UthmanicWarsh1 Ver05.otf");
                     //Typeface tf = Typeface.createFromAsset(getAssets(), "font/P200.otf");
-                    Typeface tf = Typeface.createFromFile(android.os.Environment.getExternalStorageDirectory() + fontW);
-                    ayaT.setTypeface(tf);
+                    try {
+                        Typeface tf = Typeface.createFromFile(android.os.Environment.getExternalStorageDirectory() + fontW);
+                        ayaT.setTypeface(tf);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 //ayaB.setText(curT.getString(3));
                 //tefcirB.setText(curT.getString(4));
@@ -176,8 +187,12 @@ public class Tefcir extends Activity {
                     //fontW = ""+pageS;
                     //Typeface tf = Typeface.createFromAsset(getAssets(), "font/UthmanicWarsh1 Ver05.otf");
                     //Typeface tf = Typeface.createFromAsset(getAssets(), "font/P200.otf");
-                    Typeface tf = Typeface.createFromFile(android.os.Environment.getExternalStorageDirectory() + fontW);
-                    ayaT.setTypeface(tf);
+                    try {
+                        Typeface tf = Typeface.createFromFile(android.os.Environment.getExternalStorageDirectory() + fontW);
+                        ayaT.setTypeface(tf);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 scrollV.smoothScrollTo(0,0);
