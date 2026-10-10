@@ -79,23 +79,27 @@ public class Tefcir extends Activity {
         try {
             if (curT.isBeforeFirst() || curT.isAfterLast()) return;
 
-            // col[3]=aya_q (arabic text), col[4]=aya_t (tafsir), col[7]=t_sora (sora name)
-            String ayaText   = curT.getString(3);
             String tafsirText = curT.getString(4);
             String soraName  = curT.getString(7);
             String ayaNum    = curT.getString(2);
 
-            ayaT.setText(ayaText    != null ? ayaText    : "");
-            tefcirT.setText(tafsirText != null ? tafsirText : "");
-            soraT.setText("الآية " + (ayaNum != null ? ayaNum : "") + "   سورة " + (soraName != null ? soraName : ""));
-
-            // Apply font - col[6] = p_sora (use getInt, not getString)
             if (lastR == 1) {
+                // Hafs : col[3]=aya_q contient le texte Unicode standard
+                String ayaText = curT.getString(3);
+                ayaT.setText(ayaText != null ? ayaText : "");
                 applyHafsFont();
             } else {
+                // Warsh : col[10]=ayaW contient le texte encodé pour les fonts page-par-page
+                // col[6]=p_sora donne le numéro de page (1-604) pour choisir P001.otf…P604.otf
+                String ayaText = curT.getString(10); // ayaW column
+                ayaT.setText(ayaText != null ? ayaText : "");
                 int page = curT.getInt(6); // p_sora column
                 applyWarshFont(page);
             }
+
+            tefcirT.setText(tafsirText != null ? tafsirText : "");
+            soraT.setText("الآية " + (ayaNum != null ? ayaNum : "") + "   سورة " + (soraName != null ? soraName : ""));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
