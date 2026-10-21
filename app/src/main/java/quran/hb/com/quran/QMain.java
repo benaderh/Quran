@@ -1253,15 +1253,9 @@ public class QMain extends Activity {
 		}
 	}
 
-	/** Vrai si le t\u00e9l\u00e9phone est en mode paysage (landscape). */
-	private boolean isLandscape() {
-		return getResources().getConfiguration().orientation ==
-				android.content.res.Configuration.ORIENTATION_LANDSCAPE;
-	}
-
 	/**
-	 * Retourne une copie invers\u00e9e de la liste de chemins.
-	 * En mode paysage PDF : index 0 = 1\u00e8re page Coran (p1), scroll BAS = page suivante.
+	 * Retourne une copie inversée de la liste de chemins.
+	 * En mode paysage PDF : index 0 = 1ère page Coran (p1), scroll BAS = page suivante.
 	 */
 	private ArrayList<String> reversePaths(ArrayList<String> paths) {
 		ArrayList<String> reversed = new ArrayList<String>(paths);
