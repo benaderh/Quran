@@ -54,6 +54,7 @@ public class QMain extends Activity {
 
 	SQLiteDatabase SQLdb;
 	Button btnM, btnA, btnT, btnH, btnW, btnF, btnJ, btnP, btnS, btnAbout, btnAP, btnAN, btnAPb, btnANb, btnRetour;
+	Button btnHT, btnWT; // mode texte (police OTF)
 	TextView ayaT, tefcirT, ayaB, tefcirB;
 	TextView cadre;
 	LinearLayout ll21, ll22;
@@ -115,8 +116,10 @@ public class QMain extends Activity {
 		btnM = (Button) findViewById(R.id.btnM);
 		btnA = (Button) findViewById(R.id.btnA);
 		btnT = (Button) findViewById(R.id.btnT);
-		btnH = (Button) findViewById(R.id.btnH);
-		btnW = (Button) findViewById(R.id.btnW);
+		btnH  = (Button) findViewById(R.id.btnH);
+		btnW  = (Button) findViewById(R.id.btnW);
+		btnHT = (Button) findViewById(R.id.btnHT);
+		btnWT = (Button) findViewById(R.id.btnWT);
 		btnF = (Button) findViewById(R.id.btnF);
 		btnAbout = (Button) findViewById(R.id.btnAbout);
 		btnAP = (Button) findViewById(R.id.btnAP);
@@ -569,6 +572,30 @@ public class QMain extends Activity {
 			}
 		});
 
+
+		// ── Mode texte Hafs (police OTF) ─────────────────────────────────────
+		btnHT.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				hideBar();
+				Intent it = new Intent(QMain.this, QTextPage.class);
+				it.putExtra(QTextPage.EXTRA_PAGE,   lastP);
+				it.putExtra(QTextPage.EXTRA_RIWAYA, 1);
+				startActivity(it);
+			}
+		});
+
+		// ── Mode texte Warsh (police OTF) ─────────────────────────────────────
+		btnWT.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				hideBar();
+				Intent it = new Intent(QMain.this, QTextPage.class);
+				it.putExtra(QTextPage.EXTRA_PAGE,   lastP);
+				it.putExtra(QTextPage.EXTRA_RIWAYA, 2);
+				startActivity(it);
+			}
+		});
 
 		btnT.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -1043,6 +1070,23 @@ public class QMain extends Activity {
 				== android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 	}
 
+	/** Cache tous les boutons de la barre et réinitialise bar=0 */
+	private void hideBar() {
+		btnJ.setVisibility(View.GONE);
+		btnP.setVisibility(View.GONE);
+		btnS.setVisibility(View.GONE);
+		btnM.setVisibility(View.GONE);
+		btnAbout.setVisibility(View.GONE);
+		btnA.setVisibility(View.GONE);
+		btnT.setVisibility(View.GONE);
+		btnH.setVisibility(View.GONE);
+		btnW.setVisibility(View.GONE);
+		btnHT.setVisibility(View.GONE);
+		btnWT.setVisibility(View.GONE);
+		btnF.setVisibility(View.GONE);
+		bar = 0;
+	}
+
 	/**
 	 * Clic sur une page : startX / startY sont des coordonnees "ecran" (0..screenWidth, 0..screenHeight)
 	 * qui servent a retrouver la ligne, le point, la sourate et l'aya.
@@ -1069,6 +1113,8 @@ public class QMain extends Activity {
 								btnT.setVisibility(View.VISIBLE);
 								btnH.setVisibility(View.VISIBLE);
 								btnW.setVisibility(View.VISIBLE);
+								btnHT.setVisibility(View.VISIBLE);
+								btnWT.setVisibility(View.VISIBLE);
 								btnF.setVisibility(View.VISIBLE);
 								bar = 1;
 
