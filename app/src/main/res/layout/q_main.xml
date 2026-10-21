@@ -68,6 +68,33 @@
             android:visibility="gone"
             android:onClick="true" />
 
+        <!-- Mode texte Hafs (police OTF) -->
+        <Button
+            android:id="@+id/btnHT"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:text="ح أ"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:background="#0D2B1A"
+            android:textColor="#7CFC00"
+            android:textAlignment="center"
+            android:visibility="gone"
+            android:onClick="true" />
+
+        <!-- Mode texte Warsh (police OTF) -->
+        <Button
+            android:id="@+id/btnWT"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:text="و أ"
+            android:layout_weight="1"
+            android:background="#0D2B1A"
+            android:textColor="#7CFC00"
+            android:textAlignment="center"
+            android:visibility="gone"
+            android:onClick="true" />
+
         <Button
             android:id="@+id/btnT"
             android:layout_width="0dp"
