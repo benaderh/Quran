@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Display;
@@ -228,6 +229,7 @@ public class QMain extends Activity {
 			btnW.setTypeface(null, Typeface.NORMAL);
 			btnW.setTextColor(Color.parseColor("#aea7a7"));
 			adapter = new QImage(QMain.this, utils.getFilePaths());
+			adapter.setPageListener(pageListener);
 		} else {
 			//RiwayaExel = "/AudioQ/Warsh.xls";
 			//RiwayaAudio = "/AudioQ/Warsh/";
@@ -237,6 +239,7 @@ public class QMain extends Activity {
 			btnW.setTypeface(null, Typeface.BOLD);
 			btnW.setTextColor(Color.parseColor("#ffffff"));
 			adapter = new QImage(QMain.this, utils.getFilePathsW());
+			adapter.setPageListener(pageListener);
 		}
 
 
@@ -360,208 +363,8 @@ public class QMain extends Activity {
 						//Toast.makeText(getApplicationContext(), "Land UP", Toast.LENGTH_SHORT).show();
 						float endX = event.getX();
 						float endY = event.getY();
-						if (isAClick(startX, endX, startY, endY)) {
-							cadre.setVisibility(View.GONE);
-							if (ctlAudio==1){
-								ringTone.stop();
-								ctlAudio=0;
-							}
-
-							// launchFullPhotoActivity(imageUrls);// WE HAVE A CLICK!!
-							//Toast.makeText(QMain.this, "screenHeight: " + screenHeight + "     screenWidth: " + screenWidth, Toast.LENGTH_LONG).show();
-
-							//if (bar == 0 && curQ.getInt(0)>0 && curQ.getInt(0)<605) {
-							if (bar == 0 && curQ.getInt(0) > 0 && curQ.getInt(0) < 605) {
-								//if (bar == 0) {
-								//tvB.setVisibility(View.VISIBLE);
-								btnJ.setVisibility(View.VISIBLE);
-								btnP.setVisibility(View.VISIBLE);
-								btnS.setVisibility(View.VISIBLE);
-								btnM.setVisibility(View.VISIBLE);
-								btnA.setVisibility(View.VISIBLE);
-								btnT.setVisibility(View.VISIBLE);
-								btnH.setVisibility(View.VISIBLE);
-								btnW.setVisibility(View.VISIBLE);
-								btnF.setVisibility(View.VISIBLE);
-								bar = 1;
-
-								// retrieve the stored coordinates
-								float x = startX;//lastTouchDownXY[0];
-								float y = startY;//lastTouchDownXY[1];
-								if (0 < y && y < ((screenHeight / 15) * 1) + 1) {
-									y1 = 1;
-								} else if ((screenHeight / 15) * 1 < y && y < ((screenHeight / 15) * 2) + 1) {
-									y1 = 2;
-								} else if ((screenHeight / 15) * 2 < y && y < ((screenHeight / 15) * 3) + 1) {
-									y1 = 3;
-								} else if ((screenHeight / 15) * 3 < y && y < ((screenHeight / 15) * 4) + 1) {
-									y1 = 4;
-								} else if ((screenHeight / 15) * 4 < y && y < ((screenHeight / 15) * 5) + 1) {
-									y1 = 5;
-								} else if ((screenHeight / 15) * 5 < y && y < ((screenHeight / 15) * 6) + 1) {
-									y1 = 6;
-								} else if ((screenHeight / 15) * 6 < y && y < ((screenHeight / 15) * 7) + 1) {
-									y1 = 7;
-								} else if ((screenHeight / 15) * 7 < y && y < ((screenHeight / 15) * 8) + 1) {
-									y1 = 8;
-								} else if ((screenHeight / 15) * 8 < y && y < ((screenHeight / 15) * 9) + 1) {
-									y1 = 9;
-								} else if ((screenHeight / 15) * 9 < y && y < ((screenHeight / 15) * 10) + 1) {
-									y1 = 10;
-								} else if ((screenHeight / 15) * 10 < y && y < ((screenHeight / 15) * 11) + 1) {
-									y1 = 11;
-								} else if ((screenHeight / 15) * 11 < y && y < ((screenHeight / 15) * 12) + 1) {
-									y1 = 12;
-								} else if ((screenHeight / 15) * 12 < y && y < ((screenHeight / 15) * 13) + 1) {
-									y1 = 13;
-								} else if ((screenHeight / 15) * 13 < y && y < ((screenHeight / 15) * 14) + 1) {
-									y1 = 14;
-								} else if ((screenHeight / 15) * 14 < y && y < ((screenHeight / 15) * 15) + 1) {
-									y1 = 15;
-								}
-
-								if (0 < x && x < ((screenWidth / 4) * 1) + 1) {
-									x1 = 4;
-								} else if ((screenWidth / 4) * 1 < x && x < ((screenWidth / 4) * 2) + 1) {
-									x1 = 3;
-								} else if ((screenWidth / 4) * 2 < x && x < ((screenWidth / 4) * 3) + 1) {
-									x1 = 2;
-								} else if ((screenWidth / 4) * 3 < x && x < ((screenWidth / 4) * 4) + 1) {
-									x1 = 1;
-								}
-
-								//if (0 < x && x < ((screenWidth / 8) * 1) + 1) {x1 = 8;
-								//} else if ((screenWidth / 8) * 1 < x && x < ((screenWidth / 8) * 2) + 1) {x1 = 7;
-								//} else if ((screenWidth / 8) * 2 < x && x < ((screenWidth / 8) * 3) + 1) {x1 = 6;
-								//} else if ((screenWidth / 8) * 3 < x && x < ((screenWidth / 8) * 4) + 1) {x1 = 5;
-								//} else if ((screenWidth / 8) * 4 < x && x < ((screenWidth / 8) * 5) + 1) {x1 = 4;
-								//} else if ((screenWidth / 8) * 5 < x && x < ((screenWidth / 8) * 6) + 1) {x1 = 3;
-								//} else if ((screenWidth / 8) * 6 < x && x < ((screenWidth / 8) * 7) + 1) {x1 = 2;
-								//} else if ((screenWidth / 8) * 7 < x && x < ((screenWidth / 8) * 8) + 1) {x1 = 1;
-								//}
-								//btnS.setText("x: " + x1 + "    y: " + y1);
-								//x1=((Page -1) x 120) + ((Ligne - 1) x 8) + (PointClick)        (Row0: Titre)
-
-								int click_page = curQ.getInt(0);
-								int click_line = y1;
-								int click_point = x1;
-
-								//x1=(curQ.getInt(0)-1)*120+(y1-1)*8+x1;
-								x1 = (curQ.getInt(0) - 1) * 60 + (y1 - 1) * 4 + x1+1;
-								//btnS.setText("" + x1);
-
-                                Cursor curS;
-								db.opendatabase();
-								curS = db.srrawQuery("SELECT * FROM tb_sora" , null);
-								curS.moveToFirst();
-								int j = 1;
-								do {
-									if (curS.getInt(3) > x1) {
-										//i = 366;
-										break;
-									}
-									curS.moveToNext();
-									j++;
-								} while (j < 115);
-								curS.moveToPrevious();
-								x1=x1-curS.getInt(3);
-								sora="s"+(j - 1);
-								curS.close();
-								//btnS.setText(sora);
-
-								// --- Find sora/aya from click position using tb_tafcir/tb_tafcirW ---
-								// Logic: find the LAST aya whose start position (p_sora,line,point) is
-								// <= clicked position. Since (p_sora,line,point) has a few duplicates,
-								// we take the one with the highest tefcir_id (= last inserted = last aya).
-								// Query 1: on the clicked page, at or before the clicked line/point.
-								// Query 2: fallback to last aya of any previous page.
-								int bestSora = 1;
-								int bestAya  = 1;
-
-								String tbl = (lastR == 1) ? "tb_tafcir" : "tb_tafcirW";
-
-								// Build a raw DB query directly (not through DbHelper cursor helpers
-								// so we can pass a real WHERE clause)
-								try {
-									SQLiteDatabase rawDb = android.database.sqlite.SQLiteDatabase.openDatabase(
-										"/data/data/quran.hb.com.quran/databases/db_quran.sqlite",
-										null, android.database.sqlite.SQLiteDatabase.OPEN_READONLY);
-
-									// Rows on the clicked page with position <= click position
-									String q1 = "SELECT sora, aya FROM " + tbl
-										+ " WHERE p_sora = " + click_page
-										+ " AND (line * 4 + point) <= " + (click_line * 4 + click_point)
-										+ " ORDER BY line DESC, point DESC, tefcir_id DESC LIMIT 1";
-									Cursor c1 = rawDb.rawQuery(q1, null);
-									if (c1 != null && c1.moveToFirst()) {
-										bestSora = c1.getInt(0);
-										bestAya  = c1.getInt(1);
-										c1.close();
-									} else {
-										// Fallback: last aya of any page before the clicked page
-										if (c1 != null) c1.close();
-										String q2 = "SELECT sora, aya FROM " + tbl
-											+ " WHERE p_sora < " + click_page
-											+ " ORDER BY p_sora DESC, line DESC, point DESC, tefcir_id DESC LIMIT 1";
-										Cursor c2 = rawDb.rawQuery(q2, null);
-										if (c2 != null && c2.moveToFirst()) {
-											bestSora = c2.getInt(0);
-											bestAya  = c2.getInt(1);
-										}
-										if (c2 != null) c2.close();
-									}
-									rawDb.close();
-								} catch (Exception eDb) {
-									eDb.printStackTrace();
-								}
-
-								soraI = bestSora;
-								ayaI  = bestAya;
-
-
-								try {
-									//Workbook wb = Workbook.getWorkbook(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + RiwayaExel));
-									  Workbook wb = Workbook.getWorkbook(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Riwaya + sora + ".xls"));
-									//Workbook wb = Workbook.getWorkbook(new File(Environment.getExternalStorageState() + RiwayaExel));
-									Sheet s = wb.getSheet(0);
-
-									//Cell z = s.getCell(3, x1);
-									//sora = z.getContents();
-
-									Cell z = s.getCell(4, x1);
-									pos = new Integer(z.getContents().toString());
-
-									// We don't need ayaI from xls anymore because it's retrieved from SQLite above!
-									//z = s.getCell(5, x1);
-									//ayaI = new Integer(z.getContents().toString());
-
-									z = s.getCell(1, x1);
-									lineI = new Integer(z.getContents().toString());
-
-									//btnS.setText(sora + "  " + pos + "  " + ayaI + "  " + lineI);
-								} catch (Exception e) {
-								}
-
-							} else {
-								//tvB.setVisibility(View.GONE);
-								btnJ.setVisibility(View.GONE);
-								btnP.setVisibility(View.GONE);
-								btnS.setVisibility(View.GONE);
-								btnM.setVisibility(View.GONE);
-								btnAbout.setVisibility(View.GONE);
-								btnA.setVisibility(View.GONE);
-								btnT.setVisibility(View.GONE);
-								btnH.setVisibility(View.GONE);
-								btnW.setVisibility(View.GONE);
-								btnF.setVisibility(View.GONE);
-								//cadre.setVisibility(View.GONE);
-								bar = 0;
-
-
-							}
-							ll21.setVisibility(View.GONE);
-							ll22.setVisibility(View.GONE);
-							//Toast.makeText(QMain.this, "x: " + x1 + "    y: " + y1, Toast.LENGTH_LONG).show();
+						if (isAClick(startX, endX, startY, endY) && !isLandscape()) {
+							handleTap(startX, startY);
 
 
 						}
@@ -678,6 +481,7 @@ public class QMain extends Activity {
 			public void onClick(View arg0) {
 
 				adapter = new QImage(QMain.this, utils.getFilePathsW());
+				adapter.setPageListener(pageListener);
 				viewPager.setAdapter(adapter);
 				viewPager.setCurrentItem(608 - lastP);
 
@@ -718,6 +522,7 @@ public class QMain extends Activity {
 			public void onClick(View arg0) {
 
 				adapter = new QImage(QMain.this, utils.getFilePaths());
+				adapter.setPageListener(pageListener);
 				viewPager.setAdapter(adapter);
 				viewPager.setCurrentItem(608 - lastP);
 
@@ -853,6 +658,14 @@ public class QMain extends Activity {
 				//mVideoView.start();
 				ringTone.start();
 				ctlAudio = 1;
+				ringTone.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+					@Override
+					public void onCompletion(MediaPlayer mp) {
+						ctlAudio = 0;
+						stopAudioTracking();
+					}
+				});
+				startAudioTracking();
 				//ringTone.callPlayerSeeked(startPos, endPos, false);
 
 				btnJ.setVisibility(View.GONE);
@@ -1205,6 +1018,353 @@ public class QMain extends Activity {
 				Log.e("tag", e.getMessage());
 			}
 		}
+	}
+
+
+	/** Orientation horizontale : le defilement et le clic sont geres par PageScrollView */
+	private boolean isLandscape() {
+		return getResources().getConfiguration().orientation
+				== android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+	}
+
+	/**
+	 * Clic sur une page : startX / startY sont des coordonnees "ecran" (0..screenWidth, 0..screenHeight)
+	 * qui servent a retrouver la ligne, le point, la sourate et l'aya.
+	 */
+	private void handleTap(float startX, float startY) {
+							cadre.setVisibility(View.GONE);
+							if (ctlAudio==1){
+								ringTone.stop();
+								ctlAudio=0;
+							}
+
+							// launchFullPhotoActivity(imageUrls);// WE HAVE A CLICK!!
+							//Toast.makeText(QMain.this, "screenHeight: " + screenHeight + "     screenWidth: " + screenWidth, Toast.LENGTH_LONG).show();
+
+							//if (bar == 0 && curQ.getInt(0)>0 && curQ.getInt(0)<605) {
+							if (bar == 0 && curQ.getInt(0) > 0 && curQ.getInt(0) < 605) {
+								//if (bar == 0) {
+								//tvB.setVisibility(View.VISIBLE);
+								btnJ.setVisibility(View.VISIBLE);
+								btnP.setVisibility(View.VISIBLE);
+								btnS.setVisibility(View.VISIBLE);
+								btnM.setVisibility(View.VISIBLE);
+								btnA.setVisibility(View.VISIBLE);
+								btnT.setVisibility(View.VISIBLE);
+								btnH.setVisibility(View.VISIBLE);
+								btnW.setVisibility(View.VISIBLE);
+								btnF.setVisibility(View.VISIBLE);
+								bar = 1;
+
+								// retrieve the stored coordinates
+								float x = startX;//lastTouchDownXY[0];
+								float y = startY;//lastTouchDownXY[1];
+								if (0 < y && y < ((screenHeight / 15) * 1) + 1) {
+									y1 = 1;
+								} else if ((screenHeight / 15) * 1 < y && y < ((screenHeight / 15) * 2) + 1) {
+									y1 = 2;
+								} else if ((screenHeight / 15) * 2 < y && y < ((screenHeight / 15) * 3) + 1) {
+									y1 = 3;
+								} else if ((screenHeight / 15) * 3 < y && y < ((screenHeight / 15) * 4) + 1) {
+									y1 = 4;
+								} else if ((screenHeight / 15) * 4 < y && y < ((screenHeight / 15) * 5) + 1) {
+									y1 = 5;
+								} else if ((screenHeight / 15) * 5 < y && y < ((screenHeight / 15) * 6) + 1) {
+									y1 = 6;
+								} else if ((screenHeight / 15) * 6 < y && y < ((screenHeight / 15) * 7) + 1) {
+									y1 = 7;
+								} else if ((screenHeight / 15) * 7 < y && y < ((screenHeight / 15) * 8) + 1) {
+									y1 = 8;
+								} else if ((screenHeight / 15) * 8 < y && y < ((screenHeight / 15) * 9) + 1) {
+									y1 = 9;
+								} else if ((screenHeight / 15) * 9 < y && y < ((screenHeight / 15) * 10) + 1) {
+									y1 = 10;
+								} else if ((screenHeight / 15) * 10 < y && y < ((screenHeight / 15) * 11) + 1) {
+									y1 = 11;
+								} else if ((screenHeight / 15) * 11 < y && y < ((screenHeight / 15) * 12) + 1) {
+									y1 = 12;
+								} else if ((screenHeight / 15) * 12 < y && y < ((screenHeight / 15) * 13) + 1) {
+									y1 = 13;
+								} else if ((screenHeight / 15) * 13 < y && y < ((screenHeight / 15) * 14) + 1) {
+									y1 = 14;
+								} else if ((screenHeight / 15) * 14 < y && y < ((screenHeight / 15) * 15) + 1) {
+									y1 = 15;
+								}
+
+								if (0 < x && x < ((screenWidth / 4) * 1) + 1) {
+									x1 = 4;
+								} else if ((screenWidth / 4) * 1 < x && x < ((screenWidth / 4) * 2) + 1) {
+									x1 = 3;
+								} else if ((screenWidth / 4) * 2 < x && x < ((screenWidth / 4) * 3) + 1) {
+									x1 = 2;
+								} else if ((screenWidth / 4) * 3 < x && x < ((screenWidth / 4) * 4) + 1) {
+									x1 = 1;
+								}
+
+								//if (0 < x && x < ((screenWidth / 8) * 1) + 1) {x1 = 8;
+								//} else if ((screenWidth / 8) * 1 < x && x < ((screenWidth / 8) * 2) + 1) {x1 = 7;
+								//} else if ((screenWidth / 8) * 2 < x && x < ((screenWidth / 8) * 3) + 1) {x1 = 6;
+								//} else if ((screenWidth / 8) * 3 < x && x < ((screenWidth / 8) * 4) + 1) {x1 = 5;
+								//} else if ((screenWidth / 8) * 4 < x && x < ((screenWidth / 8) * 5) + 1) {x1 = 4;
+								//} else if ((screenWidth / 8) * 5 < x && x < ((screenWidth / 8) * 6) + 1) {x1 = 3;
+								//} else if ((screenWidth / 8) * 6 < x && x < ((screenWidth / 8) * 7) + 1) {x1 = 2;
+								//} else if ((screenWidth / 8) * 7 < x && x < ((screenWidth / 8) * 8) + 1) {x1 = 1;
+								//}
+								//btnS.setText("x: " + x1 + "    y: " + y1);
+								//x1=((Page -1) x 120) + ((Ligne - 1) x 8) + (PointClick)        (Row0: Titre)
+
+								int click_page = curQ.getInt(0);
+								int click_line = y1;
+								int click_point = x1;
+
+								//x1=(curQ.getInt(0)-1)*120+(y1-1)*8+x1;
+								x1 = (curQ.getInt(0) - 1) * 60 + (y1 - 1) * 4 + x1+1;
+								//btnS.setText("" + x1);
+
+                                Cursor curS;
+								db.opendatabase();
+								curS = db.srrawQuery("SELECT * FROM tb_sora" , null);
+								curS.moveToFirst();
+								int j = 1;
+								do {
+									if (curS.getInt(3) > x1) {
+										//i = 366;
+										break;
+									}
+									curS.moveToNext();
+									j++;
+								} while (j < 115);
+								curS.moveToPrevious();
+								x1=x1-curS.getInt(3);
+								sora="s"+(j - 1);
+								curS.close();
+								//btnS.setText(sora);
+
+								// --- Find sora/aya from click position using tb_tafcir/tb_tafcirW ---
+								// Logic: find the LAST aya whose start position (p_sora,line,point) is
+								// <= clicked position. Since (p_sora,line,point) has a few duplicates,
+								// we take the one with the highest tefcir_id (= last inserted = last aya).
+								// Query 1: on the clicked page, at or before the clicked line/point.
+								// Query 2: fallback to last aya of any previous page.
+								int bestSora = 1;
+								int bestAya  = 1;
+
+								String tbl = (lastR == 1) ? "tb_tafcir" : "tb_tafcirW";
+
+								// Build a raw DB query directly (not through DbHelper cursor helpers
+								// so we can pass a real WHERE clause)
+								try {
+									SQLiteDatabase rawDb = android.database.sqlite.SQLiteDatabase.openDatabase(
+										"/data/data/quran.hb.com.quran/databases/db_quran.sqlite",
+										null, android.database.sqlite.SQLiteDatabase.OPEN_READONLY);
+
+									// Rows on the clicked page with position <= click position
+									String q1 = "SELECT sora, aya FROM " + tbl
+										+ " WHERE p_sora = " + click_page
+										+ " AND (line * 4 + point) <= " + (click_line * 4 + click_point)
+										+ " ORDER BY line DESC, point DESC, tefcir_id DESC LIMIT 1";
+									Cursor c1 = rawDb.rawQuery(q1, null);
+									if (c1 != null && c1.moveToFirst()) {
+										bestSora = c1.getInt(0);
+										bestAya  = c1.getInt(1);
+										c1.close();
+									} else {
+										// Fallback: last aya of any page before the clicked page
+										if (c1 != null) c1.close();
+										String q2 = "SELECT sora, aya FROM " + tbl
+											+ " WHERE p_sora < " + click_page
+											+ " ORDER BY p_sora DESC, line DESC, point DESC, tefcir_id DESC LIMIT 1";
+										Cursor c2 = rawDb.rawQuery(q2, null);
+										if (c2 != null && c2.moveToFirst()) {
+											bestSora = c2.getInt(0);
+											bestAya  = c2.getInt(1);
+										}
+										if (c2 != null) c2.close();
+									}
+									rawDb.close();
+								} catch (Exception eDb) {
+									eDb.printStackTrace();
+								}
+
+								soraI = bestSora;
+								ayaI  = bestAya;
+
+
+								try {
+									//Workbook wb = Workbook.getWorkbook(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + RiwayaExel));
+									  Workbook wb = Workbook.getWorkbook(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Riwaya + sora + ".xls"));
+									//Workbook wb = Workbook.getWorkbook(new File(Environment.getExternalStorageState() + RiwayaExel));
+									Sheet s = wb.getSheet(0);
+
+									//Cell z = s.getCell(3, x1);
+									//sora = z.getContents();
+
+									Cell z = s.getCell(4, x1);
+									pos = new Integer(z.getContents().toString());
+
+									// We don't need ayaI from xls anymore because it's retrieved from SQLite above!
+									//z = s.getCell(5, x1);
+									//ayaI = new Integer(z.getContents().toString());
+
+									z = s.getCell(1, x1);
+									lineI = new Integer(z.getContents().toString());
+
+									//btnS.setText(sora + "  " + pos + "  " + ayaI + "  " + lineI);
+								} catch (Exception e) {
+								}
+
+							} else {
+								//tvB.setVisibility(View.GONE);
+								btnJ.setVisibility(View.GONE);
+								btnP.setVisibility(View.GONE);
+								btnS.setVisibility(View.GONE);
+								btnM.setVisibility(View.GONE);
+								btnAbout.setVisibility(View.GONE);
+								btnA.setVisibility(View.GONE);
+								btnT.setVisibility(View.GONE);
+								btnH.setVisibility(View.GONE);
+								btnW.setVisibility(View.GONE);
+								btnF.setVisibility(View.GONE);
+								//cadre.setVisibility(View.GONE);
+								bar = 0;
+
+
+							}
+							ll21.setVisibility(View.GONE);
+							ll22.setVisibility(View.GONE);
+							//Toast.makeText(QMain.this, "x: " + x1 + "    y: " + y1, Toast.LENGTH_LONG).show();
+	}
+
+	/** Pageur : clic et passage de page par defilement en mode horizontal */
+	private final QImage.PageListener pageListener = new QImage.PageListener() {
+		@Override
+		public void onPageTap(float fracX, float fracY) {
+			int wc = (screenWidth / 4) * 4;
+			int hc = (screenHeight / 15) * 15;
+			float x = Math.max(1f, Math.min((float) wc, fracX * wc));
+			float y = Math.max(1f, Math.min((float) hc, fracY * hc));
+			handleTap(x, y);
+		}
+
+		@Override
+		public void onFlipNext(int position) {
+			if (viewPager.getCurrentItem() != position || position - 1 < 0) return;
+			adapter.prepareScroll(position - 1, true);
+			viewPager.setCurrentItem(position - 1, true);
+		}
+
+		@Override
+		public void onFlipPrev(int position) {
+			if (viewPager.getCurrentItem() != position || position + 1 > adapter.getCount() - 1) return;
+			adapter.prepareScroll(position + 1, false);
+			viewPager.setCurrentItem(position + 1, true);
+		}
+	};
+
+	// ---------------------------------------------------------------
+	// Tilawa : surlignage dynamique de la partie en cours + changement de page
+	// ---------------------------------------------------------------
+	private final Handler audioHandler = new Handler();
+	private final Runnable audioTicker = new Runnable() {
+		@Override
+		public void run() {
+			audioTick();
+		}
+	};
+	private int[] tPage = new int[0], tLine = new int[0], tPoint = new int[0], tStart = new int[0];
+	private int tCount = 0;
+	private int audioIdx = -1;
+
+	private static int toInt(String t) {
+		try {
+			return (int) Double.parseDouble(t.trim().replace(',', '.'));
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+
+	/** Lit le fichier .xls de la sourate : page, ligne, point, debut (ms) de chaque cellule */
+	private boolean loadTimings() {
+		tCount = 0;
+		try {
+			Workbook wb = Workbook.getWorkbook(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Riwaya + sora + ".xls"));
+			Sheet sh = wb.getSheet(0);
+			int n = sh.getRows() - 1;      // la ligne 0 est l'en-tete
+			if (n <= 0) {
+				wb.close();
+				return false;
+			}
+			tPage = new int[n];
+			tLine = new int[n];
+			tPoint = new int[n];
+			tStart = new int[n];
+			for (int r = 1; r <= n; r++) {
+				tPage[r - 1] = toInt(sh.getCell(0, r).getContents());
+				tLine[r - 1] = toInt(sh.getCell(1, r).getContents());
+				tPoint[r - 1] = toInt(sh.getCell(2, r).getContents());
+				tStart[r - 1] = toInt(sh.getCell(4, r).getContents());
+			}
+			tCount = n;
+			wb.close();
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	private void startAudioTracking() {
+		audioHandler.removeCallbacks(audioTicker);
+		audioIdx = -1;
+		if (loadTimings()) {
+			audioHandler.post(audioTicker);
+		}
+	}
+
+	private void stopAudioTracking() {
+		audioHandler.removeCallbacks(audioTicker);
+		audioIdx = -1;
+		if (adapter != null) adapter.clearHighlight();
+	}
+
+	private void audioTick() {
+		if (ctlAudio != 1 || ringTone == null || tCount == 0) {
+			stopAudioTracking();
+			return;
+		}
+		int t;
+		try {
+			t = ringTone.getCurrentPosition();
+		} catch (Exception e) {
+			stopAudioTracking();
+			return;
+		}
+		// cellule en cours = celle dont le debut (non nul) est le plus grand sans depasser la position
+		int best = -1, bestStart = -1;
+		for (int i = 0; i < tCount; i++) {
+			if (tStart[i] > 0 && tStart[i] <= t && tStart[i] > bestStart) {
+				best = i;
+				bestStart = tStart[i];
+			}
+		}
+		if (best < 0) best = 0;
+
+		int item = 608 - tPage[best];
+		if (best != audioIdx) {
+			audioIdx = best;
+			if (item >= 0 && item < adapter.getCount() && viewPager.getCurrentItem() != item) {
+				viewPager.setCurrentItem(item, true);
+			}
+		}
+		adapter.setHighlight(item, tLine[best], tPoint[best]);
+		adapter.applyHighlight();
+		audioHandler.postDelayed(audioTicker, 150);
+	}
+
+	@Override
+	protected void onDestroy() {
+		audioHandler.removeCallbacks(audioTicker);
+		super.onDestroy();
 	}
 
 
