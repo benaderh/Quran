@@ -42,7 +42,7 @@ public class QMain extends Activity {
 
 	private Utils utils;
 	private QImage adapter;
-	private ViewPager viewPager;
+	private NoSwipeViewPager viewPager;
 
 	private MediaPlayer ringTone;
 
@@ -93,7 +93,7 @@ public class QMain extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.q_main);
 
-		viewPager = (ViewPager) findViewById(R.id.vPager);
+		viewPager = (NoSwipeViewPager) findViewById(R.id.vPager);
 
 
 		utils = new Utils(getApplicationContext());
@@ -663,6 +663,8 @@ public class QMain extends Activity {
 					public void onCompletion(MediaPlayer mp) {
 						ctlAudio = 0;
 						stopAudioTracking();
+						// Passer automatiquement à la sourate suivante
+						playNextSora();
 					}
 				});
 				startAudioTracking();
@@ -1325,6 +1327,81 @@ public class QMain extends Activity {
 		audioHandler.removeCallbacks(audioTicker);
 		audioIdx = -1;
 		if (adapter != null) adapter.clearHighlight();
+	}
+
+	/**
+	 * Passe à la sourate suivante (s1..s114 cycliquement) et lance son audio automatiquement.
+	 * Cherche la première page de la sourate dans tb_tafcir (colonne p_sora).
+	 */
+	private void playNextSora() {
+		if (sora == null || sora.isEmpty()) return;
+		try {
+			int currentNum = Integer.parseInt(sora.substring(1)); // "s5" -> 5
+			final int nextNum = (currentNum >= 114) ? 1 : currentNum + 1;
+			final String nextSoraName = "s" + nextNum;
+
+			// Chercher la première page de la sourate dans tb_tafcir (p_sora = numéro de page)
+			// ou dans tb_tafcirW selon la riwaya courante
+			final int[] targetPage = {-1};
+			try {
+				android.database.sqlite.SQLiteDatabase rawDb =
+						android.database.sqlite.SQLiteDatabase.openDatabase(
+						"/data/data/quran.hb.com.quran/databases/db_quran.sqlite",
+						null, android.database.sqlite.SQLiteDatabase.OPEN_READONLY);
+				String tbl = (lastR == 1) ? "tb_tafcir" : "tb_tafcirW";
+				// p_sora = numéro de page Coran pour cet ayat
+				Cursor cPage = rawDb.rawQuery(
+					"SELECT p_sora FROM " + tbl + " WHERE sora = " + nextNum
+					+ " ORDER BY aya ASC LIMIT 1", null);
+				if (cPage != null && cPage.moveToFirst()) {
+					targetPage[0] = cPage.getInt(0);
+					cPage.close();
+				} else {
+					if (cPage != null) cPage.close();
+				}
+				rawDb.close();
+			} catch (Exception ignored) {}
+
+			// Poster sur le thread UI
+			audioHandler.post(new Runnable() {
+				@Override
+				public void run() {
+					sora = nextSoraName;
+					pos = 0;
+					// Naviguer vers la première page si trouvée
+					if (targetPage[0] > 0 && targetPage[0] <= 604) {
+						viewPager.setCurrentItem(608 - targetPage[0], true);
+					}
+					// Lancer l'audio de la sourate suivante
+					String filePath = android.os.Environment.getExternalStorageDirectory()
+							+ Riwaya + sora + ".wav";
+					if (ringTone != null) {
+						try { ringTone.release(); } catch (Exception ignored) {}
+					}
+					ringTone = new MediaPlayer();
+					try {
+						ringTone.setDataSource(filePath);
+						ringTone.prepare();
+						ringTone.start();
+						ctlAudio = 1;
+						ringTone.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+							@Override
+							public void onCompletion(MediaPlayer mp) {
+								ctlAudio = 0;
+								stopAudioTracking();
+								// Chaîne récursive : passer à la suivante
+								playNextSora();
+							}
+						});
+						startAudioTracking();
+					} catch (Exception e) {
+						ctlAudio = 0;
+					}
+				}
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void audioTick() {
