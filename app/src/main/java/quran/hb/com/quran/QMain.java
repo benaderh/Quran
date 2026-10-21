@@ -1249,6 +1249,8 @@ public class QMain extends Activity {
 							ll21.setVisibility(View.GONE);
 							ll22.setVisibility(View.GONE);
 							//Toast.makeText(QMain.this, "x: " + x1 + "    y: " + y1, Toast.LENGTH_LONG).show();
+			}
+		}
 	}
 
 	/** Vrai si le t\u00e9l\u00e9phone est en mode paysage (landscape). */
@@ -1262,7 +1264,7 @@ public class QMain extends Activity {
 	 * En mode paysage PDF : index 0 = 1\u00e8re page Coran (p1), scroll BAS = page suivante.
 	 */
 	private ArrayList<String> reversePaths(ArrayList<String> paths) {
-		ArrayList<String> reversed = new ArrayList<>(paths);
+		ArrayList<String> reversed = new ArrayList<String>(paths);
 		Collections.reverse(reversed);
 		return reversed;
 	}
