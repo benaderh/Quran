@@ -11,8 +11,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-
     />
+
+    <!-- Vue PDF continue pour le mode paysage -->
+    <quran.hb.com.quran.ContinuousPageView
+        android:id="@+id/continuousView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+    />
+
 
 
     <LinearLayout
