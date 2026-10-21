@@ -27,9 +27,13 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-
-      - name: Build with Gradle
-        run: ./gradlew assembleDebug --stacktrace --info
+      - name: Build with Gradle (show all errors)
+        run: |
+          ./gradlew assembleDebug --stacktrace 2>&1 | tee /tmp/build_output.txt
+          EXIT_CODE=${PIPESTATUS[0]}
+          echo "=== JAVA COMPILER ERRORS ==="
+          grep -n "error:" /tmp/build_output.txt || echo "No 'error:' lines found"
+          exit $EXIT_CODE
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
