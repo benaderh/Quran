@@ -253,6 +253,22 @@ public class DbHelper extends SQLiteOpenHelper {
 		return prcursor;
 	}
 
+	/** Retourne tous les versets Hafs de la page donnée (p_sora = page) */
+	public Cursor tfPageQuery(int page) {
+		SQLiteDatabase db = this.getReadableDatabase();
+		return db.rawQuery(
+			"SELECT * FROM " + tf_TABLE + " WHERE p_sora = ? ORDER BY tefcir_id",
+			new String[]{ String.valueOf(page) });
+	}
+
+	/** Retourne tous les versets Warsh de la page donnée (p_sora = page) */
+	public Cursor tfwPageQuery(int page) {
+		SQLiteDatabase db = this.getReadableDatabase();
+		return db.rawQuery(
+			"SELECT * FROM " + tfw_TABLE + " WHERE p_sora = ? ORDER BY tefcir_id",
+			new String[]{ String.valueOf(page) });
+	}
+
 
 	@Override
 	public void onCreate(SQLiteDatabase arg0) {
