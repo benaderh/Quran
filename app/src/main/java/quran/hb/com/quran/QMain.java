@@ -1249,8 +1249,6 @@ public class QMain extends Activity {
 							ll21.setVisibility(View.GONE);
 							ll22.setVisibility(View.GONE);
 							//Toast.makeText(QMain.this, "x: " + x1 + "    y: " + y1, Toast.LENGTH_LONG).show();
-			}
-		}
 	}
 
 	/**
