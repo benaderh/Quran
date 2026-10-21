@@ -5,7 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.AttributeSet;
 import android.util.SparseArray;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -39,6 +41,12 @@ public class ContinuousPageView extends ScrollView {
     private int currentIndex = -1; // index pager courant (0-based dans imagePaths)
     private final int sepPx;
 
+    // Détection de tap (distinguer tap vs scroll)
+    private float tapStartX, tapStartY;
+    private long  tapDownTime;
+    private final int tapSlop;        // déplacement max en px pour considérer un tap
+    private static final long TAP_MAX_MS = 350; // durée max d'un tap
+
     // Surlignage tilawa
     private int hlIndex = -1, hlLine = 0, hlPoint = 0;
 
@@ -54,7 +62,8 @@ public class ContinuousPageView extends ScrollView {
         super(context, attrs, defStyle);
         setOverScrollMode(OVER_SCROLL_NEVER);
         setFillViewport(false);
-        sepPx = Math.round(SEP_DP * context.getResources().getDisplayMetrics().density);
+        sepPx  = Math.round(SEP_DP * context.getResources().getDisplayMetrics().density);
+        tapSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 
         container = new LinearLayout(context);
         container.setOrientation(LinearLayout.VERTICAL);
@@ -300,33 +309,48 @@ public class ContinuousPageView extends ScrollView {
     }
 
     // ──────────────────────────────────────────────────────────────────────
-    // Tap (pour afficher la barre de menus)
+    // Tap (pour afficher la barre de menus) — seulement si PAS de scroll
     // ──────────────────────────────────────────────────────────────────────
 
     @Override
-    public boolean onTouchEvent(android.view.MotionEvent ev) {
-        boolean result = super.onTouchEvent(ev);
-        if (ev.getAction() == android.view.MotionEvent.ACTION_UP && listener != null) {
-            // Détecter un tap simple (faible déplacement)
-            float tapX = ev.getX();
-            float tapY = ev.getY() + getScrollY();
-            int w = getWidth();
-            // Trouver la page concernée
-            int idx = indexAtY((int) tapY);
-            View pageContainer = container.getChildAt(idx * 2);
-            if (pageContainer != null) {
-                int pageTop = pageContainer.getTop();
-                ImageView iv = imageViews.get(idx);
-                if (iv != null) {
-                    int ph = iv.getHeight();
-                    if (ph > 0 && w > 0) {
-                        float fx = Math.max(0f, Math.min(1f, tapX / w));
-                        float fy = Math.max(0f, Math.min(1f, (tapY - pageTop) / ph));
-                        listener.onTap(fx, fy);
+    public boolean onTouchEvent(MotionEvent ev) {
+        switch (ev.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+                // Mémoriser la position et le temps du contact initial
+                tapStartX  = ev.getX();
+                tapStartY  = ev.getY();
+                tapDownTime = ev.getEventTime();
+                break;
+
+            case MotionEvent.ACTION_UP:
+                // Vérifier si c'est un vrai tap : faible déplacement ET durée courte
+                float dx = Math.abs(ev.getX() - tapStartX);
+                float dy = Math.abs(ev.getY() - tapStartY);
+                long  dt = ev.getEventTime() - tapDownTime;
+                boolean isTap = (dx <= tapSlop && dy <= tapSlop && dt < TAP_MAX_MS);
+
+                if (isTap && listener != null) {
+                    float tapX = ev.getX();
+                    float tapY = ev.getY() + getScrollY();
+                    int w = getWidth();
+                    int idx = indexAtY((int) tapY);
+                    View pageContainer = container.getChildAt(idx * 2);
+                    if (pageContainer != null) {
+                        int pageTop = pageContainer.getTop();
+                        ImageView iv = imageViews.get(idx);
+                        if (iv != null) {
+                            int ph = iv.getHeight();
+                            if (ph > 0 && w > 0) {
+                                float fx = Math.max(0f, Math.min(1f, tapX / w));
+                                float fy = Math.max(0f, Math.min(1f, (tapY - pageTop) / ph));
+                                listener.onTap(fx, fy);
+                            }
+                        }
                     }
                 }
-            }
+                // Sinon c'était un scroll : ne rien faire
+                break;
         }
-        return result;
+        return super.onTouchEvent(ev);
     }
 }
