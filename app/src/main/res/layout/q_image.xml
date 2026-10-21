@@ -29,4 +29,11 @@
         android:layout_marginRight="2dp"
 
         />
+
+    <View
+        android:id="@+id/hlView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#66FFC107"
+        android:visibility="gone" />
 </RelativeLayout>
