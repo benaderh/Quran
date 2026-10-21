@@ -15,18 +15,28 @@ android:layout_gravity = "center">
     android:textSize="16sp"
     android:textColor="@android:color/black"
     android:background="#FFF4CB" />
-<ScrollView
+<quran.hb.com.quran.PageScrollView
     android:id = "@+id/page_scroller"
     android:layout_width = "match_parent"
     android:layout_height = "match_parent"
     >
-    <ImageView
-        android:id="@+id/imgDisplay"
-        android:background="#FFF4CB"
-        android:layout_width = "match_parent"
-        android:layout_height =  "match_parent"
-        android:scaleType="centerCrop"
-        android:adjustViewBounds="true"
-        />
-</ScrollView>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/imgDisplay"
+            android:background="#FFF4CB"
+            android:layout_width = "match_parent"
+            android:layout_height = "wrap_content"
+            android:scaleType="fitXY"
+            android:adjustViewBounds="true"
+            />
+        <View
+            android:id="@+id/hlView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#66FFC107"
+            android:visibility="gone" />
+    </RelativeLayout>
+</quran.hb.com.quran.PageScrollView>
 </RelativeLayout>
