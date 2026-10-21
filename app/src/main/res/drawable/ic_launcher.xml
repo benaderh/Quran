@@ -1,7 +1,23 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="96dp" android:height="96dp"
     android:viewportWidth="96" android:viewportHeight="96">
-    <path android:fillColor="#1D0606" android:pathData="M0,0h96v96h-96z"/>
-    <path android:fillColor="#227E08" android:pathData="M48,48m-30,0a30,30 0,1 1,60 0a30,30 0,1 1,-60 0"/>
-    <path android:fillColor="#FFF4CB" android:pathData="M34,32h28v32h-28z"/>
+    <!-- Fond vert foncé -->
+    <path android:fillColor="#1B5E20" android:pathData="M0,0h96v96h-96z"/>
+    <!-- Bordure dorée externe -->
+    <path android:fillColor="#F9A825" android:pathData="M48,4 C23.7,4 4,23.7 4,48 C4,72.3 23.7,92 48,92 C72.3,92 92,72.3 92,48 C92,23.7 72.3,4 48,4 Z M48,88 C25.9,88 8,70.1 8,48 C8,25.9 25.9,8 48,8 C70.1,8 88,25.9 88,48 C88,70.1 70.1,88 48,88 Z"/>
+    <!-- Cercle vert intérieur -->
+    <path android:fillColor="#2E7D32" android:pathData="M48,12 C28.1,12 12,28.1 12,48 C12,67.9 28.1,84 48,84 C67.9,84 84,67.9 84,48 C84,28.1 67.9,12 48,12 Z"/>
+    <!-- Motif arabesque : lignes dorées horizontales décoratives -->
+    <path android:fillColor="#F9A825" android:pathData="M20,38 L76,38 L76,40 L20,40 Z"/>
+    <path android:fillColor="#F9A825" android:pathData="M20,56 L76,56 L76,58 L20,58 Z"/>
+    <!-- Rectangle dorée central (représente la page du Coran) -->
+    <path android:fillColor="#FFF8E1" android:pathData="M30,41 L66,41 L66,55 L30,55 Z"/>
+    <!-- Texte القرآن en doré (lignes simulées) -->
+    <path android:fillColor="#F9A825" android:pathData="M34,44 Q48,42 62,44 L62,46 Q48,48 34,46 Z"/>
+    <path android:fillColor="#F9A825" android:pathData="M36,49 Q48,47 60,49 L60,51 Q48,53 36,51 Z"/>
+    <!-- Croissant doré en bas -->
+    <path android:fillColor="#F9A825" android:pathData="M44,65 C44,65 48,72 52,65 C52,65 50,68 48,68 C46,68 44,65 44,65 Z"/>
+    <!-- Étoile dorée -->
+    <path android:fillColor="#F9A825" android:pathData="M48,22 L49.5,27 L54.5,27 L50.5,30 L52,35 L48,32 L44,35 L45.5,30 L41.5,27 L46.5,27 Z"/>
 </vector>
+
