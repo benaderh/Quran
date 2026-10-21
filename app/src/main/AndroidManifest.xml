@@ -30,6 +30,9 @@
         <activity android:name=".LandMark" android:label="حفظ و تعديل العلامة"/>
         <activity android:name=".Tefcir" android:label="تفسير ميسر"/>
         <activity android:name=".About" android:label="حول"/>
+        <activity android:name=".QTextPage"
+            android:label="القرآن - نص"
+            android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen"/>
 
     </application>
 
