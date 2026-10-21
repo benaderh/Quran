@@ -33,6 +33,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 import jxl.Cell;
 import jxl.Sheet;
@@ -43,6 +44,8 @@ public class QMain extends Activity {
 	private Utils utils;
 	private QImage adapter;
 	private NoSwipeViewPager viewPager;
+	private ContinuousPageView continuousView;
+	private ArrayList<String> currentImagePaths;
 
 	private MediaPlayer ringTone;
 
@@ -93,7 +96,8 @@ public class QMain extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.q_main);
 
-		viewPager = (NoSwipeViewPager) findViewById(R.id.vPager);
+		viewPager       = (NoSwipeViewPager)  findViewById(R.id.vPager);
+		continuousView  = (ContinuousPageView) findViewById(R.id.continuousView);
 
 
 		utils = new Utils(getApplicationContext());
@@ -221,24 +225,22 @@ public class QMain extends Activity {
 
 
 		if (lastR == 1) {
-			//RiwayaExel = "/AudioQ/Hafs.xls";
-			//RiwayaAudio = "/AudioQ/Hafs/";
 			Riwaya = "/QuranHW/HA/";
 			btnH.setTypeface(null, Typeface.BOLD);
 			btnH.setTextColor(Color.parseColor("#ffffff"));
 			btnW.setTypeface(null, Typeface.NORMAL);
 			btnW.setTextColor(Color.parseColor("#aea7a7"));
-			adapter = new QImage(QMain.this, utils.getFilePaths());
+			currentImagePaths = utils.getFilePaths();
+			adapter = new QImage(QMain.this, currentImagePaths);
 			adapter.setPageListener(pageListener);
 		} else {
-			//RiwayaExel = "/AudioQ/Warsh.xls";
-			//RiwayaAudio = "/AudioQ/Warsh/";
 			Riwaya = "/QuranHW/WA/";
 			btnH.setTypeface(null, Typeface.NORMAL);
 			btnH.setTextColor(Color.parseColor("#aea7a7"));
 			btnW.setTypeface(null, Typeface.BOLD);
 			btnW.setTextColor(Color.parseColor("#ffffff"));
-			adapter = new QImage(QMain.this, utils.getFilePathsW());
+			currentImagePaths = utils.getFilePathsW();
+			adapter = new QImage(QMain.this, currentImagePaths);
 			adapter.setPageListener(pageListener);
 		}
 
@@ -258,8 +260,19 @@ public class QMain extends Activity {
 		} while (j < 609);
 
 		//adapter = new QImage(QMain.this, utils.getFilePaths());
-		viewPager.setAdapter(adapter);
-		viewPager.setCurrentItem(608 - lastP);
+		if (isLandscape()) {
+			// Mode paysage : défilement continu PDF
+			viewPager.setVisibility(View.GONE);
+			continuousView.setVisibility(View.VISIBLE);
+			continuousView.setPageChangeListener(continuousPageListener);
+			continuousView.setImagePaths(currentImagePaths, 608 - lastP);
+		} else {
+			// Mode portrait : ViewPager normal
+			viewPager.setVisibility(View.VISIBLE);
+			continuousView.setVisibility(View.GONE);
+			viewPager.setAdapter(adapter);
+			viewPager.setCurrentItem(608 - lastP);
+		}
 
 		//viewPager.setCurrentItem(0);
 
@@ -479,27 +492,22 @@ public class QMain extends Activity {
 		btnW.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-
-				adapter = new QImage(QMain.this, utils.getFilePathsW());
+				currentImagePaths = utils.getFilePathsW();
+				adapter = new QImage(QMain.this, currentImagePaths);
 				adapter.setPageListener(pageListener);
-				viewPager.setAdapter(adapter);
-				viewPager.setCurrentItem(608 - lastP);
-
-				//Toast.makeText(getApplicationContext(),	"You clicked on OK", Toast.LENGTH_SHORT).show();
+				if (isLandscape()) {
+					continuousView.setImagePaths(currentImagePaths, 608 - lastP);
+				} else {
+					viewPager.setAdapter(adapter);
+					viewPager.setCurrentItem(608 - lastP);
+				}
 				SQLdb = openOrCreateDatabase("db_quran.sqlite", Context.MODE_PRIVATE, null);
 				SQLdb.execSQL("UPDATE tb_indice SET last_riwaya = 2");
 				btnW.setTypeface(null, Typeface.BOLD);
 				btnW.setTextColor(Color.parseColor("#ffffff"));
 				btnH.setTypeface(null, Typeface.NORMAL);
 				btnH.setTextColor(Color.parseColor("#aea7a7"));
-				//image = curQ.getBlob(2);
-				//Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
-				//tv_img.setImageBitmap(bmp);
-
-				//RiwayaExel = "/AudioQ/Warsh.xls";
-				//RiwayaAudio = "/AudioQ/Warsh/";
 				Riwaya = "/QuranHW/WA/";
-
 				btnJ.setVisibility(View.GONE);
 				btnP.setVisibility(View.GONE);
 				btnS.setVisibility(View.GONE);
@@ -510,9 +518,7 @@ public class QMain extends Activity {
 				btnH.setVisibility(View.GONE);
 				btnW.setVisibility(View.GONE);
 				btnF.setVisibility(View.GONE);
-				//cadre.setVisibility(View.GONE);
 				bar = 0;
-
 			}
 		});
 
@@ -520,25 +526,22 @@ public class QMain extends Activity {
 		btnH.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-
-				adapter = new QImage(QMain.this, utils.getFilePaths());
+				currentImagePaths = utils.getFilePaths();
+				adapter = new QImage(QMain.this, currentImagePaths);
 				adapter.setPageListener(pageListener);
-				viewPager.setAdapter(adapter);
-				viewPager.setCurrentItem(608 - lastP);
-
+				if (isLandscape()) {
+					continuousView.setImagePaths(currentImagePaths, 608 - lastP);
+				} else {
+					viewPager.setAdapter(adapter);
+					viewPager.setCurrentItem(608 - lastP);
+				}
 				SQLdb = openOrCreateDatabase("db_quran.sqlite", Context.MODE_PRIVATE, null);
 				SQLdb.execSQL("UPDATE tb_indice SET last_riwaya = 1");
 				btnH.setTypeface(null, Typeface.BOLD);
 				btnH.setTextColor(Color.parseColor("#ffffff"));
 				btnW.setTypeface(null, Typeface.NORMAL);
 				btnW.setTextColor(Color.parseColor("#aea7a7"));
-				//image = curQ.getBlob(1);
-				//Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
-				//tv_img.setImageBitmap(bmp);
-				//RiwayaExel = "/AudioQ/Hafs.xls";
-				//RiwayaAudio = "/AudioQ/Hafs/";
 				Riwaya = "/QuranHW/HA/";
-
 				btnJ.setVisibility(View.GONE);
 				btnP.setVisibility(View.GONE);
 				btnS.setVisibility(View.GONE);
@@ -549,9 +552,7 @@ public class QMain extends Activity {
 				btnH.setVisibility(View.GONE);
 				btnW.setVisibility(View.GONE);
 				btnF.setVisibility(View.GONE);
-				//cadre.setVisibility(View.GONE);
 				bar = 0;
-
 			}
 		});
 
@@ -1263,6 +1264,63 @@ public class QMain extends Activity {
 		}
 	};
 
+	/**
+	 * Listener pour ContinuousPageView en mode paysage :
+	 * met à jour la barre (sora/page/juz) quand l'utilisateur fait défiler.
+	 */
+	private final ContinuousPageView.PageChangeListener continuousPageListener =
+			new ContinuousPageView.PageChangeListener() {
+		@Override
+		public void onPageChanged(int pagerIndex) {
+			// pagerIndex = index dans currentImagePaths (0-based), correspond à 608-lastP
+			int newLastP = 608 - pagerIndex;
+			if (newLastP == lastP) return;
+			lastP = newLastP;
+
+			// Mettre à jour curQ pour afficher sora/page/juz
+			int j = 0;
+			curQ.moveToFirst();
+			do {
+				if (curQ.getInt(0) == lastP) break;
+				curQ.moveToNext();
+				j++;
+			} while (j < 609);
+
+			if (curQ.getString(2).length() > 8)
+				Toast.makeText(QMain.this, curQ.getString(2), Toast.LENGTH_SHORT).show();
+
+			SQLdb = openOrCreateDatabase("db_quran.sqlite", Context.MODE_PRIVATE, null);
+			SQLdb.execSQL("UPDATE tb_indice SET last_page = " + curQ.getInt(0));
+			btnP.setText("" + curQ.getInt(0));
+			btnS.setText(curQ.getString(1));
+			btnJ.setText(curQ.getString(2));
+			cadre.setVisibility(View.GONE);
+
+			if (curQ.getInt(0) == 0 || curQ.getInt(0) > 604) {
+				btnJ.setVisibility(View.GONE);
+				btnP.setVisibility(View.GONE);
+				btnS.setVisibility(View.GONE);
+				btnM.setVisibility(View.GONE);
+				btnAbout.setVisibility(View.GONE);
+				btnA.setVisibility(View.GONE);
+				btnT.setVisibility(View.GONE);
+				btnH.setVisibility(View.GONE);
+				btnW.setVisibility(View.GONE);
+				btnF.setVisibility(View.GONE);
+				bar = 0;
+			}
+		}
+
+		@Override
+		public void onTap(float fracX, float fracY) {
+			int wc = (screenWidth / 4) * 4;
+			int hc = (screenHeight / 15) * 15;
+			float x = Math.max(1f, Math.min((float) wc, fracX * wc));
+			float y = Math.max(1f, Math.min((float) hc, fracY * hc));
+			handleTap(x, y);
+		}
+	};
+
 	// ---------------------------------------------------------------
 	// Tilawa : surlignage dynamique de la partie en cours + changement de page
 	// ---------------------------------------------------------------
@@ -1327,6 +1385,7 @@ public class QMain extends Activity {
 		audioHandler.removeCallbacks(audioTicker);
 		audioIdx = -1;
 		if (adapter != null) adapter.clearHighlight();
+		if (continuousView != null) continuousView.clearHighlight();
 	}
 
 	/**
@@ -1427,14 +1486,25 @@ public class QMain extends Activity {
 		if (best < 0) best = 0;
 
 		int item = 608 - tPage[best];
-		if (best != audioIdx) {
-			audioIdx = best;
-			if (item >= 0 && item < adapter.getCount() && viewPager.getCurrentItem() != item) {
-				viewPager.setCurrentItem(item, true);
+		if (isLandscape()) {
+			// Mode paysage : surlignage sur ContinuousPageView
+			if (best != audioIdx) {
+				audioIdx = best;
+				// Scroller vers la page si nécessaire (géré par applyHighlight)
 			}
+			continuousView.setHighlight(item, tLine[best], tPoint[best]);
+			continuousView.applyHighlight();
+		} else {
+			// Mode portrait : surlignage sur QImage (ViewPager)
+			if (best != audioIdx) {
+				audioIdx = best;
+				if (item >= 0 && item < adapter.getCount() && viewPager.getCurrentItem() != item) {
+					viewPager.setCurrentItem(item, true);
+				}
+			}
+			adapter.setHighlight(item, tLine[best], tPoint[best]);
+			adapter.applyHighlight();
 		}
-		adapter.setHighlight(item, tLine[best], tPoint[best]);
-		adapter.applyHighlight();
 		audioHandler.postDelayed(audioTicker, 150);
 	}
 
