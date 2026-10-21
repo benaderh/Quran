@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import jxl.Cell;
 import jxl.Sheet;
@@ -46,6 +47,8 @@ public class QMain extends Activity {
 	private NoSwipeViewPager viewPager;
 	private ContinuousPageView continuousView;
 	private ArrayList<String> currentImagePaths;
+	/** Taille de la liste passée à continuousView (listée inversée). */
+	private int contListSize = 0;
 
 	private MediaPlayer ringTone;
 
@@ -262,10 +265,16 @@ public class QMain extends Activity {
 		//adapter = new QImage(QMain.this, utils.getFilePaths());
 		if (isLandscape()) {
 			// Mode paysage : défilement continu PDF
+			// Liste inversée : index 0 = p1 (1ère page Coran, en haut)
+			//                  index N-1 = p608 (dernière, en bas)
+			// Scroll BAS = page suivante
+			ArrayList<String> reversedPaths = reversePaths(currentImagePaths);
+			contListSize = reversedPaths.size();
+			int continuousStart = lastP; // reversed[lastP] = p{lastP}.jpg
 			viewPager.setVisibility(View.GONE);
 			continuousView.setVisibility(View.VISIBLE);
 			continuousView.setPageChangeListener(continuousPageListener);
-			continuousView.setImagePaths(currentImagePaths, 608 - lastP);
+			continuousView.setImagePaths(reversedPaths, continuousStart);
 		} else {
 			// Mode portrait : ViewPager normal
 			viewPager.setVisibility(View.VISIBLE);
@@ -496,7 +505,9 @@ public class QMain extends Activity {
 				adapter = new QImage(QMain.this, currentImagePaths);
 				adapter.setPageListener(pageListener);
 				if (isLandscape()) {
-					continuousView.setImagePaths(currentImagePaths, 608 - lastP);
+					ArrayList<String> rev = reversePaths(currentImagePaths);
+					contListSize = rev.size();
+					continuousView.setImagePaths(rev, lastP);
 				} else {
 					viewPager.setAdapter(adapter);
 					viewPager.setCurrentItem(608 - lastP);
@@ -530,7 +541,9 @@ public class QMain extends Activity {
 				adapter = new QImage(QMain.this, currentImagePaths);
 				adapter.setPageListener(pageListener);
 				if (isLandscape()) {
-					continuousView.setImagePaths(currentImagePaths, 608 - lastP);
+					ArrayList<String> rev = reversePaths(currentImagePaths);
+					contListSize = rev.size();
+					continuousView.setImagePaths(rev, lastP);
 				} else {
 					viewPager.setAdapter(adapter);
 					viewPager.setCurrentItem(608 - lastP);
@@ -1238,6 +1251,22 @@ public class QMain extends Activity {
 							//Toast.makeText(QMain.this, "x: " + x1 + "    y: " + y1, Toast.LENGTH_LONG).show();
 	}
 
+	/** Vrai si le t\u00e9l\u00e9phone est en mode paysage (landscape). */
+	private boolean isLandscape() {
+		return getResources().getConfiguration().orientation ==
+				android.content.res.Configuration.ORIENTATION_LANDSCAPE;
+	}
+
+	/**
+	 * Retourne une copie invers\u00e9e de la liste de chemins.
+	 * En mode paysage PDF : index 0 = 1\u00e8re page Coran (p1), scroll BAS = page suivante.
+	 */
+	private ArrayList<String> reversePaths(ArrayList<String> paths) {
+		ArrayList<String> reversed = new ArrayList<>(paths);
+		Collections.reverse(reversed);
+		return reversed;
+	}
+
 	/** Pageur : clic et passage de page par defilement en mode horizontal */
 	private final QImage.PageListener pageListener = new QImage.PageListener() {
 		@Override
@@ -1272,8 +1301,12 @@ public class QMain extends Activity {
 			new ContinuousPageView.PageChangeListener() {
 		@Override
 		public void onPageChanged(int pagerIndex) {
-			// pagerIndex = index dans currentImagePaths (0-based), correspond à 608-lastP
-			int newLastP = 608 - pagerIndex;
+			// Liste inversée : index 0 = p1, donc lastP = pagerIndex + 1
+			int newLastP = pagerIndex + 1;
+			if (contListSize > 0) {
+				// Sécurité : recalcul générique si la taille diffère de 608
+				newLastP = 608 - (contListSize - 1 - pagerIndex);
+			}
 			if (newLastP == lastP) return;
 			lastP = newLastP;
 
@@ -1429,7 +1462,12 @@ public class QMain extends Activity {
 					pos = 0;
 					// Naviguer vers la première page si trouvée
 					if (targetPage[0] > 0 && targetPage[0] <= 604) {
-						viewPager.setCurrentItem(608 - targetPage[0], true);
+						if (isLandscape()) {
+							// Liste inversée : reversed[targetPage[0]] = p{targetPage[0]}
+							continuousView.scrollToIndex(targetPage[0], true);
+						} else {
+							viewPager.setCurrentItem(608 - targetPage[0], true);
+						}
 					}
 					// Lancer l'audio de la sourate suivante
 					String filePath = android.os.Environment.getExternalStorageDirectory()
@@ -1487,12 +1525,13 @@ public class QMain extends Activity {
 
 		int item = 608 - tPage[best];
 		if (isLandscape()) {
-			// Mode paysage : surlignage sur ContinuousPageView
+			// Mode paysage : liste inversée, index dans ContinuousPageView = tPage[best]-1
+			int continuousIdx = tPage[best]; // reversed[tPage[best]] = p{tPage[best]}.jpg
 			if (best != audioIdx) {
 				audioIdx = best;
-				// Scroller vers la page si nécessaire (géré par applyHighlight)
+				// Auto-scroll géré par applyHighlight
 			}
-			continuousView.setHighlight(item, tLine[best], tPoint[best]);
+			continuousView.setHighlight(continuousIdx, tLine[best], tPoint[best]);
 			continuousView.applyHighlight();
 		} else {
 			// Mode portrait : surlignage sur QImage (ViewPager)
