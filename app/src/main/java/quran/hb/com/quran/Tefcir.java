@@ -25,7 +25,7 @@ import java.io.IOException;
  *   tb_tafcir  : [0]tefcir_id [1]sora [2]aya [3]aya_q [4]aya_t [5]aya_text [6]p_sora [7]t_sora [8]line [9]point
  *   tb_tafcirW : [0]tefcir_id [1]sora [2]aya [3]aya_q [4]aya_t [5]aya_text [6]p_sora [7]t_sora [8]line [9]point [10]ayaW [11]eff
  *
- * Font files (external storage /QuranHW/):
+ * Font files (external storage /QuranHW/font/ ou /QuranHW/):
  *   Hafs  : UthmanicHafs1 Ver09.otf
  *   Warsh : p001.otf … p604.otf  (p_sora = column 6, values 1-604)
  */
@@ -45,29 +45,32 @@ public class Tefcir extends Activity {
     // Font helpers
     // ---------------------------------------------------------------
 
-    /** Build /QuranHW/p001.otf path for a given page (1-604) */
-    private String warshFontPath(int page) {
-        String name;
-        if      (page < 10)  name = "p00" + page;
-        else if (page < 100) name = "p0"  + page;
-        else                 name = "p"   + page;
-        return Environment.getExternalStorageDirectory().getAbsolutePath()
-                + "/QuranHW/" + name + ".otf";
+    /** Cherche un fichier de police dans /QuranHW/font/ puis /QuranHW/ (majuscules ou minuscules) */
+    private File findFont(String... names) {
+        String root = Environment.getExternalStorageDirectory().getAbsolutePath() + "/QuranHW/";
+        String[] dirs = { root + "font/", root + "Font/", root };
+        for (String d : dirs) {
+            for (String n : names) {
+                File f = new File(d + n);
+                if (f.exists()) return f;
+            }
+        }
+        return null;
     }
 
     private void applyWarshFont(int page) {
         if (page < 1 || page > 604) return;
         try {
-            File f = new File(warshFontPath(page));
-            if (f.exists()) ayaT.setTypeface(Typeface.createFromFile(f));
+            String num = (page < 10) ? "00" + page : (page < 100) ? "0" + page : "" + page;
+            File f = findFont("P" + num + ".otf", "p" + num + ".otf", "P" + num + ".OTF", "p" + num + ".OTF");
+            if (f != null) ayaT.setTypeface(Typeface.createFromFile(f));
         } catch (Exception e) { e.printStackTrace(); }
     }
 
     private void applyHafsFont() {
         try {
-            File f = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
-                    + "/QuranHW/UthmanicHafs1 Ver09.otf");
-            if (f.exists()) ayaT.setTypeface(Typeface.createFromFile(f));
+            File f = findFont("UthmanicHafs1 Ver09.otf", "UthmanicHafs1 Ver09.ttf", "UthmanicHafs1Ver09.otf");
+            if (f != null) ayaT.setTypeface(Typeface.createFromFile(f));
         } catch (Exception e) { e.printStackTrace(); }
     }
 
