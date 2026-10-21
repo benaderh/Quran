@@ -42,12 +42,12 @@ public class ContinuousPageView extends ScrollView {
     private LinearLayout container;
     private ArrayList<String> imagePaths;
 
-    private final SparseArray<ImageView> imageViews   = new SparseArray<>();
-    private final SparseArray<View>      hlViews      = new SparseArray<>();
+    private final SparseArray<ImageView> imageViews   = new SparseArray<ImageView>();
+    private final SparseArray<View>      hlViews      = new SparseArray<View>();
     /** Numéro de version par index : incrémenté à chaque unload pour annuler les threads */
-    private final SparseArray<Integer>   loadToken    = new SparseArray<>();
+    private final SparseArray<Integer>   loadToken    = new SparseArray<Integer>();
     /** true si le chargement est déclenché (thread lancé ou image présente) */
-    private final SparseArray<Boolean>   loadTriggered = new SparseArray<>();
+    private final SparseArray<Boolean>   loadTriggered = new SparseArray<Boolean>();
 
     // ── État ───────────────────────────────────────────────────────────────
     private PageChangeListener listener;
