@@ -42,6 +42,8 @@ public class PageScrollView extends ScrollView {
         super(context, attrs, defStyle);
         slop = ViewConfiguration.get(context).getScaledTouchSlop();
         flipDistance = 48 * context.getResources().getDisplayMetrics().density;
+        // Supprime l'effet de rebond/la ligne visible entre les pages
+        setOverScrollMode(OVER_SCROLL_NEVER);
     }
 
     public void setEdgeListener(EdgeListener l) {
