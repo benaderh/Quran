@@ -54,11 +54,9 @@ public class QMain extends Activity {
 
 	SQLiteDatabase SQLdb;
 	Button btnM, btnA, btnT, btnH, btnW, btnF, btnJ, btnP, btnS, btnAbout, btnAP, btnAN, btnAPb, btnANb, btnRetour;
-	Button btnHT, btnWT; // mode texte (police OTF)
 	TextView ayaT, tefcirT, ayaB, tefcirB;
 	TextView cadre;
 	LinearLayout ll21, ll22;
-	LinearLayout ll1b; // 2e ligne : boutons نص
 	ScrollView scrollV, scrollVb;
 	//Spinner btnM;
 	//ImageView imgDisplayM;
@@ -117,10 +115,8 @@ public class QMain extends Activity {
 		btnM = (Button) findViewById(R.id.btnM);
 		btnA = (Button) findViewById(R.id.btnA);
 		btnT = (Button) findViewById(R.id.btnT);
-		btnH  = (Button) findViewById(R.id.btnH);
-		btnW  = (Button) findViewById(R.id.btnW);
-		btnHT = (Button) findViewById(R.id.btnHT);
-		btnWT = (Button) findViewById(R.id.btnWT);
+		btnH = (Button) findViewById(R.id.btnH);
+		btnW = (Button) findViewById(R.id.btnW);
 		btnF = (Button) findViewById(R.id.btnF);
 		btnAbout = (Button) findViewById(R.id.btnAbout);
 		btnAP = (Button) findViewById(R.id.btnAP);
@@ -132,7 +128,6 @@ public class QMain extends Activity {
 		ayaT = (TextView) findViewById(R.id.tv_aya);
 		tefcirT = (TextView) findViewById(R.id.tv_tefcir);
 		ll21 = (LinearLayout) findViewById(R.id.ll21);
-		ll1b = (LinearLayout) findViewById(R.id.ll1b);
 		ayaB = (TextView) findViewById(R.id.tv_ayab);
 		tefcirB = (TextView) findViewById(R.id.tv_tefcirb);
 		ll22 = (LinearLayout) findViewById(R.id.ll22);
@@ -471,7 +466,6 @@ public class QMain extends Activity {
 					btnH.setVisibility(View.GONE);
 					btnW.setVisibility(View.GONE);
 					btnF.setVisibility(View.GONE);
-					if (ll1b != null) ll1b.setVisibility(View.GONE);
 					//cadre.setVisibility(View.GONE);
 					bar=0;
 				}
@@ -575,30 +569,6 @@ public class QMain extends Activity {
 			}
 		});
 
-
-		// ── Mode texte Hafs (police OTF) ─────────────────────────────────────
-		btnHT.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				hideBar();
-				Intent it = new Intent(QMain.this, QTextPage.class);
-				it.putExtra(QTextPage.EXTRA_PAGE,   lastP);
-				it.putExtra(QTextPage.EXTRA_RIWAYA, 1);
-				startActivity(it);
-			}
-		});
-
-		// ── Mode texte Warsh (police OTF) ─────────────────────────────────────
-		btnWT.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View arg0) {
-				hideBar();
-				Intent it = new Intent(QMain.this, QTextPage.class);
-				it.putExtra(QTextPage.EXTRA_PAGE,   lastP);
-				it.putExtra(QTextPage.EXTRA_RIWAYA, 2);
-				startActivity(it);
-			}
-		});
 
 		btnT.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -1073,24 +1043,6 @@ public class QMain extends Activity {
 				== android.content.res.Configuration.ORIENTATION_LANDSCAPE;
 	}
 
-	/** Cache tous les boutons de la barre et réinitialise bar=0 */
-	private void hideBar() {
-		btnJ.setVisibility(View.GONE);
-		btnP.setVisibility(View.GONE);
-		btnS.setVisibility(View.GONE);
-		btnM.setVisibility(View.GONE);
-		btnAbout.setVisibility(View.GONE);
-		btnA.setVisibility(View.GONE);
-		btnT.setVisibility(View.GONE);
-		btnH.setVisibility(View.GONE);
-		btnW.setVisibility(View.GONE);
-		btnHT.setVisibility(View.GONE);
-		btnWT.setVisibility(View.GONE);
-		btnF.setVisibility(View.GONE);
-		if (ll1b != null) ll1b.setVisibility(View.GONE);
-		bar = 0;
-	}
-
 	/**
 	 * Clic sur une page : startX / startY sont des coordonnees "ecran" (0..screenWidth, 0..screenHeight)
 	 * qui servent a retrouver la ligne, le point, la sourate et l'aya.
@@ -1117,10 +1069,7 @@ public class QMain extends Activity {
 								btnT.setVisibility(View.VISIBLE);
 								btnH.setVisibility(View.VISIBLE);
 								btnW.setVisibility(View.VISIBLE);
-								btnHT.setVisibility(View.VISIBLE);
-								btnWT.setVisibility(View.VISIBLE);
 								btnF.setVisibility(View.VISIBLE);
-								if (ll1b != null) ll1b.setVisibility(View.VISIBLE);
 								bar = 1;
 
 								// retrieve the stored coordinates
