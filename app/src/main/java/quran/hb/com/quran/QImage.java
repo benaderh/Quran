@@ -31,7 +31,7 @@ public class QImage extends PagerAdapter {
 	/** Vues d'une page : image, surlignage (tilawa) et defilement (mode horizontal seulement) */
 	private static class Holder {
 		View root;
-		ImageView img;
+		ZoomableImageView img;
 		View hl;
 		PageScrollView scroller;
 		String sig = "";
@@ -75,13 +75,13 @@ public class QImage extends PagerAdapter {
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
 		//getWidthAndHeight();
-		ImageView imgDisplay;
+		ZoomableImageView imgDisplay;
 
 
 		inflater = (LayoutInflater) _activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		View viewLayout = inflater.inflate(R.layout.q_image, container, false);
 
-		imgDisplay = (ImageView) viewLayout.findViewById(R.id.imgDisplay);
+		imgDisplay = (ZoomableImageView) viewLayout.findViewById(R.id.imgDisplay);
 
 		final int pagePosition = position;
 		final Holder holder = new Holder();
