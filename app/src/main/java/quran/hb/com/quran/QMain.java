@@ -1,6 +1,7 @@
 package quran.hb.com.quran;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetManager;
@@ -1036,6 +1037,32 @@ public class QMain extends Activity {
 		}
 	}
 
+
+	/**
+	 * Appelé à chaque changement d'orientation (portrait ↔ paysage).
+	 * Grâce à android:configChanges dans le Manifest, l'Activity N'EST PAS recrée :
+	 * on garde lastP intact et on bascule simplement entre les deux vues.
+	 */
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+
+		if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+			// ----- Passage en PAYSAGE -----
+			ArrayList<String> reversedPaths = reversePaths(currentImagePaths);
+			contListSize = reversedPaths.size();
+			viewPager.setVisibility(View.GONE);
+			continuousView.setVisibility(View.VISIBLE);
+			continuousView.setPageChangeListener(continuousPageListener);
+			continuousView.setImagePaths(reversedPaths, lastP);
+		} else {
+			// ----- Passage en PORTRAIT -----
+			viewPager.setVisibility(View.VISIBLE);
+			continuousView.setVisibility(View.GONE);
+			viewPager.setAdapter(adapter);
+			viewPager.setCurrentItem(608 - lastP, false);
+		}
+	}
 
 	/** Orientation horizontale : le defilement et le clic sont geres par PageScrollView */
 	private boolean isLandscape() {
