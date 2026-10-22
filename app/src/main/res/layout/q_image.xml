@@ -19,11 +19,18 @@
         android:background="#FFF4CB"
     />
 
+    <!--
+        PageScrollView : wraps ZoomableImageView.
+        Hauteur fixée à wrap_content pour que le ScrollView soit fonctionnel
+        uniquement quand l'image est plus haute que l'écran (zoom actif).
+        En état normal (zoom=1, FIT_XY), l'image remplit exactement la vue.
+    -->
     <quran.hb.com.quran.PageScrollView
         android:id="@+id/page_scroller"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
+        android:fillViewport="true"
         >
 
         <quran.hb.com.quran.ZoomableImageView
@@ -31,7 +38,6 @@
             android:background="#FFF4CB"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY"
             android:layout_marginLeft="2dp"
             android:layout_marginRight="2dp"
             />
