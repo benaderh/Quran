@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:layout_gravity="center"
+    android:layout_width = "fill_parent"
+    android:layout_height = "fill_parent"
+    android:orientation = "vertical"
+    android:layout_gravity = "center"
     >
 
     <TextView
@@ -13,36 +13,22 @@
         android:visibility="gone"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:gravity="center"
+        android:gravity = "center"
         android:textSize="16sp"
         android:textColor="@android:color/black"
         android:background="#FFF4CB"
     />
 
-    <!--
-        PageScrollView : wraps ZoomableImageView.
-        Hauteur fixée à wrap_content pour que le ScrollView soit fonctionnel
-        uniquement quand l'image est plus haute que l'écran (zoom actif).
-        En état normal (zoom=1, FIT_XY), l'image remplit exactement la vue.
-    -->
-    <quran.hb.com.quran.PageScrollView
-        android:id="@+id/page_scroller"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:fillViewport="true"
-        >
+    <ImageView
+        android:id="@+id/imgDisplay"
+        android:background="#FFF4CB"
+        android:layout_width = "match_parent"
+        android:layout_height =  "match_parent"
+        android:scaleType="fitXY"
+        android:layout_marginLeft="2dp"
+        android:layout_marginRight="2dp"
 
-        <quran.hb.com.quran.ZoomableImageView
-            android:id="@+id/imgDisplay"
-            android:background="#FFF4CB"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-            />
-
-    </quran.hb.com.quran.PageScrollView>
+        />
 
     <View
         android:id="@+id/hlView"
@@ -50,5 +36,4 @@
         android:layout_height="0dp"
         android:background="#66FFC107"
         android:visibility="gone" />
-
 </RelativeLayout>
