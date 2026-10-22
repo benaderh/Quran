@@ -270,7 +270,7 @@ public class QMain extends Activity {
 			// Scroll BAS = page suivante
 			ArrayList<String> reversedPaths = reversePaths(currentImagePaths);
 			contListSize = reversedPaths.size();
-			int continuousStart = lastP - 1; // reversed[lastP-1] = p{lastP}.jpg
+			int continuousStart = lastP; // reversed[lastP] = p{lastP}.jpg
 			viewPager.setVisibility(View.GONE);
 			continuousView.setVisibility(View.VISIBLE);
 			continuousView.setPageChangeListener(continuousPageListener);
@@ -507,7 +507,7 @@ public class QMain extends Activity {
 				if (isLandscape()) {
 					ArrayList<String> rev = reversePaths(currentImagePaths);
 					contListSize = rev.size();
-					continuousView.setImagePaths(rev, lastP - 1);
+					continuousView.setImagePaths(rev, lastP);
 				} else {
 					viewPager.setAdapter(adapter);
 					viewPager.setCurrentItem(608 - lastP);
@@ -543,7 +543,7 @@ public class QMain extends Activity {
 				if (isLandscape()) {
 					ArrayList<String> rev = reversePaths(currentImagePaths);
 					contListSize = rev.size();
-					continuousView.setImagePaths(rev, lastP - 1);
+					continuousView.setImagePaths(rev, lastP);
 				} else {
 					viewPager.setAdapter(adapter);
 					viewPager.setCurrentItem(608 - lastP);
@@ -1295,9 +1295,12 @@ public class QMain extends Activity {
 			new ContinuousPageView.PageChangeListener() {
 		@Override
 		public void onPageChanged(int pagerIndex) {
-			// Liste inversée : index 0 = p1, index 1 = p2, ...
-			// Donc : lastP = pagerIndex + 1
+			// Liste inversée : index 0 = p1, donc lastP = pagerIndex + 1
 			int newLastP = pagerIndex + 1;
+			if (contListSize > 0) {
+				// Sécurité : recalcul générique si la taille diffère de 608
+				newLastP = 608 - (contListSize - 1 - pagerIndex);
+			}
 			if (newLastP == lastP) return;
 			lastP = newLastP;
 
