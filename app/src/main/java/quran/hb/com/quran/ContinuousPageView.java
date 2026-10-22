@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.ImageView;
@@ -62,23 +61,6 @@ public class ContinuousPageView extends ScrollView {
     private long  tapDownTime;
     private final int tapSlop;
 
-    // ── Zoom pinch-to-zoom ──────────────────────────────────────────────────
-    private ScaleGestureDetector zoomDetector;
-    private float zoomScale    = 1.0f;
-    private float zoomTransX   = 0f;
-    private float zoomTransY   = 0f;
-    private float zoomPivotX   = 0f;
-    private float zoomPivotY   = 0f;
-    private static final float ZOOM_MIN = 1.0f;
-    private static final float ZOOM_MAX = 4.0f;
-    // Pan après zoom
-    private float lastPanX, lastPanY;
-    private boolean isPanning   = false;
-    private static final float PAN_SLOP = 10f;
-    // Double-tap pour reset
-    private long lastTapTime    = 0;
-    private static final long DOUBLE_TAP_MS = 300;
-
     // ── Surlignage tilawa ──────────────────────────────────────────────────
     private int hlIndex = -1, hlLine = 0, hlPoint = 0;
 
@@ -95,33 +77,6 @@ public class ContinuousPageView extends ScrollView {
         float density = context.getResources().getDisplayMetrics().density;
         sepPx    = Math.round(SEP_DP * density);
         tapSlop  = ViewConfiguration.get(context).getScaledTouchSlop();
-
-        // Zoom
-        zoomDetector = new ScaleGestureDetector(context, new ScaleGestureDetector.SimpleOnScaleGestureListener() {
-            @Override
-            public boolean onScaleBegin(ScaleGestureDetector d) {
-                zoomPivotX = d.getFocusX();
-                zoomPivotY = d.getFocusY() + getScrollY();
-                isPanning = false;
-                return true;
-            }
-            @Override
-            public boolean onScale(ScaleGestureDetector d) {
-                float factor = d.getScaleFactor();
-                float newScale = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, zoomScale * factor));
-                float realFactor = newScale / zoomScale;
-                zoomScale = newScale;
-                zoomTransX = zoomPivotX - realFactor * (zoomPivotX - zoomTransX);
-                zoomTransY = zoomPivotY - realFactor * (zoomPivotY - zoomTransY);
-                clampZoom();
-                applyZoom();
-                return true;
-            }
-            @Override
-            public void onScaleEnd(ScaleGestureDetector d) {
-                if (zoomScale <= ZOOM_MIN + 0.05f) resetZoom();
-            }
-        });
 
         container = new LinearLayout(context);
         container.setOrientation(LinearLayout.VERTICAL);
@@ -477,117 +432,34 @@ public class ContinuousPageView extends ScrollView {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        // Pinch zoom
-        zoomDetector.onTouchEvent(ev);
+        switch (ev.getAction() & MotionEvent.ACTION_MASK) {
 
-        int action = ev.getActionMasked();
-
-        switch (action) {
             case MotionEvent.ACTION_DOWN:
                 tapStartX   = ev.getX();
                 tapStartY   = ev.getY();
                 tapDownTime = ev.getEventTime();
-                lastPanX    = ev.getX();
-                lastPanY    = ev.getY();
-                isPanning   = false;
-                break;
-
-            case MotionEvent.ACTION_POINTER_DOWN:
-                isPanning = false;
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-                // Pan uniquement si zoom actif et pas de pinch en cours
-                if (!zoomDetector.isInProgress() && zoomScale > 1.02f) {
-                    float dx = ev.getX() - lastPanX;
-                    float dy = ev.getY() - lastPanY;
-                    if (!isPanning && (Math.abs(dx) > PAN_SLOP || Math.abs(dy) > PAN_SLOP)) {
-                        isPanning = true;
-                    }
-                    if (isPanning) {
-                        zoomTransX += dx;
-                        zoomTransY += dy;
-                        clampZoom();
-                        applyZoom();
-                        lastPanX = ev.getX();
-                        lastPanY = ev.getY();
-                        return true;
-                    }
-                }
-                lastPanX = ev.getX();
-                lastPanY = ev.getY();
                 break;
 
             case MotionEvent.ACTION_UP:
-                if (!isPanning && !zoomDetector.isInProgress()) {
-                    float dx = Math.abs(ev.getX() - tapStartX);
-                    float dy = Math.abs(ev.getY() - tapStartY);
-                    long  dt = ev.getEventTime() - tapDownTime;
-                    if (dx <= tapSlop && dy <= tapSlop && dt < TAP_MAX_MS) {
-                        // Double-tap : reset zoom
-                        long now = System.currentTimeMillis();
-                        if (now - lastTapTime < DOUBLE_TAP_MS) {
-                            resetZoom();
-                            lastTapTime = 0;
-                            return true;
-                        }
-                        lastTapTime = now;
-
-                        // Tap simple
-                        if (listener != null) {
-                            float tapX = ev.getX();
-                            float tapY = ev.getY() + getScrollY();
-                            int w = getWidth(), h = pageHeightPx;
-                            if (w > 0 && h > 0) {
-                                int idx     = indexAtY((int) tapY);
-                                int pageTop = idx * (h + sepPx);
-                                float fx = Math.max(0f, Math.min(1f, tapX / w));
-                                float fy = Math.max(0f, Math.min(1f, (tapY - pageTop) / h));
-                                listener.onTap(fx, fy);
-                            }
-                        }
+                float dx = Math.abs(ev.getX() - tapStartX);
+                float dy = Math.abs(ev.getY() - tapStartY);
+                long  dt = ev.getEventTime() - tapDownTime;
+                // Tap reconnu seulement si : faible déplacement ET courte durée
+                if (dx <= tapSlop && dy <= tapSlop && dt < TAP_MAX_MS && listener != null) {
+                    float tapX = ev.getX();
+                    float tapY = ev.getY() + getScrollY();
+                    int w = getWidth(), h = pageHeightPx;
+                    if (w > 0 && h > 0) {
+                        int idx     = indexAtY((int) tapY);
+                        int pageTop = idx * (h + sepPx);
+                        float fx = Math.max(0f, Math.min(1f, tapX / w));
+                        float fy = Math.max(0f, Math.min(1f, (tapY - pageTop) / h));
+                        listener.onTap(fx, fy);
                     }
                 }
-                isPanning = false;
+                // Si c'était un scroll → rien (barres non affectées)
                 break;
         }
-
-        // Si zoom actif et pan : on consomme pour éviter le scroll
-        if (isPanning && zoomScale > 1.02f) return true;
-
         return super.onTouchEvent(ev);
-    }
-
-    // ══════════════════════════════════════════════════════════════════════
-    // Zoom helpers
-    // ══════════════════════════════════════════════════════════════════════
-
-    private void clampZoom() {
-        int w = getWidth();
-        // Calcul de la hauteur totale du contenu zoomé
-        int totalH = container.getHeight();
-        float maxTx = w  * (zoomScale - 1f);
-        float maxTy = totalH * (zoomScale - 1f);
-        zoomTransX = Math.max(-maxTx, Math.min(0f, zoomTransX));
-        zoomTransY = Math.max(-maxTy, Math.min(0f, zoomTransY));
-    }
-
-    private void applyZoom() {
-        container.setScaleX(zoomScale);
-        container.setScaleY(zoomScale);
-        container.setPivotX(0);
-        container.setPivotY(0);
-        container.setTranslationX(zoomTransX);
-        container.setTranslationY(zoomTransY);
-    }
-
-    private void resetZoom() {
-        zoomScale  = 1.0f;
-        zoomTransX = 0f;
-        zoomTransY = 0f;
-        container.setScaleX(1f);
-        container.setScaleY(1f);
-        container.setTranslationX(0);
-        container.setTranslationY(0);
     }
 }
