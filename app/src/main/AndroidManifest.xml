@@ -21,6 +21,7 @@
         
         <activity
             android:name=".QMain"
+            android:configChanges="orientation|screenSize"
             android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen" />
 
         <activity android:name=".IndexP" android:label="البحث عن صفحة"/>
