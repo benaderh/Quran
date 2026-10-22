@@ -58,6 +58,7 @@ public class QMain extends Activity {
 	TextView ayaT, tefcirT, ayaB, tefcirB;
 	TextView cadre;
 	LinearLayout ll21, ll22;
+	LinearLayout ll1b; // 2e ligne : boutons نص
 	ScrollView scrollV, scrollVb;
 	//Spinner btnM;
 	//ImageView imgDisplayM;
@@ -131,6 +132,7 @@ public class QMain extends Activity {
 		ayaT = (TextView) findViewById(R.id.tv_aya);
 		tefcirT = (TextView) findViewById(R.id.tv_tefcir);
 		ll21 = (LinearLayout) findViewById(R.id.ll21);
+		ll1b = (LinearLayout) findViewById(R.id.ll1b);
 		ayaB = (TextView) findViewById(R.id.tv_ayab);
 		tefcirB = (TextView) findViewById(R.id.tv_tefcirb);
 		ll22 = (LinearLayout) findViewById(R.id.ll22);
@@ -469,6 +471,7 @@ public class QMain extends Activity {
 					btnH.setVisibility(View.GONE);
 					btnW.setVisibility(View.GONE);
 					btnF.setVisibility(View.GONE);
+					if (ll1b != null) ll1b.setVisibility(View.GONE);
 					//cadre.setVisibility(View.GONE);
 					bar=0;
 				}
@@ -1084,6 +1087,7 @@ public class QMain extends Activity {
 		btnHT.setVisibility(View.GONE);
 		btnWT.setVisibility(View.GONE);
 		btnF.setVisibility(View.GONE);
+		if (ll1b != null) ll1b.setVisibility(View.GONE);
 		bar = 0;
 	}
 
@@ -1116,6 +1120,7 @@ public class QMain extends Activity {
 								btnHT.setVisibility(View.VISIBLE);
 								btnWT.setVisibility(View.VISIBLE);
 								btnF.setVisibility(View.VISIBLE);
+								if (ll1b != null) ll1b.setVisibility(View.VISIBLE);
 								bar = 1;
 
 								// retrieve the stored coordinates
