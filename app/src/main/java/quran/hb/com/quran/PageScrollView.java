@@ -57,7 +57,20 @@ public class PageScrollView extends ScrollView {
     private boolean isAtBottom() {
         View c = getChildAt(0);
         if (c == null) return true;
+        // S'il n'y a pas de contenu à scroller (enfant = même taille que la vue),
+        // on ne considère pas être "en bas" pour éviter le flip immédiat.
+        int scrollable = c.getHeight() - getHeight();
+        if (scrollable <= 2) return false;
         return c.getBottom() - (getHeight() + getScrollY()) <= 2;
+    }
+
+    /** Retourne vrai si l'enfant ZoomableImageView est actuellement zoomé */
+    private boolean isChildZoomed() {
+        View c = getChildAt(0);
+        if (c instanceof ZoomableImageView) {
+            return ((ZoomableImageView) c).isZoomed();
+        }
+        return false;
     }
 
     @Override
@@ -74,9 +87,9 @@ public class PageScrollView extends ScrollView {
 
             case MotionEvent.ACTION_MOVE:
                 if (flipped) return true;
-                if (listener != null) {
+                if (listener != null && !isChildZoomed()) {
                     float y = ev.getY();
-                    // en bas de la page et on continue a tirer vers le haut
+                    // en bas de la page et on continue à tirer vers le haut
                     if (isAtBottom()) {
                         if (Float.isNaN(bottomRefY)) bottomRefY = y;
                         if (bottomRefY - y > flipDistance) {
@@ -87,7 +100,7 @@ public class PageScrollView extends ScrollView {
                     } else {
                         bottomRefY = Float.NaN;
                     }
-                    // en haut de la page et on continue a tirer vers le bas
+                    // en haut de la page et on continue à tirer vers le bas
                     if (isAtTop()) {
                         if (Float.isNaN(topRefY)) topRefY = y;
                         if (y - topRefY > flipDistance) {
