@@ -270,7 +270,7 @@ public class QMain extends Activity {
 			// Scroll BAS = page suivante
 			ArrayList<String> reversedPaths = reversePaths(currentImagePaths);
 			contListSize = reversedPaths.size();
-			int continuousStart = lastP; // reversed[lastP] = p{lastP}.jpg
+			int continuousStart = lastP - 1; // reversed[lastP-1] = p{lastP}.jpg
 			viewPager.setVisibility(View.GONE);
 			continuousView.setVisibility(View.VISIBLE);
 			continuousView.setPageChangeListener(continuousPageListener);
@@ -507,7 +507,7 @@ public class QMain extends Activity {
 				if (isLandscape()) {
 					ArrayList<String> rev = reversePaths(currentImagePaths);
 					contListSize = rev.size();
-					continuousView.setImagePaths(rev, lastP);
+					continuousView.setImagePaths(rev, lastP - 1);
 				} else {
 					viewPager.setAdapter(adapter);
 					viewPager.setCurrentItem(608 - lastP);
@@ -543,7 +543,7 @@ public class QMain extends Activity {
 				if (isLandscape()) {
 					ArrayList<String> rev = reversePaths(currentImagePaths);
 					contListSize = rev.size();
-					continuousView.setImagePaths(rev, lastP);
+					continuousView.setImagePaths(rev, lastP - 1);
 				} else {
 					viewPager.setAdapter(adapter);
 					viewPager.setCurrentItem(608 - lastP);
