@@ -1295,12 +1295,9 @@ public class QMain extends Activity {
 			new ContinuousPageView.PageChangeListener() {
 		@Override
 		public void onPageChanged(int pagerIndex) {
-			// Liste inversée : index 0 = p1, donc lastP = pagerIndex + 1
+			// Liste inversée : index 0 = p1, index 1 = p2, ...
+			// Donc : lastP = pagerIndex + 1
 			int newLastP = pagerIndex + 1;
-			if (contListSize > 0) {
-				// Sécurité : recalcul générique si la taille diffère de 608
-				newLastP = 608 - (contListSize - 1 - pagerIndex);
-			}
 			if (newLastP == lastP) return;
 			lastP = newLastP;
 
