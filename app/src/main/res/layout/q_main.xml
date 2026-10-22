@@ -23,6 +23,7 @@
 
 
 
+    <!-- Barre principale (ligne 1) -->
     <LinearLayout
         android:id="@+id/ll1"
         android:layout_width="match_parent"
@@ -40,10 +41,9 @@
             android:textAlignment="center"
             android:visibility="gone"
             android:onClick="true"
-
             android:drawableLeft="@android:drawable/ic_menu_search" />
 
-       <Button
+        <Button
             android:id="@+id/btnW"
             android:layout_width="0dp"
             android:layout_height="30dp"
@@ -64,33 +64,6 @@
             android:layout_weight="1"
             android:background="#1d0606"
             android:textColor="#ffffff"
-            android:textAlignment="center"
-            android:visibility="gone"
-            android:onClick="true" />
-
-        <!-- Mode texte Hafs (police OTF) -->
-        <Button
-            android:id="@+id/btnHT"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:text="ح أ"
-            android:textStyle="bold"
-            android:layout_weight="1"
-            android:background="#0D2B1A"
-            android:textColor="#7CFC00"
-            android:textAlignment="center"
-            android:visibility="gone"
-            android:onClick="true" />
-
-        <!-- Mode texte Warsh (police OTF) -->
-        <Button
-            android:id="@+id/btnWT"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:text="و أ"
-            android:layout_weight="1"
-            android:background="#0D2B1A"
-            android:textColor="#7CFC00"
             android:textAlignment="center"
             android:visibility="gone"
             android:onClick="true" />
@@ -133,12 +106,63 @@
             android:onClick="true" />
 
     </LinearLayout>
+
+    <!-- Barre secondaire (ligne 2) : boutons نص sous ورش et حفص -->
+    <LinearLayout
+        android:id="@+id/ll1b"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/ll1">
+
+        <!-- espace à gauche aligné sur btnF -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="0.5" />
+
+        <!-- نص Warsh : aligné sous ورش -->
+        <Button
+            android:id="@+id/btnWT"
+            android:layout_width="0dp"
+            android:layout_height="26dp"
+            android:text="نص"
+            android:layout_weight="1"
+            android:background="#0D2B1A"
+            android:textColor="#7CFC00"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            android:visibility="gone"
+            android:onClick="true" />
+
+        <!-- نص Hafs : aligné sous حفص -->
+        <Button
+            android:id="@+id/btnHT"
+            android:layout_width="0dp"
+            android:layout_height="26dp"
+            android:text="نص"
+            android:textStyle="bold"
+            android:layout_weight="1"
+            android:background="#0D2B1A"
+            android:textColor="#7CFC00"
+            android:textSize="12sp"
+            android:textAlignment="center"
+            android:visibility="gone"
+            android:onClick="true" />
+
+        <!-- espace à droite pour équilibrer btnT + btnA + btnM -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="3" />
+
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/ll11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_below="@+id/ll1"
+        android:layout_below="@+id/ll1b"
         android:layout_alignParentRight="true"
         >
     <Button
