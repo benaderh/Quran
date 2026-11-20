@@ -1,54 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="quran.hb.com.quran"
     android:versionCode="1"
     android:versionName="1.0" >
+
 
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="قرآن كريم"
         android:theme="@style/AppTheme" >
-
         <activity
             android:name=".SplashActivity"
-            android:exported="true"
-            android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen">
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        
         <activity
             android:name=".QMain"
-            android:exported="false"
             android:configChanges="orientation|screenSize"
             android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen" />
 
-        <activity android:name=".IndexP"  android:exported="false" android:label="البحث عن صفحة"/>
-        <activity android:name=".IndexS"  android:exported="false" android:label="البحث عن سورة"/>
-        <activity android:name=".IndexJ"  android:exported="false" android:label="البحث عن جزء"/>
-        <activity android:name=".IndexF"  android:exported="false" android:label="البحث عن آية"/>
-        <activity android:name=".LandMark" android:exported="false" android:label="حفظ و تعديل العلامة"/>
-        <activity android:name=".Tefcir"  android:exported="false" android:label="تفسير ميسر"/>
-        <activity android:name=".About"   android:exported="false" android:label="حول" />
-
-        <activity
-            android:name=".TilawaCorrectionActivity"
-            android:exported="false"
-            android:label="تقييم التلاوة"
-            android:windowSoftInputMode="adjustResize" />
+        <activity android:name=".IndexP" android:label="البحث عن صفحة"/>
+        <activity android:name=".IndexS" android:label="البحث عن سورة"/>
+        <activity android:name=".IndexJ" android:label="البحث عن جزء"/>
+        <activity android:name=".IndexF" android:label="البحث عن آية"/>
+        <activity android:name=".LandMark" android:label="حفظ و تعديل العلامة"/>
+        <activity android:name=".Tefcir" android:label="تفسير ميسر"/>
+        <activity android:name=".About" android:label="حول"/>
 
     </application>
 
-    <!-- Android 6-9 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="29" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
 
-    <!-- Toutes versions -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>
