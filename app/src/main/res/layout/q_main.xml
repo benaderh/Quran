@@ -202,6 +202,14 @@
                         android:text="العودة"
 
                         />
+                    <Button
+                        android:id="@+id/btnTilawa"
+                        android:layout_width="110dp"
+                        android:layout_height="50dp"
+                        android:textAlignment="center"
+                        android:text="تسميع"
+                        android:backgroundTint="#227e08"
+                        android:textColor="#ffffff" />
 
                     <Button
                         android:id="@+id/btnAP"
