@@ -13,6 +13,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repository
@@ -33,9 +35,21 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew assembleDebug --no-daemon --stacktrace
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        if: success()
+      - name: Rename APK with version and date
+        run: |
+          DATE=$(date +'%Y%m%d-%H%M')
+          cp app/build/outputs/apk/debug/app-debug.apk app-quran-${DATE}.apk
+          echo "APK_NAME=app-quran-${DATE}.apk" >> $GITHUB_ENV
+
+      - name: Create GitHub Release and upload APK
+        if: github.event_name == 'push'
+        uses: softprops/action-gh-release@v2
         with:
-          name: app-debug
-          path: app/build/outputs/apk/**/*.apk
+          tag_name: build-${{ github.run_number }}
+          name: "Build #${{ github.run_number }}"
+          body: |
+            ✅ Build automatique — commit `${{ github.sha }}`
+            📱 Téléchargez l'APK ci-dessous et installez-le directement sur votre appareil.
+          files: ${{ env.APK_NAME }}
+          draft: false
+          prerelease: false
