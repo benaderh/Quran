@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    activity_tilawa.xml
+    Layout principal pour l'activité de Tilawa (récitation).
+    Deux modes :
+      Mode 1 – Imlâ'  (إملاء)  : page blanche, saisie vocale + correction
+      Mode 2 – Murâja'a (مراجعة): texte affiché, enregistrement + comparaison
+
+    Design : RTL, palette sombre (#1d0606 dark-red bg, #227e08 green, #FFF4CB beige text)
+    minSdk 14 – support-v7:28
+-->
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1d0606"
+    android:layoutDirection="rtl"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <!-- ══════════════════════════════════════════════════════════
+             SÉLECTEUR DE MODE : Imlâ' / Murâja'a
+             ══════════════════════════════════════════════════════════ -->
+        <RadioGroup
+            android:id="@+id/rg_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="6dp"
+            android:background="#2a0a0a"
+            android:layout_marginBottom="8dp">
+
+            <RadioButton
+                android:id="@+id/rb_imla"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="إملاء"
+                android:textColor="#FFF4CB"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:checked="true"
+                android:buttonTint="#227e08" />
+
+            <RadioButton
+                android:id="@+id/rb_muraja"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="مراجعة"
+                android:textColor="#FFF4CB"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:buttonTint="#227e08" />
+        </RadioGroup>
+
+        <!-- ══════════════════════════════════════════════════════════
+             EN-TÊTE : Sourate – Aya (commun aux deux modes)
+             ══════════════════════════════════════════════════════════ -->
+        <TextView
+            android:id="@+id/tv_sora_aya_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="سورة البقرة - الآية 1"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:padding="10dp"
+            android:background="#2a0a0a"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="serif" />
+
+        <!-- ══════════════════════════════════════════════════════════
+             SÉLECTEURS : Sourate + Aya + Riwaya
+             ══════════════════════════════════════════════════════════ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="#2a0a0a"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp">
+
+            <!-- Sélecteur de Sourate -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="السورة :"
+                    android:textColor="#FFF4CB"
+                    android:textSize="14sp"
+                    android:layout_marginStart="4dp" />
+
+                <Spinner
+                    android:id="@+id/spinner_sora"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:background="#3a1010"
+                    android:popupBackground="#2a0a0a" />
+            </LinearLayout>
+
+            <!-- Sélecteur d'Aya : boutons +/- + numéro affiché -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="6dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="الآية :"
+                    android:textColor="#FFF4CB"
+                    android:textSize="14sp"
+                    android:layout_marginStart="4dp" />
+
+                <Button
+                    android:id="@+id/btn_aya_prev"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:text="+"
+                    android:textColor="#FFF4CB"
+                    android:background="#227e08"
+                    android:textSize="18sp"
+                    android:padding="0dp"
+                    android:layout_marginStart="8dp" />
+
+                <TextView
+                    android:id="@+id/tv_aya_num"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="1"
+                    android:textColor="#FFF4CB"
+                    android:textSize="18sp"
+                    android:gravity="center" />
+
+                <Button
+                    android:id="@+id/btn_aya_next"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:text="-"
+                    android:textColor="#FFF4CB"
+                    android:background="#7a1010"
+                    android:textSize="18sp"
+                    android:padding="0dp"
+                    android:layout_marginEnd="4dp" />
+            </LinearLayout>
+
+            <!-- Toggle riwaya Hafs / Warsh -->
+            <Button
+                android:id="@+id/btn_riwaya"
+                android:layout_width="match_parent"
+                android:layout_height="36dp"
+                android:text="رواية حفص"
+                android:textColor="#FFF4CB"
+                android:background="#3a1010"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <!-- ══════════════════════════════════════════════════════════
+             MODE 1 – IMLÂ' (page blanche, saisie vocale)
+             ══════════════════════════════════════════════════════════ -->
+        <LinearLayout
+            android:id="@+id/layout_imla"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <!-- Indication pédagogique -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="استمع إلى الآية ثم سجّل تلاوتك"
+                android:textColor="#aaaaaa"
+                android:textSize="13sp"
+                android:gravity="center"
+                android:padding="6dp" />
+
+            <!-- Zone d'affichage du texte reconnu (remplie après enregistrement) -->
+            <TextView
+                android:id="@+id/tv_recognized_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="80dp"
+                android:hint="سيظهر هنا النص المُتعرَّف عليه بعد التسجيل..."
+                android:textColorHint="#666666"
+                android:textColor="#FFF4CB"
+                android:textSize="18sp"
+                android:gravity="center|right"
+                android:padding="12dp"
+                android:background="#120404"
+                android:layout_marginBottom="8dp"
+                android:textDirection="rtl"
+                android:fontFamily="serif" />
+
+            <!-- Bouton déclencher l'analyse -->
+            <Button
+                android:id="@+id/btn_tashih"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="تصحيح"
+                android:textColor="#FFFFFF"
+                android:background="#227e08"
+                android:textSize="16sp"
+                android:layout_marginBottom="8dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <!-- ══════════════════════════════════════════════════════════
+             MODE 2 – MURÂJA'A (texte affiché, enregistrement + comparaison)
+             ══════════════════════════════════════════════════════════ -->
+        <LinearLayout
+            android:id="@+id/layout_muraja"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- Texte de l'aya affiché en grand -->
+            <TextView
+                android:id="@+id/tv_aya_text_ref"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="100dp"
+                android:text=""
+                android:textColor="#227e08"
+                android:textSize="22sp"
+                android:gravity="center"
+                android:padding="14dp"
+                android:background="#000000"
+                android:layout_marginBottom="8dp"
+                android:textDirection="rtl"
+                android:fontFamily="serif"
+                android:lineSpacingMultiplier="1.5" />
+
+            <!-- Zone de comparaison : ScrollView pour le texte annoté -->
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:id="@+id/tv_comparison_result"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="نتيجة المقارنة ستظهر هنا بعد التحليل..."
+                    android:textColorHint="#666666"
+                    android:textColor="#FFF4CB"
+                    android:textSize="17sp"
+                    android:padding="10dp"
+                    android:background="#120404"
+                    android:textDirection="rtl"
+                    android:lineSpacingMultiplier="1.4"
+                    android:fontFamily="serif" />
+            </ScrollView>
+        </LinearLayout>
+
+        <!-- ══════════════════════════════════════════════════════════
+             CONTRÔLES AUDIO (communs aux deux modes)
+             ══════════════════════════════════════════════════════════ -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="8dp"
+            android:background="#2a0a0a"
+            android:layout_marginBottom="10dp">
+
+            <!-- Bouton Enregistrer -->
+            <Button
+                android:id="@+id/btn_record"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_weight="1"
+                android:text="🎤 تسجيل"
+                android:textColor="#FFFFFF"
+                android:background="#c0392b"
+                android:textSize="14sp"
+                android:layout_marginEnd="4dp" />
+
+            <!-- Bouton Stop -->
+            <Button
+                android:id="@+id/btn_stop"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_weight="1"
+                android:text="⏹ إيقاف"
+                android:textColor="#FFFFFF"
+                android:background="#555555"
+                android:textSize="14sp"
+                android:layout_marginEnd="4dp"
+                android:enabled="false" />
+
+            <!-- Bouton Rejouer -->
+            <Button
+                android:id="@+id/btn_playback"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_weight="1"
+                android:text="▶ إعادة"
+                android:textColor="#FFFFFF"
+                android:background="#227e08"
+                android:textSize="14sp"
+                android:enabled="false" />
+        </LinearLayout>
+
+        <!-- Statut de l'enregistrement -->
+        <TextView
+            android:id="@+id/tv_record_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#aaaaaa"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:layout_marginBottom="10dp" />
+
+        <!-- ══════════════════════════════════════════════════════════
+             ZONE RÉSULTAT (commune, initialement cachée)
+             ══════════════════════════════════════════════════════════ -->
+        <LinearLayout
+            android:id="@+id/layout_result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:background="#120404"
+            android:padding="10dp"
+            android:layout_marginBottom="10dp">
+
+            <!-- Score -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="النتيجة : "
+                    android:textColor="#FFF4CB"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-- / 10"
+                    android:textColor="#227e08"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!-- Séparateur -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#3a1010"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Titre observations Tajwid -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ملاحظات التجويد"
+                android:textColor="#FFF4CB"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:gravity="right"
+                android:layout_marginBottom="6dp" />
+
+            <!-- RecyclerView pour les règles Tajwid -->
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_tajwid_rules"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false" />
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

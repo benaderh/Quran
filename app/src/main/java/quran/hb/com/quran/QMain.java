@@ -13,7 +13,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.support.v4.view.ViewPager;
+import androidx.viewpager.widget.ViewPager;
 import android.util.Log;
 import android.view.Display;
 import android.view.GestureDetector;
@@ -48,13 +48,13 @@ public class QMain extends Activity {
 	private NoSwipeViewPager viewPager;
 	private ContinuousPageView continuousView;
 	private ArrayList<String> currentImagePaths;
-	/** Taille de la liste passée à continuousView (listée inversée). */
+	/** Taille de la liste pass�e � continuousView (list�e invers�e). */
 	private int contListSize = 0;
 
 	private MediaPlayer ringTone;
 
 	SQLiteDatabase SQLdb;
-	Button btnM, btnA, btnT, btnH, btnW, btnF, btnJ, btnP, btnS, btnAbout, btnAP, btnAN, btnAPb, btnANb, btnRetour;
+	Button btnM, btnA, btnT, btnH, btnW, btnF, btnJ, btnP, btnS, btnAbout, btnAP, btnAN, btnAPb, btnANb, btnRetour, btnTilawa;
 	TextView ayaT, tefcirT, ayaB, tefcirB;
 	TextView cadre;
 	LinearLayout ll21, ll22;
@@ -125,6 +125,7 @@ public class QMain extends Activity {
 		btnAPb = (Button) findViewById(R.id.btnAPb);
 		btnANb = (Button) findViewById(R.id.btnANb);
 		btnRetour = (Button) findViewById(R.id.btnRetour);
+		btnTilawa = (Button) findViewById(R.id.btnTilawa);
 		//tv_img = (ImageView) findViewById(R.id.imgV);
 		ayaT = (TextView) findViewById(R.id.tv_aya);
 		tefcirT = (TextView) findViewById(R.id.tv_tefcir);
@@ -265,9 +266,9 @@ public class QMain extends Activity {
 
 		//adapter = new QImage(QMain.this, utils.getFilePaths());
 		if (isLandscape()) {
-			// Mode paysage : défilement continu PDF
-			// Liste inversée : index 0 = p1 (1ère page Coran, en haut)
-			//                  index N-1 = p608 (dernière, en bas)
+			// Mode paysage : d�filement continu PDF
+			// Liste invers�e : index 0 = p1 (1�re page Coran, en haut)
+			//                  index N-1 = p608 (derni�re, en bas)
 			// Scroll BAS = page suivante
 			ArrayList<String> reversedPaths = reversePaths(currentImagePaths);
 			contListSize = reversedPaths.size();
@@ -467,6 +468,7 @@ public class QMain extends Activity {
 					btnH.setVisibility(View.GONE);
 					btnW.setVisibility(View.GONE);
 					btnF.setVisibility(View.GONE);
+									btnTilawa.setVisibility(View.GONE);
 					//cadre.setVisibility(View.GONE);
 					bar=0;
 				}
@@ -530,6 +532,7 @@ public class QMain extends Activity {
 				btnH.setVisibility(View.GONE);
 				btnW.setVisibility(View.GONE);
 				btnF.setVisibility(View.GONE);
+								btnTilawa.setVisibility(View.GONE);
 				bar = 0;
 			}
 		});
@@ -566,6 +569,7 @@ public class QMain extends Activity {
 				btnH.setVisibility(View.GONE);
 				btnW.setVisibility(View.GONE);
 				btnF.setVisibility(View.GONE);
+								btnTilawa.setVisibility(View.GONE);
 				bar = 0;
 			}
 		});
@@ -599,6 +603,7 @@ public class QMain extends Activity {
 				btnH.setVisibility(View.GONE);
 				btnW.setVisibility(View.GONE);
 				btnF.setVisibility(View.GONE);
+								btnTilawa.setVisibility(View.GONE);
 				bar = 0;
 
 				//ayaT.setVisibility(View.VISIBLE);
@@ -649,7 +654,7 @@ public class QMain extends Activity {
 					ctlAudio = 0;
 				}
 				//String filePath = Environment.getExternalStorageDirectory()+ "/AudioQ/" + tone_name + ".mp3";
-				//String filePath = Environment.getExternalStorageDirectory()+ "/AudioQ/عصفور.mp3";
+				//String filePath = Environment.getExternalStorageDirectory()+ "/AudioQ/�����.mp3";
 
 				//String filePath = Environment.getExternalStorageDirectory() + RiwayaAudio + sora + ".wav";
 				String filePath = Environment.getExternalStorageDirectory() + Riwaya + sora + ".wav";
@@ -678,7 +683,7 @@ public class QMain extends Activity {
 					public void onCompletion(MediaPlayer mp) {
 						ctlAudio = 0;
 						stopAudioTracking();
-						// Passer automatiquement à la sourate suivante
+						// Passer automatiquement � la sourate suivante
 						playNextSora();
 					}
 				});
@@ -695,6 +700,7 @@ public class QMain extends Activity {
 				btnH.setVisibility(View.GONE);
 				btnW.setVisibility(View.GONE);
 				btnF.setVisibility(View.GONE);
+								btnTilawa.setVisibility(View.GONE);
 				//cadre.setVisibility(View.GONE);
 				bar = 0;
 
@@ -706,7 +712,7 @@ public class QMain extends Activity {
 		btnM.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				//Toast.makeText(getApplicationContext(), "القائمة", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(getApplicationContext(), "�������", Toast.LENGTH_SHORT).show();
 				btnAbout.setVisibility(View.VISIBLE);
 
 			}
@@ -716,7 +722,7 @@ public class QMain extends Activity {
 		btnAbout.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				//Toast.makeText(getApplicationContext(), "حول", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(getApplicationContext(), "���", Toast.LENGTH_SHORT).show();
 				finish();
 				Intent intent = new
 						Intent(QMain.this, About.class);
@@ -900,6 +906,19 @@ public class QMain extends Activity {
 			}
 		});
 
+		btnTilawa.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Intent intentTilawa = new Intent(QMain.this, TilawaCorrectionActivity.class);
+				intentTilawa.putExtra("soraNum", soraI);
+				intentTilawa.putExtra("ayaNum", ayaI);
+				intentTilawa.putExtra("pageNum", lastP);
+				intentTilawa.putExtra("isHafs", lastR == 1);
+				finish();
+				startActivity(intentTilawa);
+			}
+		});
+
 
 
 	}
@@ -1039,8 +1058,8 @@ public class QMain extends Activity {
 
 
 	/**
-	 * Appelé à chaque changement d'orientation (portrait ↔ paysage).
-	 * Grâce à android:configChanges dans le Manifest, l'Activity N'EST PAS recrée :
+	 * Appel� � chaque changement d'orientation (portrait ? paysage).
+	 * Gr�ce � android:configChanges dans le Manifest, l'Activity N'EST PAS recr�e :
 	 * on garde lastP intact et on bascule simplement entre les deux vues.
 	 */
 	@Override
@@ -1093,6 +1112,7 @@ public class QMain extends Activity {
 								btnS.setVisibility(View.VISIBLE);
 								btnM.setVisibility(View.VISIBLE);
 								btnA.setVisibility(View.VISIBLE);
+								btnTilawa.setVisibility(View.VISIBLE);
 								btnT.setVisibility(View.VISIBLE);
 								btnH.setVisibility(View.VISIBLE);
 								btnW.setVisibility(View.VISIBLE);
@@ -1268,6 +1288,7 @@ public class QMain extends Activity {
 								btnH.setVisibility(View.GONE);
 								btnW.setVisibility(View.GONE);
 								btnF.setVisibility(View.GONE);
+												btnTilawa.setVisibility(View.GONE);
 								//cadre.setVisibility(View.GONE);
 								bar = 0;
 
@@ -1279,8 +1300,8 @@ public class QMain extends Activity {
 	}
 
 	/**
-	 * Retourne une copie inversée de la liste de chemins.
-	 * En mode paysage PDF : index 0 = 1ère page Coran (p1), scroll BAS = page suivante.
+	 * Retourne une copie invers�e de la liste de chemins.
+	 * En mode paysage PDF : index 0 = 1�re page Coran (p1), scroll BAS = page suivante.
 	 */
 	private ArrayList<String> reversePaths(ArrayList<String> paths) {
 		ArrayList<String> reversed = new ArrayList<String>(paths);
@@ -1316,22 +1337,22 @@ public class QMain extends Activity {
 
 	/**
 	 * Listener pour ContinuousPageView en mode paysage :
-	 * met à jour la barre (sora/page/juz) quand l'utilisateur fait défiler.
+	 * met � jour la barre (sora/page/juz) quand l'utilisateur fait d�filer.
 	 */
 	private final ContinuousPageView.PageChangeListener continuousPageListener =
 			new ContinuousPageView.PageChangeListener() {
 		@Override
 		public void onPageChanged(int pagerIndex) {
-			// Liste inversée : index 0 = p1, donc lastP = pagerIndex + 1
+			// Liste invers�e : index 0 = p1, donc lastP = pagerIndex + 1
 			int newLastP = pagerIndex + 1;
 			if (contListSize > 0) {
-				// Sécurité : recalcul générique si la taille diffère de 608
+				// S�curit� : recalcul g�n�rique si la taille diff�re de 608
 				newLastP = 608 - (contListSize - 1 - pagerIndex);
 			}
 			if (newLastP == lastP) return;
 			lastP = newLastP;
 
-			// Mettre à jour curQ pour afficher sora/page/juz
+			// Mettre � jour curQ pour afficher sora/page/juz
 			int j = 0;
 			curQ.moveToFirst();
 			do {
@@ -1361,6 +1382,7 @@ public class QMain extends Activity {
 				btnH.setVisibility(View.GONE);
 				btnW.setVisibility(View.GONE);
 				btnF.setVisibility(View.GONE);
+								btnTilawa.setVisibility(View.GONE);
 				bar = 0;
 			}
 		}
@@ -1443,8 +1465,8 @@ public class QMain extends Activity {
 	}
 
 	/**
-	 * Passe à la sourate suivante (s1..s114 cycliquement) et lance son audio automatiquement.
-	 * Cherche la première page de la sourate dans tb_tafcir (colonne p_sora).
+	 * Passe � la sourate suivante (s1..s114 cycliquement) et lance son audio automatiquement.
+	 * Cherche la premi�re page de la sourate dans tb_tafcir (colonne p_sora).
 	 */
 	private void playNextSora() {
 		if (sora == null || sora.isEmpty()) return;
@@ -1453,7 +1475,7 @@ public class QMain extends Activity {
 			final int nextNum = (currentNum >= 114) ? 1 : currentNum + 1;
 			final String nextSoraName = "s" + nextNum;
 
-			// Chercher la première page de la sourate dans tb_tafcir (p_sora = numéro de page)
+			// Chercher la premi�re page de la sourate dans tb_tafcir (p_sora = num�ro de page)
 			// ou dans tb_tafcirW selon la riwaya courante
 			final int[] targetPage = {-1};
 			try {
@@ -1462,7 +1484,7 @@ public class QMain extends Activity {
 						"/data/data/quran.hb.com.quran/databases/db_quran.sqlite",
 						null, android.database.sqlite.SQLiteDatabase.OPEN_READONLY);
 				String tbl = (lastR == 1) ? "tb_tafcir" : "tb_tafcirW";
-				// p_sora = numéro de page Coran pour cet ayat
+				// p_sora = num�ro de page Coran pour cet ayat
 				Cursor cPage = rawDb.rawQuery(
 					"SELECT p_sora FROM " + tbl + " WHERE sora = " + nextNum
 					+ " ORDER BY aya ASC LIMIT 1", null);
@@ -1481,10 +1503,10 @@ public class QMain extends Activity {
 				public void run() {
 					sora = nextSoraName;
 					pos = 0;
-					// Naviguer vers la première page si trouvée
+					// Naviguer vers la premi�re page si trouv�e
 					if (targetPage[0] > 0 && targetPage[0] <= 604) {
 						if (isLandscape()) {
-							// Liste inversée : reversed[targetPage[0]] = p{targetPage[0]}
+							// Liste invers�e : reversed[targetPage[0]] = p{targetPage[0]}
 							continuousView.scrollToIndex(targetPage[0], true);
 						} else {
 							viewPager.setCurrentItem(608 - targetPage[0], true);
@@ -1507,7 +1529,7 @@ public class QMain extends Activity {
 							public void onCompletion(MediaPlayer mp) {
 								ctlAudio = 0;
 								stopAudioTracking();
-								// Chaîne récursive : passer à la suivante
+								// Cha�ne r�cursive : passer � la suivante
 								playNextSora();
 							}
 						});
@@ -1546,11 +1568,11 @@ public class QMain extends Activity {
 
 		int item = 608 - tPage[best];
 		if (isLandscape()) {
-			// Mode paysage : liste inversée, index dans ContinuousPageView = tPage[best]-1
+			// Mode paysage : liste invers�e, index dans ContinuousPageView = tPage[best]-1
 			int continuousIdx = tPage[best]; // reversed[tPage[best]] = p{tPage[best]}.jpg
 			if (best != audioIdx) {
 				audioIdx = best;
-				// Auto-scroll géré par applyHighlight
+				// Auto-scroll g�r� par applyHighlight
 			}
 			continuousView.setHighlight(continuousIdx, tLine[best], tPoint[best]);
 			continuousView.applyHighlight();

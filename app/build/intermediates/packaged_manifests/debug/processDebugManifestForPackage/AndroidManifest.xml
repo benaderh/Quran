@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="quran.hb.com.quran"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="21"
+        android:targetSdkVersion="35" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <permission
+        android:name="quran.hb.com.quran.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+        android:protectionLevel="signature" />
+
+    <uses-permission android:name="quran.hb.com.quran.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+
+    <application
+        android:allowBackup="true"
+        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+        android:debuggable="true"
+        android:extractNativeLibs="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="قرآن كريم"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="quran.hb.com.quran.SplashActivity"
+            android:exported="true"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="quran.hb.com.quran.QMain"
+            android:configChanges="orientation|screenSize"
+            android:exported="false"
+            android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen" />
+        <activity
+            android:name="quran.hb.com.quran.IndexP"
+            android:exported="false"
+            android:label="البحث عن صفحة" />
+        <activity
+            android:name="quran.hb.com.quran.IndexS"
+            android:exported="false"
+            android:label="البحث عن سورة" />
+        <activity
+            android:name="quran.hb.com.quran.IndexJ"
+            android:exported="false"
+            android:label="البحث عن جزء" />
+        <activity
+            android:name="quran.hb.com.quran.IndexF"
+            android:exported="false"
+            android:label="البحث عن آية" />
+        <activity
+            android:name="quran.hb.com.quran.LandMark"
+            android:exported="false"
+            android:label="حفظ و تعديل العلامة" />
+        <activity
+            android:name="quran.hb.com.quran.Tefcir"
+            android:exported="false"
+            android:label="تفسير ميسر" />
+        <activity
+            android:name="quran.hb.com.quran.About"
+            android:exported="false"
+            android:label="حول" />
+        <activity
+            android:name="quran.hb.com.quran.TilawaCorrectionActivity"
+            android:exported="false"
+            android:label="تقييم التلاوة"
+            android:windowSoftInputMode="adjustResize" />
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="quran.hb.com.quran.androidx-startup"
+            android:exported="false" >
+            <meta-data
+                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+                android:value="androidx.startup" />
+            <meta-data
+                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+                android:value="androidx.startup" />
+        </provider>
+    </application>
+
+</manifest>
