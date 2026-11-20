@@ -19,30 +19,31 @@ public class Utils {
         this._context = context;
     }
 
+    /**
+     * Retourne les chemins des 608 pages Hafs (HI).
+     * Chemin construit directement p1.jpg..p608.jpg (sans listFiles).
+     * Index 0 = p608 (ViewPager affiche de la fin vers le debut : swipe droite = page precedente).
+     */
     public ArrayList<String> getFilePaths() {
         ArrayList<String> filePaths = new ArrayList<String>();
-        File dir = new File(Environment.getExternalStorageDirectory() + "/QuranHW/HI");
-        if (dir.exists()) {
-            File[] files = dir.listFiles();
-            if (files != null && files.length > 0) {
-                for (int i = 0; i < files.length; i++) {
-                    filePaths.add(dir.getAbsolutePath() + "/p" + (608 - i) + ".jpg");
-                }
-            }
+        String base = Environment.getExternalStorageDirectory().getAbsolutePath() + "/QuranHW/HI/";
+        // Index 0 = page 608 (premiere vue = derniere page Coran)
+        for (int p = 608; p >= 1; p--) {
+            filePaths.add(base + "p" + p + ".jpg");
         }
         return filePaths;
     }
 
+    /**
+     * Retourne les chemins des 608 pages Warsh (WI).
+     * Chemin construit directement p1.png..p608.png (sans listFiles).
+     * Index 0 = p608.
+     */
     public ArrayList<String> getFilePathsW() {
         ArrayList<String> filePathsW = new ArrayList<String>();
-        File dir = new File(Environment.getExternalStorageDirectory() + "/QuranHW/WI");
-        if (dir.exists()) {
-            File[] files = dir.listFiles();
-            if (files != null && files.length > 0) {
-                for (int i = 0; i < files.length; i++) {
-                    filePathsW.add(dir.getAbsolutePath() + "/p" + (608 - i) + ".png");
-                }
-            }
+        String base = Environment.getExternalStorageDirectory().getAbsolutePath() + "/QuranHW/WI/";
+        for (int p = 608; p >= 1; p--) {
+            filePathsW.add(base + "p" + p + ".png");
         }
         return filePathsW;
     }

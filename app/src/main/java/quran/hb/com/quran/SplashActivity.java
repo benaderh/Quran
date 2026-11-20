@@ -7,11 +7,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.Settings;
+import android.widget.Toast;
 
 public class SplashActivity extends Activity {
 
     private static final int REQ_PERM = 1;
+    private boolean waitingForSettings = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,22 +25,40 @@ public class SplashActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        // Verifier si les permissions sont accordees apres retour des parametres
-        if (hasRequiredPermissions()) {
-            launchMain();
+        // Verifier si les permissions sont accordees apres retour des parametres systeme
+        if (waitingForSettings) {
+            waitingForSettings = false;
+            if (hasRequiredPermissions()) {
+                launchMain();
+            } else {
+                // Toujours pas de permission : lancer quand meme (pour eviter le blocage)
+                Toast.makeText(this,
+                    "Accordez l'acces au stockage pour afficher les pages du Coran",
+                    Toast.LENGTH_LONG).show();
+                launchMain();
+            }
         }
     }
 
     private void checkAndRequestPermissions() {
-        // Android 11+ (API 30+) : demander MANAGE_EXTERNAL_STORAGE
+        // Android 11+ (API 30+) : MANAGE_EXTERNAL_STORAGE obligatoire pour /QuranHW/
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             if (!Environment.isExternalStorageManager()) {
-                // Ouvrir les parametres pour autoriser l'acces complet au stockage
-                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                intent.setData(Uri.parse("package:" + getPackageName()));
-                startActivity(intent);
+                waitingForSettings = true;
+                try {
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                    intent.setData(Uri.parse("package:" + getPackageName()));
+                    startActivity(intent);
+                } catch (Exception e) {
+                    // Fallback: ouvrir les settings generaux
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                    startActivity(intent);
+                }
                 return;
             }
+            // Permission accordee
+            launchMain();
+            return;
         }
 
         // Android 13+ (API 33+) : READ_MEDIA_IMAGES
@@ -50,8 +71,12 @@ public class SplashActivity extends Activity {
                 }, REQ_PERM);
                 return;
             }
-        } else if (Build.VERSION.SDK_INT >= 23) {
-            // Android 6-12 : READ_EXTERNAL_STORAGE
+            launchMain();
+            return;
+        }
+
+        // Android 6-12 : READ_EXTERNAL_STORAGE
+        if (Build.VERSION.SDK_INT >= 23) {
             if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{
@@ -85,6 +110,7 @@ public class SplashActivity extends Activity {
     public void onRequestPermissionsResult(int requestCode,
             String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // Que la permission soit accordee ou non, lancer l'app
         launchMain();
     }
 
