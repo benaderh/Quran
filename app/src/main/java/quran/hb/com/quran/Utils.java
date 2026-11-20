@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
+import android.os.Environment;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -18,8 +19,17 @@ public class Utils {
         this._context = context;
     }
 
+    /**
+     * Retourne le dossier de base QuranHW.
+     * Priorité : /sdcard/QuranHW/ (chemin historique, images déjà là)
+     * Fallback  : stockage interne app (si SD inaccessible)
+     */
     private String getQuranBaseDir() {
-        return _context.getFilesDir().getAbsolutePath() + "/QuranHW";
+        // 1. Chemin historique sur la carte SD
+        File sdPath = new File(Environment.getExternalStorageDirectory(), "QuranHW");
+        if (sdPath.exists()) return sdPath.getAbsolutePath();
+        // 2. Stockage interne (aucune permission requise)
+        return new File(_context.getFilesDir(), "QuranHW").getAbsolutePath();
     }
 
     public ArrayList<String> getFilePaths() {
@@ -56,9 +66,8 @@ public class Utils {
         WindowManager wm = (WindowManager) _context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         final Point point = new Point();
-        try {
-            display.getSize(point);
-        } catch (java.lang.NoSuchMethodError ignore) {
+        try { display.getSize(point); }
+        catch (java.lang.NoSuchMethodError ignore) {
             point.x = display.getWidth();
             point.y = display.getHeight();
         }
