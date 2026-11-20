@@ -19,22 +19,9 @@ public class Utils {
         this._context = context;
     }
 
-    /**
-     * Retourne le dossier de base QuranHW.
-     * Priorité : /sdcard/QuranHW/ (chemin historique, images déjà là)
-     * Fallback  : stockage interne app (si SD inaccessible)
-     */
-    private String getQuranBaseDir() {
-        // 1. Chemin historique sur la carte SD
-        File sdPath = new File(Environment.getExternalStorageDirectory(), "QuranHW");
-        if (sdPath.exists()) return sdPath.getAbsolutePath();
-        // 2. Stockage interne (aucune permission requise)
-        return new File(_context.getFilesDir(), "QuranHW").getAbsolutePath();
-    }
-
     public ArrayList<String> getFilePaths() {
         ArrayList<String> filePaths = new ArrayList<String>();
-        File dir = new File(getQuranBaseDir() + "/HI");
+        File dir = new File(Environment.getExternalStorageDirectory() + "/QuranHW/HI");
         if (dir.exists()) {
             File[] files = dir.listFiles();
             if (files != null && files.length > 0) {
@@ -48,7 +35,7 @@ public class Utils {
 
     public ArrayList<String> getFilePathsW() {
         ArrayList<String> filePathsW = new ArrayList<String>();
-        File dir = new File(getQuranBaseDir() + "/WI");
+        File dir = new File(Environment.getExternalStorageDirectory() + "/QuranHW/WI");
         if (dir.exists()) {
             File[] files = dir.listFiles();
             if (files != null && files.length > 0) {
