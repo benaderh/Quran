@@ -909,7 +909,7 @@ public class QMain extends Activity {
 				btnTilawaFloat.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				Intent tilawa = new Intent(QMain.this, TilawaCorrectionActivity.class);
+				Intent tilawa = new Intent(QMain.this, TilawaMushafActivity.class);
 				tilawa.putExtra("soraNum", soraI);
 				tilawa.putExtra("ayaNum", ayaI);
 				tilawa.putExtra("isHafs", (lastR == 1) ? 1 : 0);

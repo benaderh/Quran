@@ -54,6 +54,8 @@
             android:exported="false"
             android:label="تقييم التلاوة"
             android:windowSoftInputMode="adjustResize" />
+            <activity android:name=".TilawaMushafActivity" android:exported="false" android:label="مصحف التسميع" android:screenOrientation="portrait" />
+        <activity android:name=".TilawaImlaActivity" android:exported="false" android:label="إملاء" android:screenOrientation="portrait" />
     </application>
 
 </manifest>
