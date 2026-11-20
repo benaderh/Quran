@@ -152,7 +152,7 @@ public class QMain extends Activity {
 		}
 
 
-		File myFolder = new File(Environment.getExternalStorageDirectory(), "QuranHW");
+		File myFolder = new File(getFilesDir().getAbsolutePath() + "/QuranHW");
 		if (!myFolder.exists()) {
 			myFolder.mkdir();
 			try {
@@ -163,25 +163,25 @@ public class QMain extends Activity {
 	    }
 
 
-		myFolder = new File(Environment.getExternalStorageDirectory()+"/QuranHW/", "HI");
+		myFolder = new File(getFilesDir().getAbsolutePath() + "/QuranHW/", "HI");
 		if (!myFolder.exists()) {
 			myFolder.mkdir();
 			CopyAssetsHI();
 		}
 
-		myFolder = new File(Environment.getExternalStorageDirectory()+"/QuranHW/", "HA");
+		myFolder = new File(getFilesDir().getAbsolutePath() + "/QuranHW/", "HA");
 		if (!myFolder.exists()) {
 			myFolder.mkdir();
 			CopyAssetsHA();
 		}
 
-		myFolder = new File(Environment.getExternalStorageDirectory()+"/QuranHW/", "WI");
+		myFolder = new File(getFilesDir().getAbsolutePath() + "/QuranHW/", "WI");
 		if (!myFolder.exists()) {
 			myFolder.mkdir();
 			CopyAssetsWI();
 		}
 
-		myFolder = new File(Environment.getExternalStorageDirectory()+"/QuranHW/", "WA");
+		myFolder = new File(getFilesDir().getAbsolutePath() + "/QuranHW/", "WA");
 		if (!myFolder.exists()) {
 			myFolder.mkdir();
 			CopyAssetsWA();
@@ -657,7 +657,7 @@ public class QMain extends Activity {
 				//String filePath = Environment.getExternalStorageDirectory()+ "/AudioQ/�����.mp3";
 
 				//String filePath = Environment.getExternalStorageDirectory() + RiwayaAudio + sora + ".wav";
-				String filePath = Environment.getExternalStorageDirectory() + Riwaya + sora + ".wav";
+				String filePath = getFilesDir().getAbsolutePath() + Riwaya + sora + ".wav";
 				//String filePath = Environment.getExternalStorageState() + RiwayaAudio+sora+".wav";
 				ringTone = new MediaPlayer();
 				try {
@@ -953,7 +953,7 @@ public class QMain extends Activity {
 			OutputStream out = null;
 			try {
 				in = assetManager.open("HI/" + filename);   // if files resides inside the "Files" directory itself
-				out = new FileOutputStream(Environment.getExternalStorageDirectory().toString() + "/QuranHW/HI/" + filename);
+				out = new FileOutputStream(getFilesDir().getAbsolutePath() + "/QuranHW/HI/" + filename);
 				//out = new FileOutputStream(Environment.getExternalStorageState().toString() +"/AudioQ/" + filename);
 				copyFile(in, out);
 				in.close();
@@ -982,7 +982,7 @@ public class QMain extends Activity {
 			OutputStream out = null;
 			try {
 				in = assetManager.open("HA/" + filename);   // if files resides inside the "Files" directory itself
-				out = new FileOutputStream(Environment.getExternalStorageDirectory().toString() + "/QuranHW/HA/" + filename);
+				out = new FileOutputStream(getFilesDir().getAbsolutePath() + "/QuranHW/HA/" + filename);
 				//out = new FileOutputStream(Environment.getExternalStorageState().toString() +"/AudioQ/" + filename);
 				copyFile(in, out);
 				in.close();
@@ -1012,7 +1012,7 @@ public class QMain extends Activity {
 			OutputStream out = null;
 			try {
 				in = assetManager.open("WI/" + filename);   // if files resides inside the "Files" directory itself
-				out = new FileOutputStream(Environment.getExternalStorageDirectory().toString() + "/QuranHW/WI/" + filename);
+				out = new FileOutputStream(getFilesDir().getAbsolutePath() + "/QuranHW/WI/" + filename);
 				//out = new FileOutputStream(Environment.getExternalStorageState().toString() +"/AudioQ/" + filename);
 				copyFile(in, out);
 				in.close();
@@ -1042,7 +1042,7 @@ public class QMain extends Activity {
 			OutputStream out = null;
 			try {
 				in = assetManager.open("WA/" + filename);   // if files resides inside the "Files" directory itself
-				out = new FileOutputStream(Environment.getExternalStorageDirectory().toString() + "/QuranHW/WA/" + filename);
+				out = new FileOutputStream(getFilesDir().getAbsolutePath() + "/QuranHW/WA/" + filename);
 				//out = new FileOutputStream(Environment.getExternalStorageState().toString() +"/AudioQ/" + filename);
 				copyFile(in, out);
 				in.close();
@@ -1255,7 +1255,7 @@ public class QMain extends Activity {
 
 								try {
 									//Workbook wb = Workbook.getWorkbook(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + RiwayaExel));
-									  Workbook wb = Workbook.getWorkbook(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Riwaya + sora + ".xls"));
+									  Workbook wb = Workbook.getWorkbook(new File(getFilesDir().getAbsolutePath() + Riwaya + sora + ".xls"));
 									//Workbook wb = Workbook.getWorkbook(new File(Environment.getExternalStorageState() + RiwayaExel));
 									Sheet s = wb.getSheet(0);
 
@@ -1423,7 +1423,7 @@ public class QMain extends Activity {
 	private boolean loadTimings() {
 		tCount = 0;
 		try {
-			Workbook wb = Workbook.getWorkbook(new File(Environment.getExternalStorageDirectory().getAbsolutePath() + Riwaya + sora + ".xls"));
+			Workbook wb = Workbook.getWorkbook(new File(getFilesDir().getAbsolutePath() + Riwaya + sora + ".xls"));
 			Sheet sh = wb.getSheet(0);
 			int n = sh.getRows() - 1;      // la ligne 0 est l'en-tete
 			if (n <= 0) {
@@ -1513,7 +1513,7 @@ public class QMain extends Activity {
 						}
 					}
 					// Lancer l'audio de la sourate suivante
-					String filePath = android.os.Environment.getExternalStorageDirectory()
+					String filePath = getFilesDir().getAbsolutePath()
 							+ Riwaya + sora + ".wav";
 					if (ringTone != null) {
 						try { ringTone.release(); } catch (Exception ignored) {}
