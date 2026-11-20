@@ -5,30 +5,34 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 
 public class SplashActivity extends Activity {
 
-    private static final int REQ_STORAGE = 1;
+    private static final int REQ_PERM = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        );
-        getWindow().getDecorView().setBackgroundColor(0xFFFFFFFF);
 
-        if (Build.VERSION.SDK_INT >= 23 && Build.VERSION.SDK_INT < 30) {
-            if (checkSelfPermission(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if (Build.VERSION.SDK_INT >= 33) {
+            // Android 13+ : READ_MEDIA_IMAGES
+            if (checkSelfPermission(android.Manifest.permission.READ_MEDIA_IMAGES)
                     != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{
+                    android.Manifest.permission.READ_MEDIA_IMAGES,
+                    android.Manifest.permission.RECORD_AUDIO
+                }, REQ_PERM);
+                return;
+            }
+        } else if (Build.VERSION.SDK_INT >= 23) {
+            // Android 6-12 : READ_EXTERNAL_STORAGE
+            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{
+                    android.Manifest.permission.READ_EXTERNAL_STORAGE,
                     android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                    android.Manifest.permission.READ_EXTERNAL_STORAGE
-                }, REQ_STORAGE);
+                    android.Manifest.permission.RECORD_AUDIO
+                }, REQ_PERM);
                 return;
             }
         }
@@ -39,9 +43,7 @@ public class SplashActivity extends Activity {
     public void onRequestPermissionsResult(int requestCode,
             String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQ_STORAGE) {
-            launchMain();
-        }
+        launchMain();
     }
 
     private void launchMain() {

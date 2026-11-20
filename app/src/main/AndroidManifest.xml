@@ -12,7 +12,7 @@
         <activity
             android:name=".SplashActivity"
             android:exported="true"
-            android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen">
+            android:theme="@android:style/Theme.Holo.Light.NoActionBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -32,19 +32,21 @@
         <activity android:name=".LandMark" android:exported="false" android:label="حفظ و تعديل العلامة"/>
         <activity android:name=".Tefcir"  android:exported="false" android:label="تفسير ميسر"/>
         <activity android:name=".About"   android:exported="false" android:label="حول" />
-
         <activity
             android:name=".TilawaCorrectionActivity"
             android:exported="false"
             android:label="تقييم التلاوة"
             android:windowSoftInputMode="adjustResize" />
-
     </application>
 
+    <!-- Android 6-12 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="29" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
+    <!-- Android 13+ -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.INTERNET" />
 
