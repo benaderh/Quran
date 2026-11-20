@@ -10,6 +10,10 @@ on:
       - main
       - master
 
+# IMPORTANT: permission pour creer des releases
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,7 +36,11 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee /tmp/build_output.txt; EXIT_CODE=${PIPESTATUS[0]}; grep -n "error:" /tmp/build_output.txt || true; exit $EXIT_CODE
+        run: |
+          ./gradlew assembleDebug --no-daemon --stacktrace 2>&1 | tee /tmp/build_output.txt
+          EXIT_CODE=${PIPESTATUS[0]}
+          grep -n "error:" /tmp/build_output.txt || true
+          exit $EXIT_CODE
 
       - name: Upload APK as artifact
         uses: actions/upload-artifact@v4
