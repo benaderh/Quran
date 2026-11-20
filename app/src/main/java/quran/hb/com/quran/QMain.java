@@ -54,7 +54,7 @@ public class QMain extends Activity {
 	private MediaPlayer ringTone;
 
 	SQLiteDatabase SQLdb;
-	Button btnM, btnA, btnT, btnH, btnW, btnF, btnJ, btnP, btnS, btnAbout, btnAP, btnAN, btnAPb, btnANb, btnRetour, btnTilawa;
+	Button btnM, btnA, btnT, btnH, btnW, btnF, btnJ, btnP, btnS, btnAbout, btnAP, btnAN, btnAPb, btnANb, btnRetour, btnTilawa, btnTilawaFloat;
 	TextView ayaT, tefcirT, ayaB, tefcirB;
 	TextView cadre;
 	LinearLayout ll21, ll22;
@@ -127,6 +127,7 @@ public class QMain extends Activity {
 		btnANb = (Button) findViewById(R.id.btnANb);
 		btnRetour = (Button) findViewById(R.id.btnRetour);
 		btnTilawa = (Button) findViewById(R.id.btnTilawa);
+		btnTilawaFloat = (Button) findViewById(R.id.btnTilawaFloat);
 		//tv_img = (ImageView) findViewById(R.id.imgV);
 		ayaT = (TextView) findViewById(R.id.tv_aya);
 		tefcirT = (TextView) findViewById(R.id.tv_tefcir);
@@ -896,6 +897,16 @@ public class QMain extends Activity {
 
 
 		btnTilawa.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				Intent tilawa = new Intent(QMain.this, TilawaCorrectionActivity.class);
+				tilawa.putExtra("soraNum", soraI);
+				tilawa.putExtra("ayaNum", ayaI);
+				tilawa.putExtra("isHafs", (lastR == 1) ? 1 : 0);
+				startActivity(tilawa);
+			}
+		});
+				btnTilawaFloat.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
 				Intent tilawa = new Intent(QMain.this, TilawaCorrectionActivity.class);
