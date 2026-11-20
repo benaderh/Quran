@@ -1,47 +1,57 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+    compileSdk 35
+
+    namespace "quran.hb.com.quran"
 
     defaultConfig {
         applicationId "quran.hb.com.quran"
-        minSdkVersion 14
-        targetSdkVersion 28
+        minSdk 21
+        targetSdk 35
+        versionCode 1
+        versionName "1.0"
     }
 
     buildTypes {
         release {
-            debuggable true
+            minifyEnabled true
             shrinkResources true
-
-            minifyEnabled true  // shrink
-            // useProguard true    // obfuscate
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-
         debug {
-            //debuggable false
-            //shrinkResources false
-
-            minifyEnabled false  // shrink
-            // useProguard false    // obfuscate
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled false
         }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // Permet de lire les fichiers UTF-8 (texte arabe)
+    androidResources {
+        noCompress 'wav', '3gp', 'mp3'
     }
 }
 
 dependencies {
-    //compile 'com.android.support:support-v4:18.0.0'
-    implementation 'com.android.support:support-v4:28.0.0'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.core:core:1.12.0'
+    implementation 'androidx.viewpager:viewpager:1.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'androidx.cardview:cardview:1.0.0'
     implementation files('libs/jxl.jar')
-    implementation 'com.google.android.gms:play-services-appindexing:8.4.0'
-
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    //compile 'com.android.support:appcompat-v7:25.1.0'
-    testImplementation 'junit:junit:4.12'
+
+    // Résoudre le conflit kotlin-stdlib-jdk7/jdk8 inclus dans kotlin-stdlib >= 1.8
+    configurations.configureEach {
+        resolutionStrategy {
+            force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.22'
+            exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk7'
+            exclude group: 'org.jetbrains.kotlin', module: 'kotlin-stdlib-jdk8'
+        }
+    }
 }
