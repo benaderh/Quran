@@ -202,14 +202,6 @@
                         android:text="العودة"
 
                         />
-                    <Button
-                        android:id="@+id/btnTilawa"
-                        android:layout_width="110dp"
-                        android:layout_height="50dp"
-                        android:textAlignment="center"
-                        android:text="تسميع"
-                        android:backgroundTint="#227e08"
-                        android:textColor="#ffffff" />
 
                     <Button
                         android:id="@+id/btnAP"
@@ -376,23 +368,6 @@
        />
 
 
-
-    <!-- Bouton Tilawa flottant - visible directement sur l'image Quran -->
-    <Button
-        android:id="@+id/btnTilawaFloat"
-        android:layout_width="wrap_content"
-        android:layout_height="45dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="40dp"
-        android:layout_marginRight="12dp"
-        android:text="&#x1F3A4; تسميع"
-        android:textColor="#ffffff"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:background="#CC227e08"
-        android:paddingLeft="14dp"
-        android:paddingRight="14dp" />
 </RelativeLayout>
 
 
