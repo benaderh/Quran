@@ -4,7 +4,6 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Point;
 import android.os.Build;
-import android.os.Environment;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -13,53 +12,105 @@ import java.util.ArrayList;
 
 public class Utils {
 
-    private Context _context;
+	private Context _context;
 
-    public Utils(Context context) {
-        this._context = context;
-    }
+	// constructor
+	public Utils(Context context) {
+		this._context = context;
+	}
 
-    /**
-     * Retourne les chemins des 608 pages Hafs (HI).
-     * Chemin construit directement p1.jpg..p608.jpg (sans listFiles).
-     * Index 0 = p608 (ViewPager affiche de la fin vers le debut : swipe droite = page precedente).
-     */
-    public ArrayList<String> getFilePaths() {
-        ArrayList<String> filePaths = new ArrayList<String>();
-        String base = Environment.getExternalStorageDirectory().getAbsolutePath() + "/QuranHW/HI/";
-        // Index 0 = page 608 (premiere vue = derniere page Coran)
-        for (int p = 608; p >= 1; p--) {
-            filePaths.add(base + "p" + p + ".jpg");
-        }
-        return filePaths;
-    }
+	/*
+	 * Reading file paths from SDCard
+	 */
+	public ArrayList<String> getFilePaths() {
+		ArrayList<String> filePaths = new ArrayList<String>();
+		File DirectoryH = new File(android.os.Environment.getExternalStorageDirectory().toString() +"/QuranHW/HI");
+		if (DirectoryH.exists()) {
+			File[] listFiles = DirectoryH.listFiles();
+			if (listFiles != null && listFiles.length > 0) {
+				for (int i = 0; i < listFiles.length; i++) {
+					String filePath = listFiles[i].getAbsolutePath();
+					if (IsSupportedFile(filePath)) {
+						filePaths.add(DirectoryH+"/p"+(608-i)+".jpg");
+					}
+				}
+			}
+		}
+		return filePaths ;
+	}
 
-    /**
-     * Retourne les chemins des 608 pages Warsh (WI).
-     * Chemin construit directement p1.png..p608.png (sans listFiles).
-     * Index 0 = p608.
-     */
-    public ArrayList<String> getFilePathsW() {
-        ArrayList<String> filePathsW = new ArrayList<String>();
-        String base = Environment.getExternalStorageDirectory().getAbsolutePath() + "/QuranHW/WI/";
-        for (int p = 608; p >= 1; p--) {
-            filePathsW.add(base + "p" + p + ".png");
-        }
-        return filePathsW;
-    }
+	public ArrayList<String> getFilePathsW() {
+		ArrayList<String> filePathsW = new ArrayList<String>();
+		File DirectoryW = new File(android.os.Environment.getExternalStorageDirectory().toString() +"/QuranHW/WI");
+		if (DirectoryW.exists()) {
+			File[] listFilesW = DirectoryW.listFiles();
+			if (listFilesW != null && listFilesW.length > 0) {
+				for (int i = 0; i < listFilesW.length; i++) {
+					String filePathW = listFilesW[i].getAbsolutePath();
+					if (IsSupportedFile(filePathW)) {
+						filePathsW.add(DirectoryW+"/p"+(608-i)+".png");
+					}
+				}
+			}
+		}
+		return filePathsW ;
+	}
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    public int getScreenWidth() {
-        int columnWidth;
-        WindowManager wm = (WindowManager) _context.getSystemService(Context.WINDOW_SERVICE);
-        Display display = wm.getDefaultDisplay();
-        final Point point = new Point();
-        try { display.getSize(point); }
-        catch (java.lang.NoSuchMethodError ignore) {
-            point.x = display.getWidth();
-            point.y = display.getHeight();
-        }
-        columnWidth = point.x;
-        return columnWidth;
-    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/*
+	 * Check supported file extensions
+	 *
+	 * @returns boolean
+	 */
+	private boolean IsSupportedFile(String filePath) {
+		String ext = filePath.substring((filePath.lastIndexOf(".") + 1),
+				filePath.length());
+
+		//	if (AppConstant.FILE_EXTN
+		//			.contains(ext.toLowerCase(Locale.getDefault())))
+		return true;
+		//	else
+		//		return false;
+
+	}
+
+	/*
+	 * getting screen width
+	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+	public int getScreenWidth() {
+		int columnWidth;
+		WindowManager wm = (WindowManager) _context
+				.getSystemService(Context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+
+		final Point point = new Point();
+		try {
+			display.getSize(point);
+		} catch (java.lang.NoSuchMethodError ignore) { // Older device
+			point.x = display.getWidth();
+			point.y = display.getHeight();
+		}
+		columnWidth = point.x;
+		return columnWidth;
+	}
+
+
 }
